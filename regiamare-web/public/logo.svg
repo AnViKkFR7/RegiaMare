@@ -1,0 +1,10 @@
+<svg width="200" height="60" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple minimalist logo for Regia Mare -->
+  <text x="10" y="40" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#74342b">
+    REGIA MARE
+  </text>
+  <line x1="10" y1="50" x2="190" y2="50" stroke="#e2d6c9" stroke-width="2"/>
+  <text x="10" y="58" font-family="Arial, sans-serif" font-size="8" font-weight="400" fill="#66706d" letter-spacing="2">
+    PROPERTIES
+  </text>
+</svg>

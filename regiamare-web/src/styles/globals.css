@@ -1,0 +1,226 @@
+/* Regia Mare Properties - Global Styles */
+
+/* Import BE Vietnam for body text */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
+:root {
+  /* Brand Colors */
+  --color-beige: #e2d6c9;
+  --color-brown-red: #74342b;
+  --color-gray-green: #66706d;
+  --color-dark-brown: #391212;
+  
+  /* Neutrals */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-light: #f5f5f5;
+  --color-gray-medium: #cccccc;
+  --color-gray-dark: #333333;
+  
+  /* Semantic Colors */
+  --color-primary: var(--color-brown-red);
+  --color-secondary: var(--color-beige);
+  --color-accent: var(--color-gray-green);
+  --color-text: var(--color-dark-brown);
+  --color-text-light: var(--color-gray-green);
+  --color-background: var(--color-white);
+  --color-surface: var(--color-beige);
+  
+  /* Typography */
+  --font-body: 'Be Vietnam Pro', sans-serif;
+  --font-heading: 'Be Vietnam Pro', sans-serif; /* Will be replaced with Carla Sans when available */
+  
+  /* Font Sizes */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+  --text-5xl: 3rem;      /* 48px */
+  --text-6xl: 3.75rem;   /* 60px */
+  
+  /* Spacing */
+  --spacing-xs: 0.5rem;   /* 8px */
+  --spacing-sm: 1rem;     /* 16px */
+  --spacing-md: 1.5rem;   /* 24px */
+  --spacing-lg: 2rem;     /* 32px */
+  --spacing-xl: 3rem;     /* 48px */
+  --spacing-2xl: 4rem;    /* 64px */
+  --spacing-3xl: 6rem;    /* 96px */
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;   /* 4px */
+  --radius-md: 0.5rem;    /* 8px */
+  --radius-lg: 1rem;      /* 16px */
+  --radius-xl: 1.5rem;    /* 24px */
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+  
+  /* Layout */
+  --container-max-width: 1440px;
+  --container-padding: var(--spacing-lg);
+}
+
+/* Reset & Base Styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-text);
+  letter-spacing: -0.5px;
+}
+
+h1 {
+  font-size: var(--text-5xl);
+  font-weight: 900;
+  letter-spacing: -2px;
+}
+
+h2 {
+  font-size: var(--text-4xl);
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+h3 {
+  font-size: var(--text-3xl);
+  font-weight: 800;
+}
+
+h4 {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+}
+
+h5 {
+  font-size: var(--text-xl);
+  font-weight: 700;
+}
+
+h6 {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+p {
+  margin-bottom: var(--spacing-sm);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+}
+
+/* Container */
+.container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* Utility Classes */
+.text-center {
+  text-align: center;
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.bg-surface {
+  background-color: var(--color-surface);
+}
+
+/* Responsive Typography */
+@media (max-width: 768px) {
+  :root {
+    --text-5xl: 2.5rem;    /* 40px */
+    --text-4xl: 2rem;      /* 32px */
+    --text-3xl: 1.5rem;    /* 24px */
+  }
+  
+  .container {
+    --container-padding: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --text-5xl: 2rem;      /* 32px */
+    --text-4xl: 1.75rem;   /* 28px */
+    --text-3xl: 1.375rem;  /* 22px */
+  }
+  
+  .container {
+    --container-padding: var(--spacing-sm);
+  }
+}

@@ -1,0 +1,186 @@
+.sales-page {
+  margin-top: 80px;
+}
+
+.sales-hero {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-dark-brown) 100%);
+  color: var(--color-white);
+  padding: var(--spacing-3xl) 0;
+  text-align: center;
+}
+
+.sales-hero h1 {
+  font-size: var(--text-5xl);
+  margin-bottom: var(--spacing-md);
+  color: var(--color-white);
+}
+
+.sales-hero p {
+  font-size: var(--text-xl);
+  opacity: 0.9;
+}
+
+.sales-content {
+  padding: var(--spacing-3xl) 0;
+}
+
+.sales-grid {
+  display: grid;
+  grid-template-columns: 1fr 500px;
+  gap: var(--spacing-3xl);
+  align-items: start;
+}
+
+.sales-info h2 {
+  font-size: var(--text-4xl);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+}
+
+.sales-info > p {
+  font-size: var(--text-lg);
+  color: var(--color-text-light);
+  line-height: 1.8;
+  margin-bottom: var(--spacing-xl);
+}
+
+.sales-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.sales-benefit {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: start;
+}
+
+.benefit-icon {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  border-radius: var(--radius-md);
+}
+
+.sales-benefit h3 {
+  font-size: var(--text-lg);
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-text);
+}
+
+.sales-benefit p {
+  font-size: var(--text-base);
+  color: var(--color-text-light);
+}
+
+.sales-form-container {
+  position: sticky;
+  top: 100px;
+}
+
+.sales-form {
+  background-color: var(--color-white);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+}
+
+.sales-form h3 {
+  font-size: var(--text-2xl);
+  margin-bottom: var(--spacing-xl);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-group label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: var(--spacing-sm);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background-color: var(--color-white);
+  border: 2px solid var(--color-gray-medium);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.form-submit {
+  width: 100%;
+  padding: var(--spacing-md);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.form-submit:hover {
+  background-color: var(--color-dark-brown);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.form-success {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+  .sales-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sales-form-container {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .sales-hero h1 {
+    font-size: var(--text-4xl);
+  }
+
+  .sales-info h2 {
+    font-size: var(--text-3xl);
+  }
+}
