@@ -344,6 +344,7 @@
   .sales-form-wrapper {
     display: block;
     position: static;
+    padding: 3rem 0;
   }
 
   .sales-form {

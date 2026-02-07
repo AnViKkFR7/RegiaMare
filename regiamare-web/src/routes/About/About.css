@@ -138,29 +138,34 @@
 }
 
 .about-cta-section {
-  padding: var(--spacing-3xl) 0;
+  padding: 0;
+  margin-top: 6rem;
+  margin-left: 25%;
+  margin-right: 25%;
 }
 
 .about-cta {
-  max-width: 800px;
-  margin: 0 auto;
   text-align: center;
-  padding: var(--spacing-3xl);
+  padding: 80px 40px;
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-dark-brown) 100%);
   color: var(--color-white);
 }
 
 .about-cta h2 {
-  font-size: var(--text-4xl);
+  font-size: var(--text-2xl);
   margin-bottom: var(--spacing-md);
   color: var(--color-white);
+  font-weight: 600;
 }
 
 .about-cta p {
-  font-size: var(--text-lg);
-  margin-bottom: var(--spacing-xl);
-  opacity: 0.9;
-  line-height: 1.8;
+  font-size: var(--text-base);
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.95;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .about-contact {
@@ -174,10 +179,10 @@
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-xl);
+  padding: 12px 24px;
   background-color: var(--color-white);
   color: var(--color-primary);
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
   font-weight: 600;
   transition: all var(--transition-base);
 }
@@ -229,7 +234,13 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
   }
-  
+  .about-cta-section {
+    padding: 0;
+    margin-top: 6rem;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   .about-values {
     padding: 60px 0;
   }
@@ -237,26 +248,38 @@
   .value-card {
     padding: 20px 15px;
   }
-  
+
   .value-icon {
     width: 50px;
     height: 50px;
     margin-bottom: 12px;
   }
-  
+
   .value-icon svg {
     width: 24px;
     height: 24px;
   }
-  
+
   .value-card h3 {
     font-size: 15px;
     margin-bottom: 8px;
   }
-  
+
   .value-card p {
     font-size: 13px;
     line-height: 1.4;
+  }
+
+  .about-cta {
+    padding: 40px 20px;
+  }
+
+  .about-cta h2 {
+    font-size: var(--text-xl);
+  }
+
+  .about-cta p {
+    font-size: var(--text-sm);
   }
 
   .about-contact {
@@ -266,6 +289,8 @@
   .contact-button {
     width: 100%;
     justify-content: center;
+    font-size: var(--text-sm);
+    padding: 10px 20px;
   }
 }
 

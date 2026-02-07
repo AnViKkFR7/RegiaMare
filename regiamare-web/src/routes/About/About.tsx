@@ -91,7 +91,6 @@ export default function About({ language }: AboutProps) {
       </section>
 
       <section className="about-cta-section">
-        <div className="container">
           <div className="about-cta">
             <h2>{t('about.ctaTitle')}</h2>
             <p>
@@ -113,7 +112,6 @@ export default function About({ language }: AboutProps) {
               </a>
             </div>
           </div>
-        </div>
       </section>
     </div>
   );
