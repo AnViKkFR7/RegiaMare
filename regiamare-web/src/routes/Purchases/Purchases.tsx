@@ -34,7 +34,11 @@ export default function Purchases({ language }: PurchasesProps) {
   return (
     <div className="purchases-page">
       <section className="purchases-hero">
-        <div className="container">
+        <div className="purchases-hero-background">
+          <img src="/2151986113.jpg" alt="Purchases" />
+          <div className="purchases-hero-overlay"></div>
+        </div>
+        <div className="container purchases-hero-content">
           <h1>{t('purchases.title')}</h1>
           <p>Encuentre la propiedad perfecta en la costa de Barcelona</p>
         </div>

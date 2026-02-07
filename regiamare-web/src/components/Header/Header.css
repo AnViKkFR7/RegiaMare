@@ -124,6 +124,12 @@
   transform: rotate(-45deg) translate(7px, -7px);
 }
 
+@media (max-width: 1224px) {
+  .header-logo img {
+    height: 40px;
+  }
+}
+
 /* Mobile Styles */
 @media (max-width: 1024px) {
   .header-menu-toggle {

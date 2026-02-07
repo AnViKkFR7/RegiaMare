@@ -22,6 +22,7 @@
   font-size: var(--text-lg);
   margin-bottom: var(--spacing-md);
   font-weight: 600;
+  text-decoration: underline;
 }
 
 .footer-logo img {
@@ -71,6 +72,8 @@
 
 .footer-contact a:hover {
   opacity: 1;
+  color: var(--color-white);
+  transition: opacity var(--transition-fast);
 }
 
 .footer-bottom {
@@ -113,6 +116,27 @@
   .footer-grid {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
+  }
+
+  .footer-section {
+    text-align: center;
+  }
+
+  .footer-section h4 {
+    text-decoration: underline;
+  }
+
+  .footer-logo {
+    display: flex;
+    justify-content: center;
+  }
+
+  .footer-nav {
+    align-items: center;
+  }
+
+  .footer-contact {
+    align-items: center;
   }
 
   .footer-bottom {

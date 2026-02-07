@@ -1,16 +1,23 @@
 import './About.css';
+import { useTranslation } from '../../utils/translations';
 import type { Language } from '../../types';
 
 interface AboutProps {
   language: Language;
 }
 
-export default function About(_props: AboutProps) {
+export default function About({ language }: AboutProps) {
+  const t = useTranslation(language);
+  
   return (
     <div className="about-page">
       <section className="about-hero">
-        <div className="container">
-          <h1>Quiénes somos</h1>
+        <div className="about-hero-background">
+          <img src="/2151986063.jpg" alt="About" />
+          <div className="about-hero-overlay"></div>
+        </div>
+        <div className="container about-hero-content">
+          <h1>{t('about.title')}</h1>
         </div>
       </section>
 
@@ -18,80 +25,77 @@ export default function About(_props: AboutProps) {
         <div className="container">
           <div className="about-text">
             <p className="about-lead">
-              En Regia Mare Properties apostamos por un asesoramiento a medida y cercano, porque entendemos 
-              que cada familia, cada persona y cada vivienda es un mundo, y no se puede abordar cada caso 
-              de la misma manera.
+              {t('about.lead')}
             </p>
 
             <p>
-              Con una sólida experiencia en gestión inmobiliaria fruto de nuestras asesorías en la costa, 
-              ofrecemos también un servicio de venta premium en portales nacionales e internacionales, 
-              garantizando un amplio abanico de compradores y la estructura profesional necesaria para 
-              gestionar cada operación con eficiencia y rigor.
+              {t('about.text1')}
             </p>
 
             <p>
-              Además, acompañamos y asesoramos a compradores nacionales e internacionales gracias a nuestro 
-              equipo de abogados, brokers y gestores. Junto a ellos, guiamos al cliente en la etapa de 
-              preparación, durante el proceso de compra y en todo lo relacionado con la adaptación de la 
-              vivienda y la postventa, asegurándonos de que no quede ningún cabo suelto.
+              {t('about.text2')}
             </p>
           </div>
+        </div>
+      </section>
 
-          <div className="about-values">
-            <h2>Nuestros valores</h2>
-            <div className="values-grid">
-              <div className="value-card">
-                <div className="value-icon">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                  </svg>
-                </div>
-                <h3>Cercanía</h3>
-                <p>Trato personalizado y humano en cada interacción</p>
+      <section className="about-values">
+        <div className="container">
+          <h2>{t('about.valuesTitle')}</h2>
+          <div className="values-grid">
+            <div className="value-card">
+              <div className="value-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
               </div>
+              <h3>{t('about.value.proximity.title')}</h3>
+              <p>{t('about.value.proximity.description')}</p>
+            </div>
 
-              <div className="value-card">
-                <div className="value-icon">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="20 6 9 17 4 12"></polyline>
-                  </svg>
-                </div>
-                <h3>Profesionalidad</h3>
-                <p>Experiencia y estructura para garantizar el éxito</p>
+            <div className="value-card">
+              <div className="value-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
               </div>
+              <h3>{t('about.value.professionalism.title')}</h3>
+              <p>{t('about.value.professionalism.description')}</p>
+            </div>
 
-              <div className="value-card">
-                <div className="value-icon">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <path d="M12 6v6l4 2"></path>
-                  </svg>
-                </div>
-                <h3>Compromiso</h3>
-                <p>Dedicación total hasta alcanzar sus objetivos</p>
+            <div className="value-card">
+              <div className="value-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 6v6l4 2"></path>
+                </svg>
               </div>
+              <h3>{t('about.value.commitment.title')}</h3>
+              <p>{t('about.value.commitment.description')}</p>
+            </div>
 
-              <div className="value-card">
-                <div className="value-icon">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-                    <path d="M2 17l10 5 10-5"></path>
-                    <path d="M2 12l10 5 10-5"></path>
-                  </svg>
-                </div>
-                <h3>Transparencia</h3>
-                <p>Información clara en todo momento</p>
+            <div className="value-card">
+              <div className="value-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                  <path d="M2 17l10 5 10-5"></path>
+                  <path d="M2 12l10 5 10-5"></path>
+                </svg>
               </div>
+              <h3>{t('about.value.transparency.title')}</h3>
+              <p>{t('about.value.transparency.description')}</p>
             </div>
           </div>
+        </div>
+      </section>
 
+      <section className="about-cta-section">
+        <div className="container">
           <div className="about-cta">
-            <h2>¿Hablamos?</h2>
+            <h2>{t('about.ctaTitle')}</h2>
             <p>
-              Estamos aquí para ayudarle a encontrar la propiedad de sus sueños o vender su inmueble 
-              al mejor precio. Contáctenos y descubra la diferencia del servicio Regia Mare.
+              {t('about.ctaText')}
             </p>
             <div className="about-contact">
               <a href="mailto:info@regiamare.com" className="contact-button">

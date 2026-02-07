@@ -19,12 +19,12 @@ export default function Footer({ language }: FooterProps) {
               <img src="/logo-footer.png" alt="Regia Mare Properties" />
             </div>
             <p className="footer-description">
-              Regia Mare Properties - Asesoramiento inmobiliario premium en la costa de Barcelona
+              {t('footer.description')}
             </p>
           </div>
 
           <div className="footer-section">
-            <h4>Navegación</h4>
+            <h4>{t('footer.navigation')}</h4>
             <nav className="footer-nav">
               <Link to="/">{t('nav.home')}</Link>
               <Link to="/services">{t('nav.services')}</Link>
@@ -35,7 +35,7 @@ export default function Footer({ language }: FooterProps) {
           </div>
 
           <div className="footer-section">
-            <h4>Zonas</h4>
+            <h4>{t('footer.areas')}</h4>
             <nav className="footer-nav">
               <Link to="/purchases?zone=Barcelona">Barcelona</Link>
               <Link to="/purchases?zone=Sitges">Sitges</Link>
@@ -45,20 +45,20 @@ export default function Footer({ language }: FooterProps) {
           </div>
 
           <div className="footer-section">
-            <h4>Contacto</h4>
+            <h4>{t('footer.contact')}</h4>
             <div className="footer-contact">
               <a href="mailto:info@regiamare.com">info@regiamare.com</a>
               <a href="tel:+34900000000">+34 900 000 000</a>
-              <p>Costa de Barcelona, España</p>
+              <p>{t('footer.location')}</p>
             </div>
           </div>
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} Regia Mare Properties. Todos los derechos reservados.</p>
+          <p>&copy; {new Date().getFullYear()} Regia Mare Properties. {t('footer.rights')}.</p>
           <div className="footer-links">
-            <Link to="/privacy">Política de Privacidad</Link>
-            <Link to="/legal">Aviso Legal</Link>
+            <Link to="/privacy">{t('footer.privacy')}</Link>
+            <Link to="/legal">{t('footer.legal')}</Link>
           </div>
         </div>
       </div>

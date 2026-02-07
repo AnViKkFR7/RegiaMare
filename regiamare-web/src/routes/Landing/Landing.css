@@ -329,7 +329,7 @@
 
 .value-point p {
   font-size: var(--text-base);
-  color: var(--color-text-light);
+  color: rgba(57, 18, 18, 0.7);
   line-height: 1.7;
 }
 
