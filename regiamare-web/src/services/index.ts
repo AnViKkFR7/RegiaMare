@@ -13,10 +13,13 @@ export {
   getFeaturedProperties,
   getPropertiesByZone,
   getFilteredProperties,
+  getFilteredPropertiesWithPagination,
   getAvailableZones,
   getAvailablePropertyTypes,
   getPriceRange,
-  type PropertyFilters
+  type PropertyFilters,
+  type PaginatedPropertiesResult,
+  type SortOption
 } from './propertyService';
 
 // Attribute definition services

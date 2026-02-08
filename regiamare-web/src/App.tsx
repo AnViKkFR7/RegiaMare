@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import ScrollToTop from './components/ScrollToTop';
 import Landing from './routes/Landing/Landing';
 import Services from './routes/Services/Services';
 import Purchases from './routes/Purchases/Purchases';
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <div className="app">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         

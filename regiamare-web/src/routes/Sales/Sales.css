@@ -34,7 +34,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(116, 52, 43, 0.85) 0%, rgba(57, 18, 18, 0.85) 100%);
+  background: linear-gradient(135deg, rgba(116, 52, 43, 0.55) 0%, rgba(57, 18, 18, 0.85) 100%);
   z-index: 1;
 }
 
@@ -319,12 +319,33 @@
   transform: translateY(-2px);
 }
 
+.form-submit:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.form-submit:disabled:hover {
+  background-color: #999;
+  transform: none;
+}
+
 .form-success {
   margin-top: 15px;
   padding: 15px;
   background-color: #d4edda;
   color: #155724;
   border: 2px solid #c3e6cb;
+  text-align: center;
+  font-weight: 500;
+}
+
+.form-error {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 2px solid #f5c6cb;
   text-align: center;
   font-weight: 500;
 }

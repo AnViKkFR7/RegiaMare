@@ -20,6 +20,8 @@ export default function Sales({ language }: SalesProps) {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Detect mobile to keep accordion always open
   useEffect(() => {
@@ -37,11 +39,60 @@ export default function Sales({ language }: SalesProps) {
     setActiveAccordion(activeAccordion === index ? null : index);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 3000);
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      // Enviar email usando Supabase Edge Function
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      if (!supabaseUrl || !supabaseAnonKey) {
+        throw new Error('Supabase configuration missing');
+      }
+
+      const response = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+          propertyType: formData.propertyType,
+          message: formData.message
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to send email');
+      }
+
+      const result = await response.json();
+      console.log('Email sent successfully:', result);
+
+      setSubmitted(true);
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        propertyType: '',
+        message: ''
+      });
+      setTimeout(() => setSubmitted(false), 5000);
+    } catch (err) {
+      console.error('Error sending email:', err);
+      setError('Hubo un error al enviar el formulario. Por favor, inténtelo de nuevo.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -219,13 +270,19 @@ export default function Sales({ language }: SalesProps) {
                 />
               </div>
 
-              <button type="submit" className="form-submit">
-                {t('sales.formSubmit')}
+              <button type="submit" className="form-submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Enviando...' : t('sales.formSubmit')}
               </button>
 
               {submitted && (
                 <div className="form-success">
                   {t('sales.formSuccess')}
+                </div>
+              )}
+              
+              {error && (
+                <div className="form-error">
+                  {error}
                 </div>
               )}
             </form>
@@ -314,13 +371,19 @@ export default function Sales({ language }: SalesProps) {
               />
             </div>
 
-            <button type="submit" className="form-submit">
-              {t('sales.formSubmit')}
+            <button type="submit" className="form-submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Enviando...' : t('sales.formSubmit')}
             </button>
 
             {submitted && (
               <div className="form-success">
                 {t('sales.formSuccess')}
+              </div>
+            )}
+            
+            {error && (
+              <div className="form-error">
+                {error}
               </div>
             )}
           </form>

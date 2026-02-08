@@ -33,7 +33,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(226, 214, 201, 0.92) 0%, rgba(255, 255, 255, 0.92) 100%);
+  background: linear-gradient(135deg, rgba(226, 214, 201, 0.32) 0%, rgba(255, 255, 255, 0.92) 100%);
   z-index: 1;
 }
 
@@ -201,7 +201,7 @@
 
 @media (max-width: 1024px) {
   .about-hero {
-    min-height: 400px;
+    min-height: 250px;
   }
 }
 
@@ -213,7 +213,7 @@
 
 @media (max-width: 1024px) {
   .about-hero {
-    min-height: 400px;
+    min-height: 250px;
   }
 }
 
@@ -226,8 +226,21 @@
     font-size: var(--text-xl);
   }
 
+  .about-values h2 {
+    margin: 0 0 var(--spacing-2xl) 0;
+  }
+
+  .about-text {
+    max-width: 900px;
+    margin: 0 auto var(--spacing-xl);
+  }
+
   .about-text p {
     font-size: var(--text-base);
+  }
+
+  .about-content {
+    padding: var(--spacing-md) var(--spacing-sm);
   }
 
   .values-grid {

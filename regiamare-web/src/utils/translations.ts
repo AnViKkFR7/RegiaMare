@@ -228,10 +228,25 @@ export const translations: Translation = {
     en: 'Available properties',
     fr: 'Propriétés disponibles'
   },
+  'purchases.heroSubtitle': {
+    es: 'Encuentre la propiedad perfecta en la costa de Barcelona',
+    en: 'Find the perfect property on the Barcelona coast',
+    fr: 'Trouvez la propriété parfaite sur la côte de Barcelone'
+  },
   'purchases.filters': {
     es: 'Filtros',
     en: 'Filters',
     fr: 'Filtres'
+  },
+  'purchases.zone': {
+    es: 'Zona',
+    en: 'Zone',
+    fr: 'Zone'
+  },
+  'purchases.allZones': {
+    es: 'Todas las zonas',
+    en: 'All zones',
+    fr: 'Toutes les zones'
   },
   'purchases.priceRange': {
     es: 'Rango de precio',
@@ -243,10 +258,125 @@ export const translations: Translation = {
     en: 'Bedrooms',
     fr: 'Chambres'
   },
+  'purchases.anyBedrooms': {
+    es: 'Cualquiera',
+    en: 'Any',
+    fr: 'Indifférent'
+  },
   'purchases.propertyType': {
     es: 'Tipo de propiedad',
     en: 'Property type',
     fr: 'Type de propriété'
+  },
+  'purchases.allTypes': {
+    es: 'Todos los tipos',
+    en: 'All types',
+    fr: 'Tous les types'
+  },
+  'purchases.clearFilters': {
+    es: 'Limpiar filtros',
+    en: 'Clear filters',
+    fr: 'Effacer les filtres'
+  },
+  'purchases.propertiesFound': {
+    es: 'propiedades encontradas',
+    en: 'properties found',
+    fr: 'propriétés trouvées'
+  },
+  'purchases.noResults': {
+    es: 'No se encontraron propiedades con los filtros seleccionados.',
+    en: 'No properties found with the selected filters.',
+    fr: 'Aucune propriété trouvée avec les filtres sélectionnés.'
+  },
+  'purchases.viewAll': {
+    es: 'Ver todas las propiedades',
+    en: 'View all properties',
+    fr: 'Voir toutes les propriétés'
+  },
+  'purchases.previousPage': {
+    es: 'Anterior',
+    en: 'Previous',
+    fr: 'Précédent'
+  },
+  'purchases.nextPage': {
+    es: 'Siguiente',
+    en: 'Next',
+    fr: 'Suivant'
+  },
+  'purchases.pageOf': {
+    es: 'Página {current} de {total}',
+    en: 'Page {current} of {total}',
+    fr: 'Page {current} sur {total}'
+  },
+  'purchases.sortBy': {
+    es: 'Ordenar por',
+    en: 'Sort by',
+    fr: 'Trier par'
+  },
+  'purchases.sortPriceAsc': {
+    es: 'Precio ascendente',
+    en: 'Price ascending',
+    fr: 'Prix croissant'
+  },
+  'purchases.sortPriceDesc': {
+    es: 'Precio descendente',
+    en: 'Price descending',
+    fr: 'Prix décroissant'
+  },
+  'purchases.sortNewest': {
+    es: 'Más nuevas',
+    en: 'Newest',
+    fr: 'Plus récentes'
+  },
+  'purchases.sortOldest': {
+    es: 'Más antiguas',
+    en: 'Oldest',
+    fr: 'Plus anciennes'
+  },
+  'purchases.operationType': {
+    es: 'Tipo de operación',
+    en: 'Operation type',
+    fr: 'Type d\'opération'
+  },
+  'purchases.allOperations': {
+    es: 'Todas las operaciones',
+    en: 'All operations',
+    fr: 'Toutes les opérations'
+  },
+  'purchases.sale': {
+    es: 'Venta',
+    en: 'Sale',
+    fr: 'Vente'
+  },
+  'purchases.rent': {
+    es: 'Alquiler',
+    en: 'Rent',
+    fr: 'Location'
+  },
+  'purchases.priceFrom': {
+    es: 'Precio desde',
+    en: 'Price from',
+    fr: 'Prix à partir de'
+  },
+  'purchases.priceTo': {
+    es: 'Precio hasta',
+    en: 'Price to',
+    fr: 'Prix jusqu\'à'
+  },
+  'purchases.filterButton': {
+    es: 'Filtrar',
+    en: 'Filter',
+    fr: 'Filtrer'
+  },
+  'purchases.applyFilters': {
+    es: 'Aplicar filtros',
+    en: 'Apply filters',
+    fr: 'Appliquer les filtres'
+  },
+  'purchases.closeFilters': {
+    es: 'Cerrar',
+    en: 'Close',
+    fr: 'Fermer'
   },
   
   // Sales Page

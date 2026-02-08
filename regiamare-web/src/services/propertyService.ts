@@ -342,3 +342,83 @@ export async function getPriceRange(): Promise<{ min: number; max: number }> {
     return { min: 0, max: 0 };
   }
 }
+
+/**
+ * Pagination result interface
+ */
+export interface PaginatedPropertiesResult {
+  properties: Property[];
+  totalCount: number;
+  totalPages: number;
+  currentPage: number;
+  pageSize: number;
+}
+
+/**
+ * Sort options type
+ */
+export type SortOption = 'price_asc' | 'price_desc' | 'newest' | 'oldest';
+
+/**
+ * Gets filtered properties with pagination and sorting
+ */
+export async function getFilteredPropertiesWithPagination(
+  filters: PropertyFilters,
+  page: number = 1,
+  pageSize: number = 20,
+  sortBy: SortOption = 'oldest'
+): Promise<PaginatedPropertiesResult> {
+  try {
+    // Get all filtered properties
+    let properties = await getFilteredProperties(filters);
+
+    // Apply sorting
+    switch (sortBy) {
+      case 'price_asc':
+        properties = properties.sort((a, b) => 
+          (a.attributes.price || 0) - (b.attributes.price || 0)
+        );
+        break;
+      case 'price_desc':
+        properties = properties.sort((a, b) => 
+          (b.attributes.price || 0) - (a.attributes.price || 0)
+        );
+        break;
+      case 'newest':
+        properties = properties.sort((a, b) => 
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        break;
+      case 'oldest':
+      default:
+        properties = properties.sort((a, b) => 
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+        break;
+    }
+
+    const totalCount = properties.length;
+    const totalPages = Math.ceil(totalCount / pageSize);
+    const startIndex = (page - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    
+    const paginatedProperties = properties.slice(startIndex, endIndex);
+
+    return {
+      properties: paginatedProperties,
+      totalCount,
+      totalPages,
+      currentPage: page,
+      pageSize
+    };
+  } catch (error) {
+    console.error('Error fetching paginated properties:', error);
+    return {
+      properties: [],
+      totalCount: 0,
+      totalPages: 0,
+      currentPage: page,
+      pageSize
+    };
+  }
+}

@@ -344,7 +344,7 @@
 }
 
 .cta-section::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -501,11 +501,28 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 550px) {
   .hero-cta-group {
     flex-direction: column;
     width: 100%;
     padding: 0 var(--spacing-md);
+  }
+
+  .value-text h2 {
+    margin: 0 0 var(--spacing-xl) 0;
+  }
+
+  .value-section {
+    padding: var(--spacing-xl) 0;
+  }
+
+  .featured-section {
+    padding: var(--spacing-xl) 0;
+    background-color: var(--color-white);
+  }
+
+  .section-header {
+    margin-bottom: var(--spacing-xl);
   }
 
   .hero-cta {
