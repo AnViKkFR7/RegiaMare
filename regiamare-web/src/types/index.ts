@@ -60,42 +60,108 @@ export interface ItemMedia {
   created_at: string;
 }
 
-// Property-specific types
+// Property-specific types (matching RegiaMare.sql)
 export interface PropertyAttributes {
+  // === REQUIRED ATTRIBUTES (11) ===
   price: number;
   operation_type: 'Venta' | 'Alquiler' | 'Alquiler Vacacional' | 'Traspaso';
   property_type: 'Piso' | 'Casa' | 'Casa Pareada' | 'Villa' | 'Ático' | 'Dúplex' | 'Planta Baja' | 'Masía' | 'Local' | 'Terreno';
   province: string;
   city: string;
-  zone: 'Barcelona' | 'Sitges' | 'Sant Pere de Ribes' | 'Vilanova i la Geltrú' | string;
+  zone: string;
   built_surface: number;
   bedrooms: number;
   bathrooms: number;
   condition: 'Obra Nueva' | 'A Estrenar' | 'Reformado' | 'Buen Estado' | 'A Reformar' | 'Para Entrar a Vivir';
   description: string;
-  useful_surface?: number;
-  plot_surface?: number;
+
+  // === DESCRIPTIONS (MULTILANGUAGE) ===
+  description_english?: string;
+  description_french?: string;
+
+  // === SURFACE & LOCATION ===
+  usable_surface?: number; // Superficie útil
+  plot_surface?: number; // Superficie parcela
+  floor?: string; // Planta
+  is_exterior?: boolean; // Exterior/Interior
+
+  // === STRUCTURE ===
+  has_elevator?: boolean; // Ascensor
   year_built?: number;
-  orientation?: string;
-  energy_certificate?: string;
-  heating?: string;
-  cooling?: string;
-  parking?: boolean;
+
+  // === PARKING & STORAGE ===
   parking_type?: string;
   parking_spaces?: number;
   garage_spaces?: number;
-  storage_room?: boolean;
-  terrace?: boolean;
+  has_storage_room?: boolean; // Trastero
+  storage_surface?: number; // Superficie trastero
+
+  // === OUTDOOR SPACES ===
+  has_terrace?: boolean;
   terrace_surface?: number;
-  garden?: boolean;
+  has_balcony?: boolean;
+  has_garden?: boolean;
   garden_surface?: number;
-  pool?: boolean;
-  elevator?: boolean;
-  accessibility?: boolean;
-  security_system?: boolean;
-  views?: string;
+  has_patio?: boolean;
+
+  // === POOL ===
+  pool_type?: string; // "Privada", "Comunitaria", "Sin Piscina", etc.
+
+  // === ORIENTATION & VIEWS ===
+  orientation?: string;
+  views?: string; // Can be array or string
   distance_to_beach?: number;
   distance_to_city_center?: number;
+
+  // === CLIMATE CONTROL ===
+  heating_type?: string; // Tipo de calefacción
+  air_conditioning?: string; // Aire acondicionado
+
+  // === KITCHEN & INTERIOR ===
+  kitchen_type?: string;
+  built_in_wardrobes?: boolean;
+  furnished?: string; // "Totalmente Amueblado", "Parcialmente Amueblado", "Sin Amueblar"
+  has_fireplace?: boolean;
+  flooring_type?: string;
+  high_ceilings?: boolean;
+  ceiling_height?: number;
+
+  // === ENERGY CERTIFICATION ===
+  energy_certificate?: string;
+  energy_consumption?: number; // kWh/m²·año
+  co2_emissions?: number; // kg/m²·año
+
+  // === FISCAL & LEGAL ===
+  cadastral_reference?: string;
+  ibi_annual?: number; // IBI anual €
+  community_fees?: number; // Gastos comunidad €/mes
+
+  // === ADDITIONAL FEATURES ===
+  features?: string[]; // Array de características destacadas
+  has_concierge?: boolean; // Portería/Conserje
+  security_type?: string; // Sistema de seguridad
+  has_home_automation?: boolean; // Domótica
+  wheelchair_accessible?: boolean; // Accesibilidad movilidad reducida
+
+  // === COMMUNAL SERVICES ===
+  has_gym?: boolean;
+  has_playground?: boolean; // Zona infantil
+  has_paddle_tennis?: boolean;
+  has_communal_gardens?: boolean;
+
+  // === USE & AVAILABILITY ===
+  has_tourist_license?: boolean;
+  tourist_license_number?: string;
+  available_from?: string; // Date
+  pets_allowed?: boolean;
+
+  // === INTERNAL INFO ===
+  internal_reference?: string;
+  additional_notes?: string;
+  previous_price?: number;
+  assigned_agent?: string;
+  is_exclusive?: boolean;
+  is_featured?: boolean;
 }
 
 export interface Property extends Item {

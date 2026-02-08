@@ -8,10 +8,8 @@
 
 /* Breadcrumb */
 .breadcrumb {
-  background-color: #f8f6f3;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-md) 0;
   font-size: var(--text-sm);
-  margin-bottom: var(--spacing-lg);
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
@@ -64,7 +62,7 @@
 .property-content {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: var(--spacing-3xl);
+  gap: var(--spacing-md);
   margin-top: var(--spacing-2xl);
   margin-bottom: var(--spacing-3xl);
 }
@@ -121,7 +119,11 @@
 }
 
 .basic-icon {
-  font-size: 1.5rem;
+  width: 22px;
+  height: 22px;
+  color: var(--color-text);
+  stroke-width: 2;
+  flex-shrink: 0;
 }
 
 .property-price {
@@ -129,7 +131,7 @@
   flex-direction: column;
   align-items: flex-end;
   padding: var(--spacing-lg);
-  background: linear-gradient(135deg, #74342b 0%, #2d5555 100%);
+  background: var(--color-primary);
   color: white;
   min-width: 220px;
 }
@@ -171,6 +173,11 @@
   color: #444;
 }
 
+.property-description .description-text {
+  white-space: pre-line;
+  text-align: justify;
+}
+
 /* Details Grid Section */
 .property-details-section h2 {
   font-size: 1.75rem;
@@ -184,30 +191,21 @@
 .details-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-md);
+  gap: 12px 24px;
 }
 
-.detail-item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-md);
-  background-color: #f8f6f3;
-  border-left: 4px solid #e2d6c9;
-}
-
-.detail-label {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #74342b;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.detail-value {
-  font-size: 1.125rem;
-  font-weight: 600;
+.details-grid p {
+  margin: 0;
+  padding: 6px 0;
+  font-size: 15px;
   color: #2d5555;
+  line-height: 1.6;
+}
+
+.details-grid strong {
+  color: #74342b;
+  font-weight: 700;
+  margin-right: 6px;
 }
 
 /* Amenities Section */
@@ -231,14 +229,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-lg);
+  gap: 12px;
+  padding: 24px 16px;
   background-color: #f8f6f3;
-  border: 3px solid #e2d6c9;
+  border: 2px solid var(--color-text);
+  border-radius: 8px;
   text-align: center;
-  aspect-ratio: 1;
   transition: all var(--transition-base);
   cursor: default;
+  min-height: 120px;
 }
 
 .amenity-card:hover {
@@ -248,29 +247,37 @@
 }
 
 .amenity-icon {
-  font-size: 2.5rem;
-  line-height: 1;
+  width: 40px;
+  height: 40px;
+  color: var(--color-text);
+  stroke-width: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.amenity-icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 .amenity-label {
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #2d5555;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  line-height: 1.3;
 }
 
 /* Right Column - Sidebar */
 .property-sidebar {
-  position: sticky;
-  top: 100px;
   height: fit-content;
 }
 
 .agent-card {
   background-color: #f8f6f3;
   padding: var(--spacing-xl);
-  border: 3px solid #e2d6c9;
+  border: 3px solid var(--color-text);
 }
 
 .agent-info {
@@ -294,7 +301,7 @@
 .agent-name {
   font-size: 1.25rem;
   font-weight: 900;
-  color: #2d5555;
+  color: var(--color-text);
   margin: 0 0 var(--spacing-xs) 0;
 }
 
@@ -332,7 +339,7 @@
 .contact-form h3 {
   font-size: 1.125rem;
   font-weight: 900;
-  color: #2d5555;
+  color: var(--color-text);
   margin: 0 0 var(--spacing-md) 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -341,7 +348,7 @@
 .contact-form input {
   width: 100%;
   padding: var(--spacing-md);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-xs);
   border: 2px solid #e2d6c9;
   font-size: 1rem;
   font-family: inherit;
@@ -914,7 +921,6 @@
 
 /* Property Details Section */
 .property-details-section {
-  padding-top: var(--spacing-xl);
 }
 
 .property-details-section h2 {
@@ -959,12 +965,11 @@
 .property-separator {
   height: 3px;
   background-color: var(--color-beige);
-  margin: var(--spacing-2xl) 0;
+  margin: var(--spacing-sm) 0;
 }
 
 /* Property Amenities Section */
 .property-amenities-section {
-  padding-top: var(--spacing-xl);
 }
 
 .property-amenities-section h2 {
@@ -1086,5 +1091,140 @@
 
   .property-content {
     gap: var(--spacing-lg);
+  }
+}
+
+/* Related Properties Section */
+.related-properties-section {
+  background-color: #e2d6c9;
+  padding: var(--spacing-xxl) 0;
+  margin-top: var(--spacing-xxl);
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.related-properties-header {
+  text-decoration: none;
+  display: block;
+  transition: opacity 0.3s ease;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: var(--spacing-lg);
+}
+
+.related-properties-header:hover {
+  opacity: 0.8;
+}
+
+.related-properties-header h2 {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: var(--color-text);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.related-properties-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 280px);
+  gap: var(--spacing-lg);
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-lg);
+  justify-content: flex-start;
+}
+
+.related-property-card {
+  background: white;
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: #74342b solid 3px;
+}
+
+.related-property-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.related-property-image {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.related-property-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.related-property-card:hover .related-property-image img {
+  transform: scale(1.05);
+}
+
+.related-property-no-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.related-property-title {
+  padding: var(--spacing-md);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* Responsive for Related Properties */
+@media (max-width: 1280px) {
+  .related-properties-grid {
+    grid-template-columns: repeat(3, 280px);
+  }
+}
+
+@media (max-width: 980px) {
+  .related-properties-grid {
+    grid-template-columns: repeat(2, 280px);
+    gap: var(--spacing-md);
+  }
+  
+  .related-properties-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .related-property-image {
+    height: 180px;
+  }
+}
+
+@media (max-width: 680px) {
+  .related-properties-section {
+    padding: var(--spacing-xl) 0;
+  }
+  
+  .related-properties-grid {
+    grid-template-columns: 280px;
+    justify-content: center;
+  }
+  
+  .related-property-image {
+    height: 220px;
   }
 }
