@@ -1065,6 +1065,71 @@ export const translations: Translation = {
     es: 'Hubo un error al enviar el formulario. Por favor, inténtelo de nuevo.',
     en: 'There was an error submitting the form. Please try again.',
     fr: 'Une erreur s\'est produite lors de l\'envoi du formulaire. Veuillez réessayer.'
+  },
+  
+  // Cookie Banner
+  'cookies.banner.title': {
+    es: 'Usamos cookies',
+    en: 'We use cookies',
+    fr: 'Nous utilisons des cookies'
+  },
+  'cookies.banner.message': {
+    es: 'Utilizamos cookies propias y de terceros para mejorar nuestros servicios y mostrarle publicidad relacionada con sus preferencias mediante el análisis de sus hábitos de navegación.',
+    en: 'We use our own and third-party cookies to improve our services and show you advertising related to your preferences by analyzing your browsing habits.',
+    fr: 'Nous utilisons nos propres cookies et ceux de tiers pour améliorer nos services et vous montrer de la publicité liée à vos préférences en analysant vos habitudes de navigation.'
+  },
+  'cookies.banner.accept': {
+    es: 'Aceptar',
+    en: 'Accept',
+    fr: 'Accepter'
+  },
+  'cookies.banner.reject': {
+    es: 'Rechazar',
+    en: 'Reject',
+    fr: 'Refuser'
+  },
+  'cookies.banner.configure': {
+    es: 'Configurar',
+    en: 'Configure',
+    fr: 'Configurer'
+  },
+  'cookies.banner.more': {
+    es: 'Más información',
+    en: 'More information',
+    fr: 'Plus d\'informations'
+  },
+  
+  // Privacy Policy
+  'privacy.title': {
+    es: 'Política de Privacidad',
+    en: 'Privacy Policy',
+    fr: 'Politique de Confidentialité'
+  },
+  'privacy.updated': {
+    es: 'Última actualización',
+    en: 'Last updated',
+    fr: 'Dernière mise à jour'
+  },
+  
+  // Legal Notice
+  'legal.title': {
+    es: 'Aviso Legal',
+    en: 'Legal Notice',
+    fr: 'Mentions Légales'
+  },
+  
+  // Cookies Policy
+  'cookiesPolicy.title': {
+    es: 'Política de Cookies',
+    en: 'Cookie Policy',
+    fr: 'Politique de Cookies'
+  },
+  
+  // Footer update
+  'footer.cookies': {
+    es: 'Cookies',
+    en: 'Cookies',
+    fr: 'Cookies'
   }
 };
 
@@ -1073,3 +1138,4 @@ export function useTranslation(language: Language = 'es') {
     return translations[key]?.[language] || key;
   };
 }
+

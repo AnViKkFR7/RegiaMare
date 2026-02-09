@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import CookieBanner from './components/CookieBanner/CookieBanner';
 import ScrollToTop from './components/ScrollToTop';
 import Landing from './routes/Landing/Landing';
 import Services from './routes/Services/Services';
@@ -9,6 +10,9 @@ import Purchases from './routes/Purchases/Purchases';
 import Sales from './routes/Sales/Sales';
 import About from './routes/About/About';
 import PropertyDetail from './routes/PropertyDetail/PropertyDetail';
+import Privacy from './routes/Privacy/Privacy';
+import Legal from './routes/Legal/Legal';
+import Cookies from './routes/Cookies/Cookies';
 import type { Language } from './types';
 import './styles/globals.css';
 import './App.css';
@@ -34,10 +38,14 @@ function App() {
             <Route path="/property/:id" element={<PropertyDetail language={language} />} />
             <Route path="/sales" element={<Sales language={language} />} />
             <Route path="/about" element={<About language={language} />} />
+            <Route path="/privacy" element={<Privacy language={language} />} />
+            <Route path="/legal" element={<Legal language={language} />} />
+            <Route path="/cookies" element={<Cookies language={language} />} />
           </Routes>
         </main>
 
         <Footer language={language} />
+        <CookieBanner language={language} />
       </div>
     </Router>
   );
