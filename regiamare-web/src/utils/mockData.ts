@@ -23,18 +23,18 @@ export const mockFeaturedProperties: Property[] = [
       bathrooms: 4,
       condition: 'A Estrenar',
       description: 'Magnífica villa de diseño contemporáneo ubicada en una de las zonas más exclusivas de Sitges. La propiedad cuenta con amplios espacios interiores, grandes ventanales que maximizan la entrada de luz natural y vistas espectaculares al mar. Dispone de piscina infinity, jardín mediterráneo, garaje para 3 vehículos y todas las comodidades de una vivienda de lujo.',
-      useful_surface: 400,
+      usable_surface: 400,
       plot_surface: 800,
       year_built: 2024,
-      parking: true,
+      parking_type: 'Garaje',
       garage_spaces: 3,
-      terrace: true,
+      has_terrace: true,
       terrace_surface: 120,
-      garden: true,
+      has_garden: true,
       garden_surface: 400,
-      pool: true,
-      elevator: true,
-      security_system: true,
+      pool_type: 'Privada',
+      has_elevator: true,
+      security_type: 'Sistema de Seguridad',
       views: 'Mar',
       distance_to_beach: 500
     },
@@ -71,14 +71,15 @@ export const mockFeaturedProperties: Property[] = [
       bathrooms: 3,
       condition: 'Reformado',
       description: 'Impresionante ático completamente reformado en el corazón del Eixample de Barcelona. La propiedad destaca por su amplia terraza de 150m² con vistas de 360 grados a la ciudad. Acabados de primera calidad, cocina de diseño totalmente equipada, sistema de domótica integrado y garaje incluido. A escasos metros de Paseo de Gracia.',
-      useful_surface: 250,
+      usable_surface: 250,
       year_built: 1900,
-      parking: true,
+      parking_type: 'Garaje',
       garage_spaces: 2,
-      terrace: true,
+      has_terrace: true,
       terrace_surface: 150,
-      elevator: true,
-      security_system: true,
+      has_elevator: true,
+      security_type: 'Sistema de Seguridad',
+      has_home_automation: true,
       views: 'Ciudad'
     },
     media: [
@@ -118,9 +119,9 @@ export const mockProperties: Property[] = [
       bathrooms: 3,
       condition: 'Buen Estado',
       description: 'Hermosa casa familiar en zona residencial tranquila',
-      pool: true,
-      garden: true,
-      parking: true
+      pool_type: 'Privada',
+      has_garden: true,
+      parking_type: 'Garaje'
     },
     media: []
   },
@@ -144,8 +145,8 @@ export const mockProperties: Property[] = [
       bathrooms: 2,
       condition: 'Reformado',
       description: 'Piso luminoso completamente reformado con vistas al mar',
-      terrace: true,
-      elevator: true
+      has_terrace: true,
+      has_elevator: true
     },
     media: []
   }
