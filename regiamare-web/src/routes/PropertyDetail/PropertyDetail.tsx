@@ -412,7 +412,6 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
             {detailsExpanded && (
               <div className="collapsible-content">
                 <div className="details-grid">
-              {attrs.internal_reference && <p><strong>{t('property.details.internal_reference')}:</strong> {attrs.internal_reference}</p>}
               {attrs.zone && <p><strong>{t('property.details.zone')}:</strong> {attrs.zone}</p>}
               {attrs.condition && <p><strong>{t('property.details.condition')}:</strong> {attrs.condition}</p>}
               {attrs.floor && <p><strong>{t('property.details.floor')}:</strong> {attrs.floor}</p>}
