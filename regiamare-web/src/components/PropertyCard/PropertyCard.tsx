@@ -1,14 +1,17 @@
 import { Link } from 'react-router-dom';
-import type { Property } from '../../types';
+import type { Property, Language } from '../../types';
 import './PropertyCard.css';
+import { useTranslation } from '../../utils/translations';
 
 interface PropertyCardProps {
   property: Property;
   featured?: boolean;
+  language: Language;
 }
 
-export default function PropertyCard({ property, featured = false }: PropertyCardProps) {
+export default function PropertyCard({ property, featured = false, language }: PropertyCardProps) {
   const { attributes, media } = property;
+  const t = useTranslation(language);
   
   // Get primary image or use placeholder
   const primaryImage = media.find(m => m.is_primary)?.url || media[0]?.url || '/placeholder-property.jpg';
@@ -27,7 +30,7 @@ export default function PropertyCard({ property, featured = false }: PropertyCar
       <div className="property-card-image">
         <img src={primaryImage} alt={property.title} loading="lazy" />
         <div className="property-card-overlay">
-          {featured && <span className="property-badge featured-badge">DESTACADO</span>}
+          {featured && <span className="property-badge featured-badge">{t('card.featured')}</span>}
           <span className="property-badge type-badge">{attributes.property_type.toUpperCase()}</span>
         </div>
       </div>
@@ -49,21 +52,21 @@ export default function PropertyCard({ property, featured = false }: PropertyCar
         <div className="property-card-features">
           <div className="property-feature-item">
             <span className="feature-value">{attributes.bedrooms}</span>
-            <span className="feature-label">Habitaciones</span>
+            <span className="feature-label">{t('card.bedrooms')}</span>
           </div>
           
           <div className="property-feature-divider"></div>
           
           <div className="property-feature-item">
             <span className="feature-value">{attributes.bathrooms}</span>
-            <span className="feature-label">Baños</span>
+            <span className="feature-label">{t('card.bathrooms')}</span>
           </div>
           
           <div className="property-feature-divider"></div>
           
           <div className="property-feature-item">
             <span className="feature-value">{attributes.built_surface}</span>
-            <span className="feature-label">m²</span>
+            <span className="feature-label">{t('card.surface')}</span>
           </div>
         </div>
       </div>

@@ -192,6 +192,7 @@
   color: var(--color-gray-green);
   line-height: 1.8;
   margin-bottom: 20px;
+  text-align: justify;
 }
 
 @media (min-width: 1025px) {

@@ -89,7 +89,7 @@ export default function Sales({ language }: SalesProps) {
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
       console.error('Error sending email:', err);
-      setError('Hubo un error al enviar el formulario. Por favor, inténtelo de nuevo.');
+      setError(t('form.error'));
     } finally {
       setIsSubmitting(false);
     }

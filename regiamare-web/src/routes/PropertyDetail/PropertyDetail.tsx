@@ -5,6 +5,7 @@ import type { Property } from '../../types';
 import { getPropertyById, getPropertiesByZone } from '../../services/propertyService';
 import ImageGallery from '../../components/ImageGallery/ImageGallery';
 import type { Language } from '../../types';
+import { useTranslation } from '../../utils/translations';
 
 interface PropertyDetailProps {
   language: Language;
@@ -13,6 +14,7 @@ interface PropertyDetailProps {
 export default function PropertyDetail({ language }: PropertyDetailProps) {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const t = useTranslation(language);
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
   const [relatedProperties, setRelatedProperties] = useState<Property[]>([]);
@@ -24,6 +26,14 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Collapsible sections state (default: expanded)
+  const [descriptionExpanded, setDescriptionExpanded] = useState(true);
+  const [detailsExpanded, setDetailsExpanded] = useState(true);
+  const [amenitiesExpanded, setAmenitiesExpanded] = useState(true);
+  
+  // Video modal state
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   useEffect(() => {
     async function fetchProperty() {
@@ -103,32 +113,33 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
       setContactForm({ name: '', phone: '', email: '' });
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
-      console.error('Error sending contact request:', err);
-      setError('Hubo un error al enviar el formulario. Por favor, inténtelo de nuevo.');
+      setError(t('form.error'));
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Get amenities with SVG icons
+  // Convert YouTube URL to embed format
+  const getYouTubeEmbedUrl = (url: string): string => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    const videoId = (match && match[2].length === 11) ? match[2] : null;
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
+  };
+
+  // Get amenities with PNG icons
   const getAmenities = () => {
     if (!property) return [];
     
-    const amenities: Array<{ key: string; label: string; svgPath: React.ReactElement }> = [];
+    const amenities: Array<{ key: string; label: string; icon: string }> = [];
     const attrs = property.attributes;
 
     // Air Conditioning
     if (attrs.air_conditioning && attrs.air_conditioning !== 'No') {
       amenities.push({
         key: 'air_conditioning',
-        label: 'Aire Acondicionado',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 2v10m0 10V12m0 0l-3-3m3 3l3-3m-3 3l-3 3m3-3l3 3"/>
-            <path d="M12 2L9 5M12 2l3 3"/>
-            <path d="M15 12h6m-18 0h6"/>
-          </svg>
-        )
+        label: t('property.amenity.air_conditioning'),
+        icon: '/air-conditioner.png'
       });
     }
 
@@ -136,15 +147,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.built_in_wardrobes) {
       amenities.push({
         key: 'built_in_wardrobes',
-        label: 'Armarios Empotrados',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="2" width="18" height="20" rx="2"/>
-            <line x1="12" y1="2" x2="12" y2="22"/>
-            <circle cx="8" cy="12" r="1"/>
-            <circle cx="16" cy="12" r="1"/>
-          </svg>
-        )
+        label: t('property.amenity.built_in_wardrobes'),
+        icon: '/wardrobe.png'
       });
     }
 
@@ -152,14 +156,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.furnished) {
       amenities.push({
         key: 'furnished',
-        label: 'Amueblado',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M3 9v11h18V9"/>
-            <path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"/>
-            <line x1="3" y1="14" x2="21" y2="14"/>
-          </svg>
-        )
+        label: t('property.amenity.furnished'),
+        icon: '/sofa.png'
       });
     }
 
@@ -167,14 +165,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.has_balcony) {
       amenities.push({
         key: 'balcony',
-        label: 'Balcón',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M3 12h18"/>
-            <path d="M6 12v8M10 12v8M14 12v8M18 12v8"/>
-            <path d="M3 20h18"/>
-          </svg>
-        )
+        label: t('property.amenity.balcony'),
+        icon: '/balcony.png'
       });
     }
 
@@ -182,13 +174,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.has_communal_gardens) {
       amenities.push({
         key: 'communal_gardens',
-        label: 'Jardines Comunitarios',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 22v-8m0 0c-2.5 0-5-2-5-5a5 5 0 0 1 10 0c0 3-2.5 5-5 5z"/>
-            <path d="M17 9c0-2.5-2-5-5-5S7 6.5 7 9"/>
-          </svg>
-        )
+        label: t('property.amenity.communal_gardens'),
+        icon: '/park.png'
       });
     }
 
@@ -196,14 +183,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.has_elevator) {
       amenities.push({
         key: 'elevator',
-        label: 'Ascensor',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="5" y="2" width="14" height="20" rx="2"/>
-            <path d="M10 9l2-2 2 2"/>
-            <path d="M10 15l2 2 2-2"/>
-          </svg>
-        )
+        label: t('property.amenity.elevator'),
+        icon: '/elevator.png'
       });
     }
 
@@ -211,27 +192,26 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.has_fireplace) {
       amenities.push({
         key: 'fireplace',
-        label: 'Chimenea',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 2c0 0-6 4-6 10a6 6 0 0 0 12 0c0-6-6-10-6-10z"/>
-            <path d="M12 22v-6"/>
-          </svg>
-        )
+        label: t('property.amenity.fireplace'),
+        icon: '/fireplace.png'
       });
     }
 
-    // Garden with Patio (both required)
-    if (attrs.has_garden || attrs.has_patio) {
+    // Garden and Patio (both required) or Garden only
+    if (attrs.has_garden && attrs.has_patio) {
       amenities.push({
         key: 'garden_patio',
-        label: 'Jardín y Patio',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 22v-8m0 0c-2.5 0-5-2-5-5a5 5 0 0 1 10 0c0 3-2.5 5-5 5z"/>
-            <path d="M17 9c0-2.5-2-5-5-5S7 6.5 7 9"/>
-          </svg>
-        )
+        label: t('property.amenity.garden_patio'),
+        icon: '/watering-plants.png'
+      });
+    } else if (attrs.has_garden) {
+      const label = attrs.garden_surface 
+        ? `${t('property.amenity.garden')} ${attrs.garden_surface}m²`
+        : t('property.amenity.garden');
+      amenities.push({
+        key: 'garden',
+        label,
+        icon: '/watering-plants.png'
       });
     }
 
@@ -239,14 +219,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.has_gym) {
       amenities.push({
         key: 'gym',
-        label: 'Gimnasio',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M6.5 6.5l11 11"/>
-            <path d="M21 3l-1 1-4-4-1 1 4 4-1 1-4-4-1 1 4 4-1 1-4-4-1 1 4 4-1 1-11-11"/>
-            <path d="M3 21l1-1"/>
-          </svg>
-        )
+        label: t('property.amenity.gym'),
+        icon: '/weight.png'
       });
     }
 
@@ -254,13 +228,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.has_home_automation) {
       amenities.push({
         key: 'home_automation',
-        label: 'Domótica',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="3" width="18" height="18" rx="2"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-        )
+        label: t('property.amenity.home_automation'),
+        icon: '/smart-home.png'
       });
     }
 
@@ -268,32 +237,20 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.has_paddle_tennis) {
       amenities.push({
         key: 'paddle',
-        label: 'Pádel/Tenis',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10"/>
-            <path d="M12 2v20"/>
-            <path d="M2 12h20"/>
-          </svg>
-        )
+        label: t('property.amenity.paddle_tennis'),
+        icon: '/paddle.png'
       });
     }
 
     // Terrace
     if (attrs.has_terrace) {
       const label = attrs.terrace_surface 
-        ? `Terraza ${attrs.terrace_surface}m²`
-        : 'Terraza';
+        ? `${t('property.amenity.terrace')} ${attrs.terrace_surface} m²`
+        : t('property.amenity.terrace');
       amenities.push({
         key: 'terrace',
         label,
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M3 12l9-9 9 9"/>
-            <path d="M5 10v12h14V10"/>
-            <path d="M9 21v-8h6v8"/>
-          </svg>
-        )
+        icon: '/terrace.png'
       });
     }
 
@@ -301,12 +258,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.has_storage_room) {
       amenities.push({
         key: 'storage',
-        label: 'Trastero',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-          </svg>
-        )
+        label: t('property.amenity.storage_room'),
+        icon: '/store-room.png'
       });
     }
 
@@ -314,14 +267,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.has_tourist_license) {
       amenities.push({
         key: 'tourist_license',
-        label: 'Licencia Turística',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="9" y1="15" x2="15" y2="15"/>
-          </svg>
-        )
+        label: t('property.amenity.tourist_license'),
+        icon: '/licence.png'
       });
     }
 
@@ -329,16 +276,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.pets_allowed) {
       amenities.push({
         key: 'pets_allowed',
-        label: 'Se Admiten Mascotas',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="11" cy="4" r="2"/>
-            <circle cx="18" cy="8" r="2"/>
-            <circle cx="20" cy="16" r="2"/>
-            <circle cx="9" cy="10" r="2"/>
-            <path d="M13 22c-2 0-4-2-4-4 0-2 2-4 4-4s4 2 4 4c0 2-2 4-4 4z"/>
-          </svg>
-        )
+        label: t('property.amenity.pets_allowed'),
+        icon: '/pawprint.png'
       });
     }
 
@@ -346,16 +285,10 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     if (attrs.pool_type && attrs.pool_type.trim() !== '') {
       amenities.push({
         key: 'pool',
-        label: 'Piscina',
-        svgPath: (
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M2 15c.6.5 1.2 1 2.5 1 1.3 0 1.9-.5 2.5-1 .6-.5 1.2-1 2.5-1s1.9.5 2.5 1c.6.5 1.2 1 2.5 1 1.3 0 1.9-.5 2.5-1 .6-.5 1.3-1 2.5-1 1.2 0 1.9.5 2.5 1"/>
-            <path d="M2 19c.6.5 1.2 1 2.5 1 1.3 0 1.9-.5 2.5-1 .6-.5 1.2-1 2.5-1s1.9.5 2.5 1c.6.5 1.2 1 2.5 1 1.3 0 1.9-.5 2.5-1 .6-.5 1.3-1 2.5-1 1.2 0 1.9.5 2.5 1"/>
-          </svg>
-        )
+        label: t('property.amenity.pool'),
+        icon: '/swimming.png'
       });
     }
-
 
     return amenities;
   };
@@ -364,7 +297,7 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     return (
       <div className="property-detail-loading">
         <div className="spinner"></div>
-        <p>Cargando propiedad...</p>
+        <p>{t('property.loading')}</p>
       </div>
     );
   }
@@ -380,9 +313,9 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     <div className="property-detail">
       {/* Breadcrumb */}
       <div className="breadcrumb">
-        <Link to="/">Inicio</Link>
+        <Link to="/">{t('property.breadcrumb.home')}</Link>
         <span className="breadcrumb-separator">/</span>
-        <Link to="/purchases">Compras</Link>
+        <Link to="/purchases">{t('property.breadcrumb.purchases')}</Link>
         <span className="breadcrumb-separator">/</span>
         <span className="breadcrumb-current">{property.title}</span>
       </div>
@@ -403,86 +336,138 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
               </p>
               <div className="property-basics">
                 <div className="property-basic-item">
-                  <svg className="basic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    <line x1="3" y1="9" x2="21" y2="9"/>
-                    <line x1="9" y1="21" x2="9" y2="9"/>
-                  </svg>
+                  <img src="/size.png" alt="superficie" className="basic-icon" />
                   <span>{attrs.built_surface} m²</span>
                 </div>
                 {attrs.bedrooms && (
                   <div className="property-basic-item">
-                    <svg className="basic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M3 11h18v10H3z"/>
-                      <path d="M6 11V7a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/>
-                      <line x1="3" y1="11" x2="3" y2="17"/>
-                      <line x1="21" y1="11" x2="21" y2="17"/>
-                    </svg>
-                    <span>{attrs.bedrooms} hab.</span>
+                    <img src="/bed.png" alt="habitaciones" className="basic-icon" />
+                    <span>{attrs.bedrooms} {t('property.basics.bedrooms')}</span>
                   </div>
                 )}
                 {attrs.bathrooms && (
                   <div className="property-basic-item">
-                    <svg className="basic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M9 22v-4m6 4v-4"/>
-                      <path d="M12 6v3"/>
-                      <path d="M6 9h12a3 3 0 0 1 3 3v2a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-2a3 3 0 0 1 3-3z"/>
-                    </svg>
-                    <span>{attrs.bathrooms} baños</span>
+                    <img src="/bathroom.png" alt="baños" className="basic-icon" />
+                    <span>{attrs.bathrooms} {t('property.basics.bathrooms')}</span>
                   </div>
                 )}
               </div>
+              
+              {/* Video Button */}
+              {attrs.video_url && (
+                <div className="property-video-section">
+                  <button 
+                    className="property-video-button"
+                    onClick={() => setIsVideoModalOpen(true)}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    {t('property.video.button')}
+                  </button>
+                </div>
+              )}
             </div>
             <div className="property-price">
-              <span className="price-label">PRECIO</span>
+              <span className="price-label">{t('property.price_label')}</span>
               <span className="price-amount">{attrs.price?.toLocaleString('es-ES')} €</span>
             </div>
           </div>
 
           {/* Description */}
-          <div className="property-description">
-            <h2>DESCRIPCIÓN</h2>
-            <p className="description-text">{language === 'es' ? attrs.description : language === 'en' ? attrs.description_english : attrs.description_french}</p>
+          <div className="property-description collapsible-section">
+            <div className="section-header" onClick={() => setDescriptionExpanded(!descriptionExpanded)}>
+              <h2>{t('property.description')}</h2>
+              <svg 
+                className={`chevron-icon ${descriptionExpanded ? 'expanded' : ''}`}
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+            {descriptionExpanded && (
+              <div className="collapsible-content">
+                <p className="description-text">{(language === 'es' ? attrs.description : language === 'en' ? attrs.description_english : attrs.description_french)?.replace(/\\n/g, '') || ''}</p>
+              </div>
+            )}
           </div>
 
           {/* Property Details */}
-          <div className="property-details-section">
-            <h2>DETALLES DE LA PROPIEDAD</h2>
-            <div className="details-grid">
-              {attrs.zone && <p><strong>Zona:</strong> {attrs.zone}</p>}
-              {attrs.condition && <p><strong>Estado:</strong> {attrs.condition}</p>}
-              {attrs.year_built && <p><strong>Año de construcción:</strong> {attrs.year_built}</p>}
-              {attrs.energy_certificate && <p><strong>Certificación energética:</strong> {attrs.energy_certificate}</p>}
-              {attrs.usable_surface && <p><strong>Superficie útil:</strong> {attrs.usable_surface} m²</p>}
-              {attrs.plot_surface && <p><strong>Superficie parcela:</strong> {attrs.plot_surface} m²</p>}
-              {attrs.garden_surface && <p><strong>Superficie jardín:</strong> {attrs.garden_surface} m²</p>}
-              {attrs.heating_type && <p><strong>Calefacción:</strong> {attrs.heating_type}</p>}
-              {attrs.air_conditioning && <p><strong>Refrigeración:</strong> {attrs.air_conditioning}</p>}
-              {attrs.orientation && <p><strong>Orientación:</strong> {attrs.orientation}</p>}
-              {attrs.parking_spaces && attrs.parking_spaces > 0 && <p><strong>Plazas de parking:</strong> {attrs.parking_spaces}</p>}
-              {attrs.parking_type && <p><strong>Tipo de parking:</strong> {attrs.parking_type}</p>}
-              {attrs.garage_spaces && attrs.garage_spaces > 0 && <p><strong>Plazas de garaje:</strong> {attrs.garage_spaces}</p>}
-              {attrs.terrace_surface && <p><strong>Superficie terraza:</strong> {attrs.terrace_surface} m²</p>}
-              {attrs.views && <p><strong>Vistas:</strong> {attrs.views}</p>}
-              {attrs.distance_to_beach && <p><strong>Distancia a la playa:</strong> {attrs.distance_to_beach} m</p>}
-              {attrs.distance_to_city_center && <p><strong>Distancia al centro:</strong> {attrs.distance_to_city_center} m</p>}
+          <div className="property-details-section collapsible-section">
+            <div className="section-header" onClick={() => setDetailsExpanded(!detailsExpanded)}>
+              <h2>{t('property.details.title')}</h2>
+              <svg 
+                className={`chevron-icon ${detailsExpanded ? 'expanded' : ''}`}
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
             </div>
+            {detailsExpanded && (
+              <div className="collapsible-content">
+                <div className="details-grid">
+              {attrs.internal_reference && <p><strong>{t('property.details.internal_reference')}:</strong> {attrs.internal_reference}</p>}
+              {attrs.zone && <p><strong>{t('property.details.zone')}:</strong> {attrs.zone}</p>}
+              {attrs.condition && <p><strong>{t('property.details.condition')}:</strong> {attrs.condition}</p>}
+              {attrs.floor && <p><strong>{t('property.details.floor')}:</strong> {attrs.floor}</p>}
+              {attrs.year_built && <p><strong>{t('property.details.year_built')}:</strong> {attrs.year_built}</p>}
+              {attrs.energy_certificate && <p><strong>{t('property.details.energy_certificate')}:</strong> {attrs.energy_certificate}</p>}
+              {attrs.usable_surface && <p><strong>{t('property.details.usable_surface')}:</strong> {attrs.usable_surface} m²</p>}
+              {attrs.plot_surface && <p><strong>{t('property.details.plot_surface')}:</strong> {attrs.plot_surface} m²</p>}
+              {attrs.garden_surface && <p><strong>{t('property.details.garden_surface')}:</strong> {attrs.garden_surface} m²</p>}
+              {attrs.heating_type && <p><strong>{t('property.details.heating_type')}:</strong> {attrs.heating_type}</p>}
+              {attrs.air_conditioning && <p><strong>{t('property.details.air_conditioning')}:</strong> {attrs.air_conditioning}</p>}
+              {attrs.orientation && <p><strong>{t('property.details.orientation')}:</strong> {attrs.orientation}</p>}
+              {attrs.kitchen_type && <p><strong>{t('property.details.kitchen_type')}:</strong> {attrs.kitchen_type}</p>}
+              {attrs.furnished && <p><strong>{t('property.details.furnished')}:</strong> {attrs.furnished}</p>}
+              {typeof attrs.is_exterior === 'boolean' && <p><strong>{t('property.details.is_exterior')}:</strong> {attrs.is_exterior ? t('common.yes') : t('common.no')}</p>}
+              {attrs.security_type && <p><strong>{t('property.details.security_type')}:</strong> {attrs.security_type}</p>}
+              {attrs.parking_spaces && attrs.parking_spaces > 0 && <p><strong>{t('property.details.parking_spaces')}:</strong> {attrs.parking_spaces}</p>}
+              {attrs.parking_type && <p><strong>{t('property.details.parking_type')}:</strong> {attrs.parking_type}</p>}
+              {attrs.garage_spaces && attrs.garage_spaces > 0 && <p><strong>{t('property.details.garage_spaces')}:</strong> {attrs.garage_spaces}</p>}
+              {attrs.terrace_surface && <p><strong>{t('property.details.terrace_surface')}:</strong> {attrs.terrace_surface} m²</p>}
+              {attrs.views && <p><strong>{t('property.details.views')}:</strong> {attrs.views}</p>}
+              {attrs.distance_to_beach && <p><strong>{t('property.details.distance_to_beach')}:</strong> {attrs.distance_to_beach} m</p>}
+              {attrs.distance_to_city_center && <p><strong>{t('property.details.distance_to_city_center')}:</strong> {attrs.distance_to_city_center} m</p>}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Amenities */}
           {getAmenities().length > 0 && (
             <>
-              <div className="property-separator"></div>
-              <div className="property-amenities-section">
-                <h2>CARACTERÍSTICAS Y COMODIDADES</h2>
-                <div className="amenities-grid">
+              <div className="property-amenities-section collapsible-section">
+                <div className="section-header" onClick={() => setAmenitiesExpanded(!amenitiesExpanded)}>
+                  <h2>{t('property.amenities.title')}</h2>
+                  <svg 
+                    className={`chevron-icon ${amenitiesExpanded ? 'expanded' : ''}`}
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2"
+                  >
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </div>
+                {amenitiesExpanded && (
+                  <div className="collapsible-content">
+                    <div className="amenities-grid">
                   {getAmenities().map(amenity => (
                     <div key={amenity.key} className="amenity-card">
-                      <div className="amenity-icon">{amenity.svgPath}</div>
+                      <div className="amenity-icon"><img src={amenity.icon} alt={amenity.label} /></div>
                       <span className="amenity-label">{amenity.label}</span>
                     </div>
                   ))}
-                </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </>
           )}
@@ -494,24 +479,24 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
             <div className="agent-info">
               <img 
                 src="/file.jpg" 
-                alt="Mohammed bin Rahil" 
+                alt={t('property.agent.alt')} 
                 className="agent-photo"
               />
               <div className="agent-details">
                 <h3 className="agent-name">David Delaunay</h3>
                 <p className="agent-description">
-                  Agente inmobiliario experimentado especializado en propiedades de lujo en la costa. Comprometido en ofrecer un servicio excepcional y encontrar la propiedad perfecta para cada cliente.
+                  {t('property.agent.description')}
                 </p>
               </div>
             </div>
 
             {/* Contact Form */}
             <form className="contact-form" onSubmit={handleContactSubmit}>
-              <h3>SOLICITAR INFORMACIÓN</h3>
+              <h3>{t('property.contact.title')}</h3>
               
               <input
                 type="text"
-                placeholder="Nombre completo"
+                placeholder={t('property.contact.name_placeholder')}
                 value={contactForm.name}
                 onChange={(e) => setContactForm({ ...contactForm, name: e.target.value })}
                 required
@@ -519,7 +504,7 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
               
               <input
                 type="tel"
-                placeholder="Teléfono"
+                placeholder={t('property.contact.phone_placeholder')}
                 value={contactForm.phone}
                 onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
                 required
@@ -527,7 +512,7 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
               
               <input
                 type="email"
-                placeholder="Correo electrónico"
+                placeholder={t('property.contact.email_placeholder')}
                 value={contactForm.email}
                 onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                 required
@@ -535,7 +520,7 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
 
               {submitted && (
                 <div className="form-success">
-                  ✓ Mensaje enviado correctamente. Nos pondremos en contacto pronto.
+                  {t('property.contact.success_message')}
                 </div>
               )}
 
@@ -550,7 +535,7 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
                 className="contact-submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Enviando...' : 'ENVIAR SOLICITUD'}
+                {isSubmitting ? t('property.contact.submitting') : t('property.contact.submit_button')}
               </button>
             </form>
           </div>
@@ -564,7 +549,7 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
             to={`/purchases?zone=${encodeURIComponent(property.attributes.zone || '')}`}
             className="related-properties-header"
           >
-            <h2>MÁS PROPIEDADES EN {property.attributes.zone?.toUpperCase()}</h2>
+            <h2>{t('property.related.title')} {property.attributes.zone?.toUpperCase()}</h2>
           </Link>
           <div className="related-properties-grid">
             {relatedProperties.map(relProp => (
@@ -581,15 +566,59 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
                     />
                   ) : (
                     <div className="related-property-no-image">
-                      Sin imagen
+                      {t('property.related.no_image')}
                     </div>
                   )}
+                  <div className="related-property-overlay">
+                    <span className="related-property-type">{relProp.attributes.property_type}</span>
+                    <span className="related-property-price">
+                      {relProp.attributes.price?.toLocaleString('es-ES')}€
+                    </span>
+                  </div>
                 </div>
                 <div className="related-property-title">
                   {relProp.title}
                 </div>
+                <div className="related-property-details">
+                  <span className="related-property-detail">
+                    <img src="/size.png" alt="superficie" width="16" height="16" />
+                    {relProp.attributes.built_surface || relProp.attributes.usable_surface}m²
+                  </span>
+                  {relProp.attributes.bedrooms && (
+                    <span className="related-property-detail">
+                      <img src="/bed.png" alt="habitaciones" width="16" height="16" />
+                      {relProp.attributes.bedrooms}
+                    </span>
+                  )}
+                  {relProp.attributes.bathrooms && (
+                    <span className="related-property-detail">
+                      <img src="/bathroom.png" alt="baños" width="16" height="16" />
+                      {relProp.attributes.bathrooms}
+                    </span>
+                  )}
+                </div>
               </Link>
             ))}
+          </div>
+        </div>
+      )}
+      
+      {/* Video Modal */}
+      {isVideoModalOpen && attrs.video_url && (
+        <div className="video-modal" onClick={() => setIsVideoModalOpen(false)}>
+          <div className="video-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="video-modal-close" onClick={() => setIsVideoModalOpen(false)}>
+              ×
+            </button>
+            <div className="video-iframe-container">
+              <iframe
+                src={getYouTubeEmbedUrl(attrs.video_url)}
+                title="Property Video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
           </div>
         </div>
       )}

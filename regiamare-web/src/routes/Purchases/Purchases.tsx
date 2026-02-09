@@ -538,13 +538,13 @@ export default function Purchases({ language }: PurchasesProps) {
 
             {loading ? (
               <div className="loading">
-                <p>Cargando propiedades...</p>
+                <p>{t('purchases.loading')}</p>
               </div>
             ) : (
               <>
                 <div className="properties-grid">
                   {properties.map((property) => (
-                    <PropertyCard key={property.id} property={property} />
+                    <PropertyCard key={property.id} property={property} language={language} />
                   ))}
                 </div>
 

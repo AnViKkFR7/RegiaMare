@@ -462,6 +462,11 @@ INSERT INTO public.attribute_definitions (company_id, item_type, key, label, dat
 VALUES 
   ('eac2ccbe-cc36-40cd-bb7e-d5fe44de972d', 'regiamare_property', 'description_french', 'Descripción en Francés', 'longtext', false, false);
 
+-- 67. AÑADIR URL DE VIDEO DE LA PROPIEDAD (Opcional)
+INSERT INTO public.attribute_definitions (company_id, item_type, key, label, data_type, is_filterable, is_required)
+VALUES 
+  ('eac2ccbe-cc36-40cd-bb7e-d5fe44de972d', 'regiamare_property', 'video_url', 'URL de Video', 'text', false, false);
+
 -- =====================================================================================
 -- RESUMEN DE DEFINICIONES CREADAS
 -- =====================================================================================

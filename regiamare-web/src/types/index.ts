@@ -78,6 +78,9 @@ export interface PropertyAttributes {
   // === DESCRIPTIONS (MULTILANGUAGE) ===
   description_english?: string;
   description_french?: string;
+  
+  // === MEDIA ===
+  video_url?: string; // URL de YouTube del video de la propiedad
 
   // === SURFACE & LOCATION ===
   usable_surface?: number; // Superficie útil

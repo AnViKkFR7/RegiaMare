@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import './ImageGallery.css';
 import type { ItemMedia, Language } from '../../types';
+import { useTranslation } from '../../utils/translations';
 
 interface ImageGalleryProps {
   images: ItemMedia[];
@@ -8,9 +9,10 @@ interface ImageGalleryProps {
   language: Language;
 }
 
-export default function ImageGallery({ images, propertyTitle }: ImageGalleryProps) {
+export default function ImageGallery({ images, propertyTitle, language }: ImageGalleryProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const t = useTranslation(language);
 
   if (images.length === 0) {
     return null;
@@ -63,7 +65,7 @@ export default function ImageGallery({ images, propertyTitle }: ImageGalleryProp
                 {/* Overlay on last image if there are more */}
                 {isLast && hasMoreImages && (
                   <div className="view-more-overlay">
-                    <span className="view-more-text">Ver más</span>
+                    <span className="view-more-text">{t('gallery.viewMore')}</span>
                     <span className="view-more-count">+{images.length - 4}</span>
                   </div>
                 )}

@@ -90,7 +90,7 @@ export default function Landing({ language }: LandingProps) {
               </>
             ) : featuredProperties.length > 0 ? (
               featuredProperties.map((property) => (
-                <PropertyCard key={property.id} property={property} featured />
+                <PropertyCard key={property.id} property={property} featured language={language} />
               ))
             ) : (
               <p className="no-properties-message">{t('landing.noProperties')}</p>

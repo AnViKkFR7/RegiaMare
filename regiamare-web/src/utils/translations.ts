@@ -687,6 +687,384 @@ export const translations: Translation = {
     es: 'Estamos aquí para ayudarle a encontrar la propiedad de sus sueños o vender su inmueble al mejor precio. Contáctenos y descubra la diferencia del servicio Regia Mare.',
     en: 'We are here to help you find your dream property or sell your property at the best price. Contact us and discover the difference of Regia Mare service.',
     fr: 'Nous sommes là pour vous aider à trouver la propriété de vos rêves ou à vendre votre bien au meilleur prix. Contactez-nous et découvrez la différence du service Regia Mare.'
+  },
+
+  // Property Detail - Amenities
+  'property.amenity.air_conditioning': {
+    es: 'Aire Acondicionado',
+    en: 'Air Conditioning',
+    fr: 'Climatisation'
+  },
+  'property.amenity.built_in_wardrobes': {
+    es: 'Armarios Empotrados',
+    en: 'Built-in Wardrobes',
+    fr: 'Armoires Encastrées'
+  },
+  'property.amenity.furnished': {
+    es: 'Amueblado',
+    en: 'Furnished',
+    fr: 'Meublé'
+  },
+  'property.amenity.balcony': {
+    es: 'Balcón',
+    en: 'Balcony',
+    fr: 'Balcon'
+  },
+  'property.amenity.communal_gardens': {
+    es: 'Jardines Comunitarios',
+    en: 'Communal Gardens',
+    fr: 'Jardins Communautaires'
+  },
+  'property.amenity.elevator': {
+    es: 'Ascensor',
+    en: 'Elevator',
+    fr: 'Ascenseur'
+  },
+  'property.amenity.fireplace': {
+    es: 'Chimenea',
+    en: 'Fireplace',
+    fr: 'Cheminée'
+  },
+  'property.amenity.garden': {
+    es: 'Jardín',
+    en: 'Garden',
+    fr: 'Jardin'
+  },
+  'property.amenity.garden_patio': {
+    es: 'Jardín y Patio',
+    en: 'Garden and Patio',
+    fr: 'Jardin et Patio'
+  },
+  'property.amenity.gym': {
+    es: 'Gimnasio',
+    en: 'Gym',
+    fr: 'Salle de Sport'
+  },
+  'property.amenity.home_automation': {
+    es: 'Domótica',
+    en: 'Home Automation',
+    fr: 'Domotique'
+  },
+  'property.amenity.paddle_tennis': {
+    es: 'Pádel/Tenis',
+    en: 'Padel/Tennis',
+    fr: 'Padel/Tennis'
+  },
+  'property.amenity.terrace': {
+    es: 'Terraza',
+    en: 'Terrace',
+    fr: 'Terrasse'
+  },
+  'property.amenity.storage_room': {
+    es: 'Trastero',
+    en: 'Storage Room',
+    fr: 'Débarras'
+  },
+  'property.amenity.tourist_license': {
+    es: 'Licencia Turística',
+    en: 'Tourist License',
+    fr: 'Licence Touristique'
+  },
+  'property.amenity.pets_allowed': {
+    es: 'Se Admiten Mascotas',
+    en: 'Pets Allowed',
+    fr: 'Animaux Acceptés'
+  },
+  'property.amenity.pool': {
+    es: 'Piscina',
+    en: 'Swimming Pool',
+    fr: 'Piscine'
+  },
+
+  // Property Detail - Details Section
+  'property.details.zone': {
+    es: 'Zona',
+    en: 'Area',
+    fr: 'Zone'
+  },
+  'property.details.condition': {
+    es: 'Estado',
+    en: 'Condition',
+    fr: 'État'
+  },
+  'property.details.year_built': {
+    es: 'Año de construcción',
+    en: 'Year Built',
+    fr: 'Année de construction'
+  },
+  'property.details.energy_certificate': {
+    es: 'Certificación energética',
+    en: 'Energy Certificate',
+    fr: 'Certificat Énergétique'
+  },
+  'property.details.usable_surface': {
+    es: 'Superficie útil',
+    en: 'Usable Surface',
+    fr: 'Surface Utile'
+  },
+  'property.details.plot_surface': {
+    es: 'Superficie parcela',
+    en: 'Plot Surface',
+    fr: 'Surface du Terrain'
+  },
+  'property.details.garden_surface': {
+    es: 'Superficie jardín',
+    en: 'Garden Surface',
+    fr: 'Surface du Jardin'
+  },
+  'property.details.heating_type': {
+    es: 'Calefacción',
+    en: 'Heating',
+    fr: 'Chauffage'
+  },
+  'property.details.air_conditioning': {
+    es: 'Refrigeración',
+    en: 'Air Conditioning',
+    fr: 'Climatisation'
+  },
+  'property.details.orientation': {
+    es: 'Orientación',
+    en: 'Orientation',
+    fr: 'Orientation'
+  },
+  'property.details.parking_spaces': {
+    es: 'Plazas de parking',
+    en: 'Parking Spaces',
+    fr: 'Places de Parking'
+  },
+  'property.details.parking_type': {
+    es: 'Tipo de parking',
+    en: 'Parking Type',
+    fr: 'Type de Parking'
+  },
+  'property.details.garage_spaces': {
+    es: 'Plazas de garaje',
+    en: 'Garage Spaces',
+    fr: 'Places de Garage'
+  },
+  'property.details.terrace_surface': {
+    es: 'Superficie terraza',
+    en: 'Terrace Surface',
+    fr: 'Surface de la Terrasse'
+  },
+  'property.details.views': {
+    es: 'Vistas',
+    en: 'Views',
+    fr: 'Vues'
+  },
+  'property.details.distance_to_beach': {
+    es: 'Distancia a la playa',
+    en: 'Distance to Beach',
+    fr: 'Distance à la Plage'
+  },
+  'property.details.distance_to_city_center': {
+    es: 'Distancia al centro',
+    en: 'Distance to City Center',
+    fr: 'Distance au Centre-ville'
+  },
+  'property.details.floor': {
+    es: 'Planta',
+    en: 'Floor',
+    fr: 'Étage'
+  },
+  'property.details.kitchen_type': {
+    es: 'Tipo de cocina',
+    en: 'Kitchen Type',
+    fr: 'Type de Cuisine'
+  },
+  'property.details.security_type': {
+    es: 'Sistema de seguridad',
+    en: 'Security System',
+    fr: 'Système de Sécurité'
+  },
+  'property.details.internal_reference': {
+    es: 'Referencia',
+    en: 'Reference',
+    fr: 'Référence'
+  },
+  'property.details.is_exterior': {
+    es: 'Exterior',
+    en: 'Exterior',
+    fr: 'Extérieur'
+  },
+  'property.details.furnished': {
+    es: 'Amueblado',
+    en: 'Furnished',
+    fr: 'Meublé'
+  },
+  'property.details.title': {
+    es: 'DETALLES DE LA PROPIEDAD',
+    en: 'PROPERTY DETAILS',
+    fr: 'DÉTAILS DE LA PROPRIÉTÉ'
+  },
+  'property.amenities.title': {
+    es: 'CARACTERÍSTICAS Y COMODIDADES',
+    en: 'FEATURES AND AMENITIES',
+    fr: 'CARACTÉRISTIQUES ET ÉQUIPEMENTS'
+  },
+  'property.description': {
+    es: 'DESCRIPCIÓN',
+    en: 'DESCRIPTION',
+    fr: 'DESCRIPTION'
+  },
+  'property.price_label': {
+    es: 'PRECIO',
+    en: 'PRICE',
+    fr: 'PRIX'
+  },
+  
+  // Breadcrumb
+  'property.breadcrumb.home': {
+    es: 'Inicio',
+    en: 'Home',
+    fr: 'Accueil'
+  },
+  'property.breadcrumb.purchases': {
+    es: 'Compras',
+    en: 'Purchases',
+    fr: 'Achats'
+  },
+  
+  // Basics
+  'property.basics.bedrooms': {
+    es: 'hab.',
+    en: 'beds',
+    fr: 'ch.'
+  },
+  'property.basics.bathrooms': {
+    es: 'baños',
+    en: 'baths',
+    fr: 'salles de bain'
+  },
+  
+  // Loading
+  'property.loading': {
+    es: 'Cargando propiedad...',
+    en: 'Loading property...',
+    fr: 'Chargement de la propriété...'
+  },
+  
+  // Video
+  'property.video.button': {
+    es: 'Ver video de la propiedad',
+    en: 'Watch property video',
+    fr: 'Voir la vidéo de la propriété'
+  },
+  
+  // Agent
+  'property.agent.description': {
+    es: 'Agente inmobiliario experimentado especializado en propiedades de lujo en la costa. Comprometido en ofrecer un servicio excepcional y encontrar la propiedad perfecta para cada cliente.',
+    en: 'Experienced real estate agent specializing in luxury coastal properties. Committed to providing exceptional service and finding the perfect property for each client.',
+    fr: 'Agent immobilier expérimenté spécialisé dans les propriétés de luxe en bord de mer. Engagé à offrir un service exceptionnel et à trouver la propriété parfaite pour chaque client.'
+  },
+  'property.agent.alt': {
+    es: 'Foto del agente',
+    en: 'Agent photo',
+    fr: 'Photo de l\'agent'
+  },
+  
+  // Contact Form
+  'property.contact.title': {
+    es: 'SOLICITAR INFORMACIÓN',
+    en: 'REQUEST INFORMATION',
+    fr: 'DEMANDE D\'INFORMATION'
+  },
+  'property.contact.name_placeholder': {
+    es: 'Nombre completo',
+    en: 'Full name',
+    fr: 'Nom complet'
+  },
+  'property.contact.phone_placeholder': {
+    es: 'Teléfono',
+    en: 'Phone',
+    fr: 'Téléphone'
+  },
+  'property.contact.email_placeholder': {
+    es: 'Correo electrónico',
+    en: 'Email',
+    fr: 'Courriel'
+  },
+  'property.contact.success_message': {
+    es: '✓ Mensaje enviado correctamente. Nos pondremos en contacto pronto.',
+    en: '✓ Message sent successfully. We will contact you soon.',
+    fr: '✓ Message envoyé avec succès. Nous vous contactons bientôt.'
+  },
+  'property.contact.submit_button': {
+    es: 'ENVIAR SOLICITUD',
+    en: 'SEND REQUEST',
+    fr: 'ENVOYER LA DEMANDE'
+  },
+  'property.contact.submitting': {
+    es: 'Enviando...',
+    en: 'Sending...',
+    fr: 'Envoi en cours...'
+  },
+  
+  // Related Properties
+  'property.related.title': {
+    es: 'MÁS PROPIEDADES EN',
+    en: 'MORE PROPERTIES IN',
+    fr: 'PLUS DE PROPRIÉTÉS À'
+  },
+  'property.related.no_image': {
+    es: 'Sin imagen',
+    en: 'No image',
+    fr: 'Pas d\'image'
+  },
+  
+  // Common
+  'common.yes': {
+    es: 'Sí',
+    en: 'Yes',
+    fr: 'Oui'
+  },
+  'common.no': {
+    es: 'No',
+    en: 'No',
+    fr: 'Non'
+  },
+  
+  // PropertyCard
+  'card.featured': {
+    es: 'DESTACADO',
+    en: 'FEATURED',
+    fr: 'EN VEDETTE'
+  },
+  'card.bedrooms': {
+    es: 'Habitaciones',
+    en: 'Bedrooms',
+    fr: 'Chambres'
+  },
+  'card.bathrooms': {
+    es: 'Baños',
+    en: 'Bathrooms',
+    fr: 'Salles de bain'
+  },
+  'card.surface': {
+    es: 'm²',
+    en: 'm²',
+    fr: 'm²'
+  },
+  
+  // Gallery
+  'gallery.viewMore': {
+    es: 'Ver más',
+    en: 'View more',
+    fr: 'Voir plus'
+  },
+  
+  // Purchases
+  'purchases.loading': {
+    es: 'Cargando propiedades...',
+    en: 'Loading properties...',
+    fr: 'Chargement des propriétés...'
+  },
+  
+  // Forms
+  'form.error': {
+    es: 'Hubo un error al enviar el formulario. Por favor, inténtelo de nuevo.',
+    en: 'There was an error submitting the form. Please try again.',
+    fr: 'Une erreur s\'est produite lors de l\'envoi du formulaire. Veuillez réessayer.'
   }
 };
 
