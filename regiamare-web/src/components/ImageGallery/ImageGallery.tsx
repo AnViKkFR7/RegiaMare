@@ -118,6 +118,8 @@ export default function ImageGallery({ images, propertyTitle, language }: ImageG
                 </div>
               ))}
             </div>
+
+            <div className='modal-bottom-spacing'></div>
           </div>
         </div>
       )}
