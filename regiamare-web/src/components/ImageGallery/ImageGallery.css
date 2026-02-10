@@ -349,9 +349,15 @@
   }
 
   .modal-thumbnail {
-    min-width: 70px;
-    height: 55px;
+    max-width: 90px;
+    height: 75px;
     border-width: 2px;
+  }
+
+  .modal-bottom-spacing {
+    display: flex;
+    height: 4rem;
+    background-color: var(--color-beige);
   }
 }
 
@@ -395,7 +401,7 @@
     background-color: var(--color-beige);
   }
   .modal-thumbnail {
-    min-width: 60px;
+    max-width: 80px;
     height: 60px;
   }
 }
