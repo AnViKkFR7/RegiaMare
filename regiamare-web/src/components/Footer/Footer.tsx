@@ -62,7 +62,18 @@ export default function Footer({ language }: FooterProps) {
         </div>
 
         <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} Regia Mare Properties. {t('footer.rights')}.</p>
+          <p>
+            &copy; {new Date().getFullYear()} Regia Mare Properties. {t('footer.rights')}.
+            <span style={{ margin: '0 12px', color: 'inherit' }}>|</span>
+            <a
+              href="https://moiraordo.es/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'inherit', textDecoration: 'none', fontWeight: 500 }}
+            >
+              Developed by MoiraOrdo
+            </a>
+          </p>
           <div className="footer-links">
             <Link to="/privacy">{t('footer.privacy')}</Link>
             <Link to="/legal">{t('footer.legal')}</Link>
