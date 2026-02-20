@@ -49,7 +49,14 @@ export default function Footer({ language }: FooterProps) {
             <div className="footer-contact">
               <a href="mailto:info@regiamare.com">info@regiamare.com</a>
               <a href="tel:+34669887791">+34 669 887 791</a>
-              <p>{t('footer.location')}</p>
+              <a
+                href="https://www.google.com/maps/place/Carrer+d'Antoni+Gaud%C3%AD,+18,+08870+Sitges,+Barcelona"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: 'inherit', textDecoration: 'none' }}
+              >
+                {t('footer.location')}
+              </a>
             </div>
           </div>
         </div>

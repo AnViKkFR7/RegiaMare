@@ -592,9 +592,9 @@ export const translations: Translation = {
     fr: 'Contact'
   },
   'footer.location': {
-    es: 'Costa de Barcelona, España',
-    en: 'Barcelona Coast, Spain',
-    fr: 'Côte de Barcelone, Espagne'
+    es: "Dirección Oficina de Sitges: Carrer d'Antoni Gaudí 18, local 6, Sitges 08870",
+    en: "Sitges Office Address: Carrer d'Antoni Gaudí 18, local 6, Sitges 08870",
+    fr: "Adresse bureau de Sitges : Carrer d'Antoni Gaudí 18, local 6, Sitges 08870"
   },
   'footer.rights': {
     es: 'Todos los derechos reservados',
