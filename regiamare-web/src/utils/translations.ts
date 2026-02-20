@@ -596,6 +596,11 @@ export const translations: Translation = {
     en: "Sitges Office Address: Carrer d'Antoni Gaudí 18, local 6, Sitges 08870",
     fr: "Adresse bureau de Sitges : Carrer d'Antoni Gaudí 18, local 6, Sitges 08870"
   },
+  'footer.location_comarruga': {
+    es: "Dirección de la empresa y oficina de Comarruga: Av Palfuriana 126, Comarruga 43880",
+    en: "Company and Comarruga Office Address: Av Palfuriana 126, Comarruga 43880",
+    fr: "Adresse de l'entreprise et bureau de Comarruga : Av Palfuriana 126, Comarruga 43880"
+  },
   'footer.rights': {
     es: 'Todos los derechos reservados',
     en: 'All rights reserved',

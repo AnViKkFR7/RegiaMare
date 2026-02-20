@@ -53,9 +53,17 @@ export default function Footer({ language }: FooterProps) {
                 href="https://www.google.com/maps/place/Carrer+d'Antoni+Gaud%C3%AD,+18,+08870+Sitges,+Barcelona"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ color: 'inherit', textDecoration: 'none' }}
+                style={{ color: 'inherit', textDecoration: 'none', display: 'block', marginBottom: 4 }}
               >
                 {t('footer.location')}
+              </a>
+              <a
+                href="https://www.google.com/maps/place/Av+Palfuriana,+126,+43880+Coma-ruga,+Tarragona"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: 'inherit', textDecoration: 'none', display: 'block' }}
+              >
+                {t('footer.location_comarruga')}
               </a>
             </div>
           </div>
