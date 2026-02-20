@@ -35,9 +35,9 @@ export const translations: Translation = {
     fr: 'Bienvenue à Regia Mare'
   },
   'landing.heroTitle': {
-    es: 'ENCUENTRA TU PROPIEDAD DE LUJO EN LA COSTA',
-    en: 'FIND YOUR LUXURY PROPERTY ON THE COAST',
-    fr: 'TROUVEZ VOTRE PROPRIÉTÉ DE LUXE SUR LA CÔTE'
+    es: 'ENCUENTRA TU VIVIENDA IDEAL EN LA COSTA',
+    en: 'FIND YOUR IDEAL HOME ON THE COAST',
+    fr: 'TROUVEZ VOTRE LOGEMENT IDÉAL SUR LA CÔTE'
   },
   'landing.heroSubtitle': {
     es: 'Propiedades exclusivas en las mejores zonas de Barcelona y la Costa Dorada',
