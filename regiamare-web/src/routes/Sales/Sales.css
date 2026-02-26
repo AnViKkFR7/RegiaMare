@@ -58,7 +58,7 @@
 /* Main Content Layout */
 .sales-content {
   padding: 0px 0;
-  background-color: #2d5555;
+  background-color: #E2D6C9;
 }
 
 .sales-layout {
@@ -138,14 +138,14 @@
 .sales-intro h2 {
   font-size: 32px;
   font-weight: 700;
-  color: white;
+  color: var(--color-dark-brown);
   margin-bottom: 15px;
   line-height: 1.2;
 }
 
 .sales-intro p {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-dark-brown);
   line-height: 1.6;
   text-align: justify;
 }
@@ -158,17 +158,18 @@
 }
 
 .accordion-item {
-  border: 3px solid rgba(255, 255, 255, 0.3);
+  border: 3px solid var(--color-dark-brown);
   background-color: transparent;
   transition: all 0.3s ease;
+  margin-bottom: 18px;
 }
 
 .accordion-item:hover {
-  border-color: rgba(255, 255, 255, 0.5);
+  border-color: var(--color-dark-brown);
 }
 
 .accordion-item.active {
-  border-color: white;
+  border-color: var(--color-dark-brown);
 }
 
 .accordion-header {
@@ -193,12 +194,13 @@
 
 .accordion-header span {
   flex: 1;
+  color: var(--color-dark-brown);
 }
 
 .accordion-icon {
   flex-shrink: 0;
   transition: transform 0.3s ease;
-  color: white;
+  color: var(--color-dark-brown);
 }
 
 .accordion-item.active .accordion-icon {
@@ -220,7 +222,7 @@
 }
 
 .accordion-content p {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--color-dark-brown);
   line-height: 1.7;
   font-size: 15px;
 }
