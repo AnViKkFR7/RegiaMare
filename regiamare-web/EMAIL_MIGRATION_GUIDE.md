@@ -61,7 +61,7 @@ supabase link --project-ref TU_PROJECT_ID
 
 #### 5. **Configurar Secreto en Supabase**
 ```bash
-supabase secrets set RESEND_API_KEY=re_tu_api_key
+supabase secrets set RESEND_REGIAMARE_API_KEY=re_tu_api_key
 ```
 
 #### 6. **Personalizar Email Destino/Remitente** (Opcional)
@@ -93,7 +93,7 @@ supabase functions logs send-email --tail
 ### 1. **Probar Localmente** (Opcional)
 ```bash
 # Crear archivo con tu API key
-echo "RESEND_API_KEY=re_tu_key" > .env.local
+echo "RESEND_REGIAMARE_API_KEY=re_tu_key" > .env.local
 
 # Iniciar Supabase local
 supabase start
@@ -141,7 +141,7 @@ supabase functions logs send-email --tail
 supabase secrets list
 
 # Volver a configurar
-supabase secrets set RESEND_API_KEY=re_tu_key
+supabase secrets set RESEND_REGIAMARE_API_KEY=re_tu_key
 
 # Redesplegar
 supabase functions deploy send-email --no-verify-jwt
@@ -203,7 +203,7 @@ supabase secrets unset SECRET_NAME
 - [ ] Crear cuenta en Resend
 - [ ] Obtener API Key de Resend
 - [ ] Vincular proyecto: `supabase link --project-ref ...`
-- [ ] Configurar secreto: `supabase secrets set RESEND_API_KEY=...`
+- [ ] Configurar secreto: `supabase secrets set RESEND_REGIAMARE_API_KEY=...`
 - [ ] Personalizar email destino/remitente (opcional)
 - [ ] Verificar dominio en Resend (opcional)
 - [ ] Desplegar función: `supabase functions deploy send-email --no-verify-jwt`

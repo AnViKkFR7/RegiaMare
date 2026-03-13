@@ -1035,6 +1035,11 @@ export const translations: Translation = {
     en: 'FEATURED',
     fr: 'EN VEDETTE'
   },
+  'card.reserved': {
+    es: 'RESERVADO',
+    en: 'RESERVED',
+    fr: 'RÉSERVÉ'
+  },
   'card.bedrooms': {
     es: 'Habitaciones',
     en: 'Bedrooms',

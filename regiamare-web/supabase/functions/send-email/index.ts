@@ -37,9 +37,9 @@ Deno.serve(async (req) => {
         }
 
         // Get Resend API key from environment
-        const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
+        const RESEND_API_KEY = Deno.env.get('RESEND_REGIAMARE_API_KEY');
         if (!RESEND_API_KEY) {
-            throw new Error('RESEND_API_KEY not configured');
+            throw new Error('RESEND_REGIAMARE_API_KEY not configured');
         }
 
         // Prepare email content
@@ -104,7 +104,7 @@ Este email fue enviado desde el formulario de valoración de Regiamare Propertie
             },
             body: JSON.stringify({
                 from: 'onboarding@resend.dev',
-                to: ['joselynelvira99@gmail.com'],
+                to: ['david@regiamare.com'],
                 reply_to: email,
                 subject: `Nueva Solicitud de Valoración - ${name}`,
                 html: emailHtml,

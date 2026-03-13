@@ -160,20 +160,33 @@ export async function getPropertyById(id: string): Promise<Property | null> {
 }
 
 /**
- * Gets the 2 most expensive published properties (featured)
+ * Gets 2 featured properties based on is_featured attribute.
+ * - If 2+ have is_featured=true → the 2 most expensive among them.
+ * - If exactly 1 has is_featured=true → that one + the most expensive non-featured.
+ * - If none have is_featured=true → the 2 most expensive overall.
  */
 export async function getFeaturedProperties(): Promise<Property[]> {
   try {
     const properties = await getAllProperties();
-    
-    // Sort by price descending
-    const sortedByPrice = properties.sort((a, b) => {
-      const priceA = a.attributes.price || 0;
-      const priceB = b.attributes.price || 0;
-      return priceB - priceA;
-    });
 
-    return sortedByPrice.slice(0, 2);
+    const byPriceDesc = (a: Property, b: Property) =>
+      (b.attributes.price || 0) - (a.attributes.price || 0);
+
+    const featured = properties.filter(p => p.attributes.is_featured === true);
+
+    if (featured.length >= 2) {
+      return featured.sort(byPriceDesc).slice(0, 2);
+    }
+
+    if (featured.length === 1) {
+      const nonFeatured = properties
+        .filter(p => !p.attributes.is_featured)
+        .sort(byPriceDesc);
+      return [featured[0], ...nonFeatured.slice(0, 1)];
+    }
+
+    // No featured properties — fall back to 2 most expensive
+    return properties.sort(byPriceDesc).slice(0, 2);
   } catch (error) {
     console.error('Error fetching featured properties:', error);
     return [];

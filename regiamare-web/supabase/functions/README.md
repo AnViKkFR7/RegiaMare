@@ -86,7 +86,7 @@ supabase secrets set SECRET_NAME=value
 
 1. Crea `.env.local`:
    ```
-   RESEND_API_KEY=re_your_api_key
+   RESEND_REGIAMARE_API_KEY=re_your_api_key
    ```
 
 2. Inicia las funciones:
@@ -107,7 +107,7 @@ Para instrucciones completas de configuración y despliegue, consulta [SUPABASE_
 
 ## 🔒 Seguridad
 
-- Los secretos (como RESEND_API_KEY) se configuran mediante `supabase secrets set`
+- Los secretos (como RESEND_REGIAMARE_API_KEY) se configuran mediante `supabase secrets set`
 - Nunca commitees archivos .env con secretos reales
 - Las funciones incluyen validación de campos requeridos
 - CORS está configurado para permitir peticiones desde el frontend

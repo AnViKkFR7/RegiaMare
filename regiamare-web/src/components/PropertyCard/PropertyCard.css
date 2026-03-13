@@ -85,6 +85,23 @@
   margin-top: auto;
 }
 
+.reserved-ribbon {
+  position: absolute;
+  top: 22px;
+  right: -42px;
+  width: 150px;
+  background-color: var(--color-beige);
+  color: var(--color-dark-brown);
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 10px 0;
+  transform: rotate(45deg);
+  z-index: 10;
+  pointer-events: none;
+}
+
 .property-card-content {
   padding: var(--spacing-md);
   flex-grow: 1;

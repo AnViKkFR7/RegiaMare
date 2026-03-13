@@ -165,6 +165,7 @@ export interface PropertyAttributes {
   assigned_agent?: string;
   is_exclusive?: boolean;
   is_featured?: boolean;
+  reservada?: boolean;
 }
 
 export interface Property extends Item {

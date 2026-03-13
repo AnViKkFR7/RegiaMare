@@ -71,7 +71,7 @@ Los secretos son variables de entorno seguras que solo existen en el servidor:
 
 ```bash
 # Configurar API Key de Resend
-supabase secrets set RESEND_API_KEY=re_tu_api_key_aqui
+supabase secrets set RESEND_REGIAMARE_API_KEY=re_tu_api_key_aqui
 
 # Ver secretos configurados (sin mostrar valores)
 supabase secrets list
@@ -117,7 +117,7 @@ supabase functions serve send-email --env-file .env
 
 1. Crea un archivo `.env.local` con:
    ```
-   RESEND_API_KEY=re_tu_api_key
+   RESEND_REGIAMARE_API_KEY=re_tu_api_key
    ```
 
 2. Ejecuta la función localmente:
@@ -151,9 +151,9 @@ supabase functions serve send-email --env-file .env
 
 ## 🔍 Troubleshooting
 
-### Error: "RESEND_API_KEY not configured"
+### Error: "RESEND_REGIAMARE_API_KEY not configured"
 - Verifica que el secreto esté configurado: `supabase secrets list`
-- Vuelve a configurarlo: `supabase secrets set RESEND_API_KEY=re_...`
+- Vuelve a configurarlo: `supabase secrets set RESEND_REGIAMARE_API_KEY=re_...`
 - Redesplega la función: `supabase functions deploy send-email --no-verify-jwt`
 
 ### Error: "Failed to send email"

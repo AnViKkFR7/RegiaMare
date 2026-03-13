@@ -12,10 +12,10 @@ interface PropertyCardProps {
 export default function PropertyCard({ property, featured = false, language }: PropertyCardProps) {
   const { attributes, media } = property;
   const t = useTranslation(language);
-  
+
   // Get primary image or use placeholder
   const primaryImage = media.find(m => m.is_primary)?.url || media[0]?.url || '/placeholder-property.jpg';
-  
+
   // Format price
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('es-ES', {
@@ -29,15 +29,22 @@ export default function PropertyCard({ property, featured = false, language }: P
     <Link to={`/property/${property.id}`} className={`property-card ${featured ? 'featured' : ''}`}>
       <div className="property-card-image">
         <img src={primaryImage} alt={property.title} loading="lazy" />
+        {attributes.reservada && (
+          <div className="reserved-ribbon">{t('card.reserved')}</div>
+        )}
         <div className="property-card-overlay">
           {featured && <span className="property-badge featured-badge">{t('card.featured')}</span>}
           <span className="property-badge type-badge">{attributes.property_type.toUpperCase()}</span>
         </div>
       </div>
-      
+
       <div className="property-card-content">
         <div className="property-card-header">
-          <h3 className="property-card-title">{property.title.toUpperCase()}</h3>
+          <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><h3 className="property-card-title">{property.title.toUpperCase()}</h3>
+            {attributes.reservada && (
+              <span className="reserved-title-badge">{t('card.reserved')}</span>
+            )}</div>
+
           <p className="property-card-location">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
@@ -54,16 +61,16 @@ export default function PropertyCard({ property, featured = false, language }: P
             <span className="feature-value">{attributes.bedrooms}</span>
             <span className="feature-label">{t('card.bedrooms')}</span>
           </div>
-          
+
           <div className="property-feature-divider"></div>
-          
+
           <div className="property-feature-item">
             <span className="feature-value">{attributes.bathrooms}</span>
             <span className="feature-label">{t('card.bathrooms')}</span>
           </div>
-          
+
           <div className="property-feature-divider"></div>
-          
+
           <div className="property-feature-item">
             <span className="feature-value">{attributes.built_surface}</span>
             <span className="feature-label">{t('card.surface')}</span>
