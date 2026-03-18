@@ -76,6 +76,27 @@
   transition: opacity var(--transition-fast);
 }
 
+.footer-social {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--color-beige);
+  opacity: 0.8;
+}
+
+.footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-beige);
+  opacity: 1;
+  transition: opacity var(--transition-fast);
+}
+
+.footer-social-link:hover {
+  opacity: 1;
+  color: var(--color-white);
+}
+
 .footer-bottom {
   border-top: 1px solid rgba(226, 214, 201, 0.2);
   padding-top: var(--spacing-lg);
