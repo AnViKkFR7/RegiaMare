@@ -45,7 +45,7 @@ export default function ImageGallery({ images, propertyTitle, language }: ImageG
       <div className="image-gallery">
         {/* Main Image - Left side (2/3) */}
         <div className="gallery-main-image" onClick={() => openModal(0)}>
-          <img src={mainImage.url} alt={mainImage.alt_text || propertyTitle} />
+          <img loading="lazy" decoding="async" src={mainImage.url} alt={mainImage.alt_text || propertyTitle} />
         </div>
 
         {/* Side Images - Right side (1/3) */}
@@ -53,15 +53,15 @@ export default function ImageGallery({ images, propertyTitle, language }: ImageG
           {sideImages.map((image, index) => {
             const isLast = index === sideImages.length - 1;
             const imageIndex = index + 1;
-            
+
             return (
               <div
                 key={image.id}
                 className={`gallery-side-image ${isLast ? 'last-image' : ''}`}
                 onClick={() => openModal(imageIndex)}
               >
-                <img src={image.url} alt={image.alt_text || `${propertyTitle} ${imageIndex + 1}`} />
-                
+                <img loading="lazy" decoding="async" src={image.url} alt={image.alt_text || `${propertyTitle} ${imageIndex + 1}`} />
+
                 {/* Overlay on last image if there are more */}
                 {isLast && hasMoreImages && (
                   <div className="view-more-overlay">
@@ -89,13 +89,15 @@ export default function ImageGallery({ images, propertyTitle, language }: ImageG
               <button className="modal-nav modal-prev" onClick={prevImage}>
                 ‹
               </button>
-              
+
               <img
+                loading="lazy"
+                decoding="async"
                 src={images[selectedImageIndex].url}
                 alt={images[selectedImageIndex].alt_text || propertyTitle}
                 className="modal-main-image"
               />
-              
+
               <button className="modal-nav modal-next" onClick={nextImage}>
                 ›
               </button>
@@ -114,7 +116,7 @@ export default function ImageGallery({ images, propertyTitle, language }: ImageG
                   className={`modal-thumbnail ${index === selectedImageIndex ? 'active' : ''}`}
                   onClick={() => setSelectedImageIndex(index)}
                 >
-                  <img src={image.url} alt={`Thumbnail ${index + 1}`} />
+                  <img loading="lazy" decoding="async" src={image.url} alt={`Thumbnail ${index + 1}`} />
                 </div>
               ))}
             </div>

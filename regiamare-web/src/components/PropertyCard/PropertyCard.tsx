@@ -28,7 +28,7 @@ export default function PropertyCard({ property, featured = false, language }: P
   return (
     <Link to={`/property/${property.id}`} className={`property-card ${featured ? 'featured' : ''}`}>
       <div className="property-card-image">
-        <img src={primaryImage} alt={property.title} loading="lazy" />
+        <img loading="lazy" decoding="async" src={primaryImage} alt={property.title} />
         {attributes.reservada && (
           <div className="reserved-ribbon">{t('card.reserved')}</div>
         )}
