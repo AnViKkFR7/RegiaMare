@@ -29,9 +29,11 @@ export default function PropertyCard({ property, featured = false, language }: P
     <Link to={`/property/${property.id}`} className={`property-card ${featured ? 'featured' : ''}`}>
       <div className="property-card-image">
         <img loading="lazy" decoding="async" src={primaryImage} alt={property.title} />
-        {attributes.reservada && (
+        {attributes.vendido ? (
+          <div className="sold-ribbon">{t('card.sold')}</div>
+        ) : attributes.reservada ? (
           <div className="reserved-ribbon">{t('card.reserved')}</div>
-        )}
+        ) : null}
         <div className="property-card-overlay">
           {featured && <span className="property-badge featured-badge">{t('card.featured')}</span>}
           <span className="property-badge type-badge">{attributes.property_type.toUpperCase()}</span>
@@ -41,9 +43,11 @@ export default function PropertyCard({ property, featured = false, language }: P
       <div className="property-card-content">
         <div className="property-card-header">
           <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}><h3 className="property-card-title">{property.title.toUpperCase()}</h3>
-            {attributes.reservada && (
+            {attributes.vendido ? (
+              <span className="sold-title-badge">{t('card.sold')}</span>
+            ) : attributes.reservada ? (
               <span className="reserved-title-badge">{t('card.reserved')}</span>
-            )}</div>
+            ) : null}</div>
 
           <p className="property-card-location">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">

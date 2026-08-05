@@ -166,6 +166,7 @@ export interface PropertyAttributes {
   is_exclusive?: boolean;
   is_featured?: boolean;
   reservada?: boolean;
+  vendido?: boolean;
 }
 
 export interface Property extends Item {

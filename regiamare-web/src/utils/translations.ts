@@ -1040,6 +1040,11 @@ export const translations: Translation = {
     en: 'RESERVED',
     fr: 'RÉSERVÉ'
   },
+  'card.sold': {
+    es: 'VENDIDO',
+    en: 'SOLD',
+    fr: 'VENDU'
+  },
   'card.bedrooms': {
     es: 'Habitaciones',
     en: 'Bedrooms',

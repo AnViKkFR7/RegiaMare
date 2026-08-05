@@ -332,9 +332,11 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
             <div className="property-title-section">
               <div className="property-title-wrapper">
                 <h1 className="property-title">{property.title}</h1>
-                {attrs.reservada && (
+                {attrs.vendido ? (
+                  <span className="sold-title-badge">{t('card.sold')}</span>
+                ) : attrs.reservada ? (
                   <span className="reserved-title-badge">{t('card.reserved')}</span>
-                )}
+                ) : null}
               </div>
               <p className="property-location">
                 {[ attrs.city, attrs.province ].filter(Boolean).join(', ')}
@@ -573,9 +575,11 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
                       {t('property.related.no_image')}
                     </div>
                   )}
-                  {relProp.attributes.reservada && (
+                  {relProp.attributes.vendido ? (
+                    <div className="related-sold-ribbon">{t('card.sold')}</div>
+                  ) : relProp.attributes.reservada ? (
                     <div className="related-reserved-ribbon">{t('card.reserved')}</div>
-                  )}
+                  ) : null}
                   <div className="related-property-overlay">
                     <span className="related-property-type">{relProp.attributes.property_type}</span>
                     <span className="related-property-price">
