@@ -1,7 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 
+// La URL del proyecto no es secreta, así que reutilizamos VITE_SUPABASE_URL
+// si SUPABASE_URL (sin prefijo) no está configurada aparte.
 const supabase = createClient(
-  process.env.SUPABASE_URL!,
+  (process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL)!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
