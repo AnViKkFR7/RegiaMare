@@ -27,9 +27,7 @@ async function activeEventKeys(companyId: string): Promise<Set<string>> {
   return keys
 }
 
-export default async function handler(req: Request) {
-  if (req.method !== 'POST') return new Response('Method not allowed', { status: 405 })
-
+export async function POST(req: Request) {
   let body: { company_id?: string; event_type?: string; event_key?: string; path?: string; session_id?: string }
   try {
     body = await req.json()

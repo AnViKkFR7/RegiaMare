@@ -50,7 +50,7 @@ Variables), no en el admin panel:
 
 | Variable | Prefijo público? | Valor |
 |---|---|---|
-| `SUPABASE_URL` | No — solo servidor | URL del proyecto Supabase compartido |
+| `SUPABASE_URL` | No — solo servidor | URL del proyecto Supabase compartido. Opcional si esta web ya tiene `VITE_SUPABASE_URL` (o equivalente) configurada — `api/track.ts` cae a esa si `SUPABASE_URL` no existe |
 | `SUPABASE_SERVICE_ROLE_KEY` | **No, nunca** | Service role key de ese mismo proyecto |
 | `VITE_COMPANY_ID` | Sí — pública, se sirve al navegador | `id` de esta empresa en `companies` |
 
@@ -71,12 +71,26 @@ Variables), no en el admin panel:
 Crea este archivo tal cual, en `api/track.ts` (Vercel lo despliega como
 Serverless Function automáticamente, sin configuración adicional):
 
+> ⚠️ **La firma de la función importa.** Vercel Functions con la API Fetch
+> (`Request`/`Response`) exige exportar la función con el nombre del método
+> HTTP (`export async function POST(req: Request)`), **no** un
+> `export default function handler(req: Request)`. Un `export default` que
+> devuelve un `Response` se ignora en silencio: Vercel no lo trata como
+> error, pero tampoco cierra la respuesta — el navegador ve la petición
+> quedarse en "(pending)" para siempre y ningún evento llega a guardarse.
+> Si ves eso, es casi siempre esto.
+
 ```ts
 // api/track.ts
 import { createClient } from '@supabase/supabase-js'
 
+// La URL del proyecto no es secreta: si esta web ya tiene configurada
+// VITE_SUPABASE_URL (u otra variable pública equivalente) para el resto de
+// la app, no hace falta duplicarla como SUPABASE_URL — cae a esa por
+// defecto. Lo único que SIEMPRE debe ir sin prefijo público es la
+// service role key.
 const supabase = createClient(
-  process.env.SUPABASE_URL!,
+  (process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL)!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
@@ -100,9 +114,9 @@ async function activeEventKeys(companyId: string): Promise<Set<string>> {
   return keys
 }
 
-export default async function handler(req: Request) {
-  if (req.method !== 'POST') return new Response('Method not allowed', { status: 405 })
-
+export async function POST(req: Request) {
+  // No hace falta comprobar req.method: al exportar la función como `POST`,
+  // Vercel solo la invoca para peticiones POST y devuelve 405 para el resto.
   let body: { company_id?: string; event_type?: string; event_key?: string; path?: string; session_id?: string }
   try {
     body = await req.json()
@@ -309,6 +323,21 @@ desde el admin panel, es posible que estos dos ya existan por defecto.
    ahora" en la pestaña "Analítica" (o esperar a la siguiente pasada
    automática, cada 2 horas aprox. entre las 10:00 y las 18:00) y comprobar
    que los datos de hoy aparecen ahí.
+
+> ⚠️ **Una petición en "(pending)" para siempre en el Network tab no
+> significa que esté fallando.** `lib/analytics.ts` usa
+> `navigator.sendBeacon()` a propósito (para no perder el evento si el
+> usuario cambia de página justo después del clic), y Chrome DevTools tiene
+> un bug conocido por el que las peticiones hechas con `sendBeacon` casi
+> siempre se quedan marcadas como "(pending)" en Network aunque el servidor
+> ya haya respondido — no actualiza el estado visualmente. No te fíes de esa
+> columna para diagnosticar `sendBeacon`; en su lugar comprueba directamente
+> los **logs de la función** (Vercel → Deployments → tu deploy → Functions →
+> `api/track`) o la tabla `analytics_events` en el Table Editor de Supabase.
+> Si ahí no hay errores ni filas nuevas, el problema es real (revisa las
+> variables de entorno del Paso 1 y la firma de la función del Paso 2); si
+> sí hay filas nuevas, todo funciona y el "(pending)" era solo un artefacto
+> de DevTools.
 
 ---
 
