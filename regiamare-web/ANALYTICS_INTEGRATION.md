@@ -343,11 +343,12 @@ desde el admin panel, es posible que estos dos ya existan por defecto.
 
 ## 7. Checklist final
 
-- [ ] `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` configuradas en Vercel
-      (servidor, nunca con prefijo público)
+- [ ] `SUPABASE_SERVICE_ROLE_KEY` configurada en Vercel (servidor, nunca con
+      prefijo público); `SUPABASE_URL` también si esta web no tiene ya
+      `VITE_SUPABASE_URL`
 - [ ] `VITE_COMPANY_ID` (o el equivalente del bundler) configurada con el
       `id` correcto de esta empresa
-- [ ] `api/track.ts` desplegado
+- [ ] `api/track.ts` desplegado, exportando `POST` (no `export default`)
 - [ ] `lib/analytics.ts` creado y `initAutoTracking()` llamado una vez al
       arrancar
 - [ ] `trackPageview` cableado al cambio de ruta
