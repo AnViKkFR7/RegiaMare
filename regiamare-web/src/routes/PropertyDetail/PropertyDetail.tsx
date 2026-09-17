@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import './PropertyDetail.css';
 import type { Property } from '../../types';
@@ -6,6 +6,7 @@ import { getPropertyById, getPropertiesByZone } from '../../services/propertySer
 import ImageGallery from '../../components/ImageGallery/ImageGallery';
 import type { Language } from '../../types';
 import { useTranslation } from '../../utils/translations';
+import { trackEvent } from '../../lib/analytics';
 
 interface PropertyDetailProps {
   language: Language;
@@ -26,7 +27,14 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+  const formOpenTracked = useRef(false);
+
+  const handleFormOpen = () => {
+    if (formOpenTracked.current) return;
+    formOpenTracked.current = true;
+    trackEvent('form_open');
+  };
+
   // Collapsible sections state (default: expanded)
   const [descriptionExpanded, setDescriptionExpanded] = useState(true);
   const [detailsExpanded, setDetailsExpanded] = useState(true);
@@ -109,10 +117,12 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
         throw new Error(errorData.error || 'Failed to send email');
       }
 
+      trackEvent('form_submit_success');
       setSubmitted(true);
       setContactForm({ name: '', phone: '', email: '' });
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
+      trackEvent('form_submit_error');
       setError(t('form.error'));
     } finally {
       setIsSubmitting(false);
@@ -497,7 +507,7 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
             </div>
 
             {/* Contact Form */}
-            <form className="contact-form" onSubmit={handleContactSubmit}>
+            <form className="contact-form" onSubmit={handleContactSubmit} onFocus={handleFormOpen}>
               <h3>{t('property.contact.title')}</h3>
               
               <input

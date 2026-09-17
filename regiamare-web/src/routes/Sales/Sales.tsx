@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './Sales.css';
 import { useTranslation } from '../../utils/translations';
+import { trackEvent } from '../../lib/analytics';
 import type { Language } from '../../types';
 
 interface SalesProps {
@@ -22,6 +23,13 @@ export default function Sales({ language }: SalesProps) {
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const formOpenTracked = useRef(false);
+
+  const handleFormOpen = () => {
+    if (formOpenTracked.current) return;
+    formOpenTracked.current = true;
+    trackEvent('form_open');
+  };
 
   // Detect mobile to keep accordion always open
   useEffect(() => {
@@ -77,6 +85,7 @@ export default function Sales({ language }: SalesProps) {
       const result = await response.json();
       console.log('Email sent successfully:', result);
 
+      trackEvent('form_submit_success');
       setSubmitted(true);
       setFormData({
         name: '',
@@ -89,6 +98,7 @@ export default function Sales({ language }: SalesProps) {
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
       console.error('Error sending email:', err);
+      trackEvent('form_submit_error');
       setError(t('form.error'));
     } finally {
       setIsSubmitting(false);
@@ -190,7 +200,7 @@ export default function Sales({ language }: SalesProps) {
 
           {/* Form - Right column for >1500px and tablet */}
           <div className="sales-form-wrapper">
-            <form className="sales-form" onSubmit={handleSubmit}>
+            <form className="sales-form" onSubmit={handleSubmit} onFocus={handleFormOpen}>
               <h3>{t('sales.cta')}</h3>
               
               <div className="form-group">
@@ -291,7 +301,7 @@ export default function Sales({ language }: SalesProps) {
         
         {/* Form below - For 1024px-1500px */}
         <div className="sales-form-bottom">
-          <form className="sales-form" onSubmit={handleSubmit}>
+          <form className="sales-form" onSubmit={handleSubmit} onFocus={handleFormOpen}>
             <h3>{t('sales.cta')}</h3>
             
             <div className="form-group">

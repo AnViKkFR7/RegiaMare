@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { trackPageview } from './lib/analytics';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import CookieBanner from './components/CookieBanner/CookieBanner';
@@ -17,6 +18,14 @@ import type { Language } from './types';
 import './styles/globals.css';
 import './App.css';
 
+function PageviewTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    trackPageview(location.pathname);
+  }, [location.pathname]);
+  return null;
+}
+
 function App() {
   const [language, setLanguage] = useState<Language>('es');
 
@@ -27,6 +36,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
+      <PageviewTracker />
       <div className="app">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
