@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import './Sales.css';
 import { useTranslation } from '../../utils/translations';
 import { trackEvent } from '../../lib/analytics';
+import { submitLead } from '../../lib/leads';
 import type { Language } from '../../types';
 
 interface SalesProps {
@@ -47,43 +48,69 @@ export default function Sales({ language }: SalesProps) {
     setActiveAccordion(activeAccordion === index ? null : index);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const sendEmail = async () => {
+    // Enviar email usando Supabase Edge Function
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error('Supabase configuration missing');
+    }
+
+    const response = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${supabaseAnonKey}`,
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        propertyType: formData.propertyType,
+        message: formData.message
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to send email');
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const honeypot = String(new FormData(e.currentTarget).get('company_website') ?? '');
+    if (honeypot) {
+      // Bot: se simula éxito sin enviar nada
+      setSubmitted(true);
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
     try {
-      // Enviar email usando Supabase Edge Function
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-      if (!supabaseUrl || !supabaseAnonKey) {
-        throw new Error('Supabase configuration missing');
-      }
-
-      const response = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabaseAnonKey}`,
-        },
-        body: JSON.stringify({
+      // La solicitud se guarda en la bandeja de leads y, además, se sigue
+      // enviando el email. Basta con que una de las dos vías funcione.
+      const [leadResult, emailResult] = await Promise.allSettled([
+        submitLead({
           name: formData.name,
           email: formData.email,
           phone: formData.phone,
-          address: formData.address,
-          propertyType: formData.propertyType,
-          message: formData.message
-        })
-      });
+          message: `Dirección: ${formData.address}\nTipo de propiedad: ${formData.propertyType}\n\n${formData.message}`.trim(),
+        }),
+        sendEmail(),
+      ]);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to send email');
+      const leadOk = leadResult.status === 'fulfilled' && leadResult.value.ok;
+      const emailOk = emailResult.status === 'fulfilled';
+      if (!leadOk) console.error('Error saving lead:', leadResult);
+      if (!emailOk) console.error('Error sending email:', emailResult);
+      if (!leadOk && !emailOk) {
+        throw new Error('Lead and email both failed');
       }
-
-      const result = await response.json();
-      console.log('Email sent successfully:', result);
 
       trackEvent('form_submit_success');
       setSubmitted(true);
@@ -97,7 +124,7 @@ export default function Sales({ language }: SalesProps) {
       });
       setTimeout(() => setSubmitted(false), 5000);
     } catch (err) {
-      console.error('Error sending email:', err);
+      console.error('Error submitting form:', err);
       trackEvent('form_submit_error');
       setError(t('form.error'));
     } finally {
@@ -280,6 +307,15 @@ export default function Sales({ language }: SalesProps) {
                 />
               </div>
 
+              <input
+                type="text"
+                name="company_website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: 'absolute', left: '-9999px', width: 1, height: 1 }}
+              />
+
               <button type="submit" className="form-submit" disabled={isSubmitting}>
                 {isSubmitting ? 'Enviando...' : t('sales.formSubmit')}
               </button>
@@ -380,6 +416,15 @@ export default function Sales({ language }: SalesProps) {
                 placeholder={t('sales.formPropertyInfo')}
               />
             </div>
+
+            <input
+              type="text"
+              name="company_website"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+              style={{ position: 'absolute', left: '-9999px', width: 1, height: 1 }}
+            />
 
             <button type="submit" className="form-submit" disabled={isSubmitting}>
               {isSubmitting ? 'Enviando...' : t('sales.formSubmit')}

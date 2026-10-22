@@ -7,6 +7,7 @@ import ImageGallery from '../../components/ImageGallery/ImageGallery';
 import type { Language } from '../../types';
 import { useTranslation } from '../../utils/translations';
 import { trackEvent } from '../../lib/analytics';
+import { submitLead } from '../../lib/leads';
 
 interface PropertyDetailProps {
   language: Language;
@@ -83,38 +84,69 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     }
   }, [property]);
 
-  const handleContactSubmit = async (e: React.FormEvent) => {
+  const sendContactEmail = async (message: string) => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error('Supabase configuration missing');
+    }
+
+    const response = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${supabaseAnonKey}`,
+      },
+      body: JSON.stringify({
+        name: contactForm.name,
+        email: contactForm.email,
+        phone: contactForm.phone,
+        address: property?.attributes.zone || property?.attributes.city || 'No especificada',
+        propertyType: property?.title || 'Consulta de propiedad',
+        message
+      })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to send email');
+    }
+  };
+
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const honeypot = String(new FormData(e.currentTarget).get('company_website') ?? '');
+    if (honeypot) {
+      // Bot: se simula éxito sin enviar nada
+      setSubmitted(true);
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
     try {
-      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+      const message = `Consulta sobre la propiedad: ${property?.title || id}\nURL: ${window.location.href}`;
 
-      if (!supabaseUrl || !supabaseAnonKey) {
-        throw new Error('Supabase configuration missing');
-      }
-
-      const response = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabaseAnonKey}`,
-        },
-        body: JSON.stringify({
+      // Se guarda en la bandeja de leads y, además, se sigue enviando el
+      // email. Basta con que una de las dos vías funcione.
+      const [leadResult, emailResult] = await Promise.allSettled([
+        submitLead({
           name: contactForm.name,
           email: contactForm.email,
           phone: contactForm.phone,
-          address: property?.attributes.zone || property?.attributes.city || 'No especificada',
-          propertyType: property?.title || 'Consulta de propiedad',
-          message: `Consulta sobre la propiedad: ${property?.title || id}\nURL: ${window.location.href}`
-        })
-      });
+          message,
+        }),
+        sendContactEmail(message),
+      ]);
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to send email');
+      const leadOk = leadResult.status === 'fulfilled' && leadResult.value.ok;
+      const emailOk = emailResult.status === 'fulfilled';
+      if (!leadOk) console.error('Error saving lead:', leadResult);
+      if (!emailOk) console.error('Error sending email:', emailResult);
+      if (!leadOk && !emailOk) {
+        throw new Error('Lead and email both failed');
       }
 
       trackEvent('form_submit_success');
@@ -532,6 +564,15 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
                 value={contactForm.email}
                 onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                 required
+              />
+
+              <input
+                type="text"
+                name="company_website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                style={{ position: 'absolute', left: '-9999px', width: 1, height: 1 }}
               />
 
               {submitted && (
