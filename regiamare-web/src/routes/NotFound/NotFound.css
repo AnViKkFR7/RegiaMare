@@ -1,0 +1,23 @@
+.not-found-page {
+  padding: var(--spacing-3xl, 6rem) 0;
+  text-align: center;
+}
+
+.not-found-page h1 {
+  color: var(--color-text);
+  margin-bottom: var(--spacing-sm);
+}
+
+.not-found-page p {
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-md);
+}
+
+.not-found-link {
+  display: inline-block;
+  padding: var(--spacing-xs) var(--spacing-md);
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-radius: 4px;
+  font-weight: 600;
+}

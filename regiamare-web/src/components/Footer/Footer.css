@@ -129,6 +129,22 @@
   opacity: 1;
 }
 
+.footer-link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  color: var(--color-beige);
+  opacity: 0.6;
+  font-size: var(--text-sm);
+  transition: opacity var(--transition-fast);
+}
+
+.footer-link-button:hover {
+  opacity: 1;
+}
+
 @media (max-width: 768px) {
   .footer {
     padding: var(--spacing-2xl) 0 var(--spacing-md);

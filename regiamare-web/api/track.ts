@@ -1,20 +1,39 @@
+// api/track.ts — Vercel Serverless Function (Node runtime).
+//
+// Recibe los eventos de medición y los guarda en analytics_events. La web NO
+// escribe directamente en Supabase: la tabla no tiene política de insert.
+//
+// Qué decide el SERVIDOR y no el navegador (para que no se pueda falsear):
+//   - quién: hash anónimo del visitante (sal del día + IP + user-agent)
+//   - desde dónde: país/región/ciudad de las cabeceras del hosting
+//   - con qué: móvil / tableta / escritorio, del user-agent
+//
+// Variables de entorno requeridas en el proyecto Vercel:
+//   SUPABASE_URL                  (o VITE_SUPABASE_URL: la URL no es secreta)
+//   SUPABASE_SERVICE_ROLE_KEY     (NUNCA con prefijo VITE_)
+//   ANALYTICS_SALT                cadena larga al azar, distinta por entorno
+//                                 (openssl rand -hex 32)
 import { createClient } from '@supabase/supabase-js'
+// Extensión .js a propósito: el proyecto es ESM ("type": "module") y Node
+// exige extensión en los imports relativos. TypeScript y Vercel la resuelven
+// al .ts.
+import {
+  businessDay, deviceFromUa, geoFromHeaders, isBot, isEventKeyAllowed, isSameOrigin, parseTrackPayload, visitorHash,
+} from '../src/lib/trackCore.js'
 
-// La URL del proyecto no es secreta, así que reutilizamos VITE_SUPABASE_URL
-// si SUPABASE_URL (sin prefijo) no está configurada aparte.
-const supabase = createClient(
-  (process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL)!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+const supabaseUrl = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL
 
-const ALLOWED_EVENT_TYPES = new Set(['page_view', 'cta_click'])
+const supabase = createClient(supabaseUrl!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
-// Caché en memoria por invocación "caliente" de la función — evita
-// consultar analytics_event_definitions en cada clic.
-let definitionsCache: { keys: Set<string>; expiresAt: number } | null = null
+// La medición nunca debe romper la web ni delatar nada: pase lo que pase se
+// responde 204 y el navegador no reintenta.
+const noContent = () => new Response(null, { status: 204 })
+
+// Caché en memoria de la instancia "caliente": evita consultar en cada clic
+let definitionsCache: { companyId: string; keys: Set<string>; expiresAt: number } | null = null
 
 async function activeEventKeys(companyId: string): Promise<Set<string>> {
-  if (definitionsCache && definitionsCache.expiresAt > Date.now()) {
+  if (definitionsCache?.companyId === companyId && definitionsCache.expiresAt > Date.now()) {
     return definitionsCache.keys
   }
   const { data } = await supabase
@@ -22,64 +41,99 @@ async function activeEventKeys(companyId: string): Promise<Set<string>> {
     .select('key')
     .eq('company_id', companyId)
     .eq('is_active', true)
-  const keys = new Set((data ?? []).map((d) => d.key as string))
-  definitionsCache = { keys, expiresAt: Date.now() + 5 * 60 * 1000 }
+  const keys = new Set((data ?? []).map((row) => row.key as string))
+  definitionsCache = { companyId, keys, expiresAt: Date.now() + 5 * 60 * 1000 }
   return keys
 }
 
+// La sal del día se pide a la base de datos y se guarda solo la de hoy
+let saltCache: { day: string; salt: string } | null = null
+
+async function dailySalt(day: string): Promise<string | null> {
+  if (saltCache?.day === day) return saltCache.salt
+  const { data, error } = await supabase.rpc('analytics_salt', { p_day: day })
+  if (error || typeof data !== 'string') return null
+  saltCache = { day, salt: data }
+  return data
+}
+
+// Export nombrado POST (no `export default`): Vercel ignora en silencio un
+// default que devuelve Response y la petición se queda colgada.
 export async function POST(req: Request) {
-  let body: { company_id?: string; event_type?: string; event_key?: string; path?: string; session_id?: string }
+  const get = (header: string) => req.headers.get(header)
+
+  // Sin configuración no se guarda nada, pero tampoco se avisa
+  if (!supabaseUrl || !process.env.SUPABASE_SERVICE_ROLE_KEY || !process.env.ANALYTICS_SALT) {
+    return noContent()
+  }
+
+  // Bots y peticiones que no vienen de la propia web
+  const userAgent = get('user-agent') ?? ''
+  if (isBot(userAgent)) return noContent()
+  if (!isSameOrigin(get)) return noContent()
+
+  const raw = await req.text()
+  if (raw.length > 4000) return noContent()
+
+  let body: unknown
   try {
-    body = await req.json()
+    body = JSON.parse(raw)
   } catch {
-    return new Response('Bad request', { status: 400 })
+    return noContent()
   }
 
-  const { company_id, event_type, event_key, path, session_id } = body
-  if (!company_id || !event_type || !ALLOWED_EVENT_TYPES.has(event_type) || !session_id) {
-    return new Response('Bad request', { status: 400 })
+  const ownHost = get('x-forwarded-host') ?? get('host') ?? undefined
+  const preliminary = parseTrackPayload(body, { ownHost })
+  if (!preliminary) return noContent()
+
+  // Un clic con una clave que la empresa no ha dado de alta se descarta,
+  // salvo las reservadas (teléfono, email, formulario), que valen siempre.
+  if (preliminary.event_type === 'cta_click') {
+    if (!preliminary.event_key) return noContent()
+    const keys = await activeEventKeys(preliminary.company_id)
+    if (!isEventKeyAllowed(preliminary.event_key, keys)) return noContent()
   }
 
-  // company_id debe existir — evita inyectar tráfico a una empresa que no
-  // sea la que corresponde a este despliegue.
+  // company_id debe existir: evita inyectar tráfico en otra empresa
   const { data: company } = await supabase
     .from('companies')
     .select('id')
-    .eq('id', company_id)
+    .eq('id', preliminary.company_id)
     .maybeSingle()
-  if (!company) return new Response('Bad request', { status: 400 })
+  if (!company) return noContent()
 
-  // Un clic con event_key que la empresa no ha dado de alta (o desactivado
-  // desde el admin) se descarta en silencio: nunca da error al visitante.
-  if (event_type === 'cta_click') {
-    if (!event_key) return new Response('Bad request', { status: 400 })
-    const keys = await activeEventKeys(company_id)
-    if (!keys.has(event_key)) return new Response(null, { status: 204 })
+  const day = businessDay(new Date())
+  const salt = await dailySalt(day)
+  if (!salt) {
+    console.error('[track] sin sal diaria: falta la RPC analytics_salt (ANALYTICS_PRIVACY_UPGRADE.sql)')
+    return noContent()
   }
 
-  // Gratis en Vercel: geo ya resuelto por la CDN, sin llamar a ningún
-  // servicio externo de geolocalización.
-  const country = req.headers.get('x-vercel-ip-country') ?? null
-  const region = req.headers.get('x-vercel-ip-country-region') ?? null
-  const city = req.headers.get('x-vercel-ip-city') ?? null
-
-  const ua = req.headers.get('user-agent') ?? ''
-  const device = /mobile/i.test(ua) ? 'mobile' : /tablet|ipad/i.test(ua) ? 'tablet' : 'desktop'
+  const ip = get('x-real-ip') ?? get('x-forwarded-for')?.split(',')[0]?.trim() ?? ''
+  const visitor = await visitorHash(`${salt}:${process.env.ANALYTICS_SALT}`, day, ip, userAgent)
+  const geo = geoFromHeaders(get)
 
   const { error } = await supabase.from('analytics_events').insert({
-    company_id,
-    event_type,
-    event_key: event_type === 'cta_click' ? event_key : null,
-    path,
-    session_id,
-    device,
-    country,
-    region,
-    city,
+    company_id: preliminary.company_id,
+    event_type: preliminary.event_type,
+    event_key: preliminary.event_key ?? null,
+    value: preliminary.value ?? null,
+    path: preliminary.path ?? null,
+    visitor,
+    device: deviceFromUa(userAgent),
+    country: geo.country,
+    region: geo.region,
+    city: geo.city,
+    lang: preliminary.lang ?? null,
+    referrer: preliminary.referrer ?? null,
+    utm_source: preliminary.utm_source ?? null,
+    utm_medium: preliminary.utm_medium ?? null,
+    utm_campaign: preliminary.utm_campaign ?? null,
   })
 
-  if (error) return new Response('Error', { status: 500 })
-  return new Response(null, { status: 204 })
+  // Un fallo al guardar tampoco se le cuenta al navegador
+  if (error) console.error('[track] insert failed', error.message)
+  return noContent()
 }
 
 export const config = { runtime: 'nodejs' }

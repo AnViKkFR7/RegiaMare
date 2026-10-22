@@ -14,6 +14,7 @@ import PropertyDetail from './routes/PropertyDetail/PropertyDetail';
 import Privacy from './routes/Privacy/Privacy';
 import Legal from './routes/Legal/Legal';
 import Cookies from './routes/Cookies/Cookies';
+import NotFound from './routes/NotFound/NotFound';
 import type { Language } from './types';
 import './styles/globals.css';
 import './App.css';
@@ -51,6 +52,7 @@ function App() {
             <Route path="/privacy" element={<Privacy language={language} />} />
             <Route path="/legal" element={<Legal language={language} />} />
             <Route path="/cookies" element={<Cookies language={language} />} />
+            <Route path="*" element={<NotFound language={language} />} />
           </Routes>
         </main>
 

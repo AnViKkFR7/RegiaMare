@@ -43,7 +43,7 @@ export default function Cookies({ language }: CookiesProps) {
         },
         {
           title: '8. Consentimiento',
-          content: 'Al acceder a nuestro sitio web, se le mostrará un banner informativo sobre el uso de cookies. Puede:\n\n• Aceptar todas las cookies\n• Rechazar cookies no esenciales\n• Configurar sus preferencias\n\nSu consentimiento es válido durante 12 meses, tras los cuales se le volverá a solicitar.'
+          content: 'Al acceder a nuestro sitio web, se le mostrará un banner con tres interruptores, además de las cookies necesarias (siempre activas):\n\n• Medición sin cookies (ver apartado 12)\n• Analítica (cookies de terceros)\n• Publicidad (cookies de terceros)\n\nPuede aceptar todo, quedarse solo con las necesarias o configurar cada interruptor. Rechazar las cookies no desactiva la medición sin cookies: son cosas distintas, y puede oponerse a ella por separado.\n\nSu decisión es válida durante 12 meses, tras los cuales se le volverá a solicitar.'
         },
         {
           title: '9. Revocación del Consentimiento',
@@ -56,6 +56,10 @@ export default function Cookies({ language }: CookiesProps) {
         {
           title: '11. Más Información',
           content: 'Para más información sobre cookies:\n\n• Agencia Española de Protección de Datos: www.aepd.es\n• Guía sobre el uso de cookies: www.aepd.es/guias\n• Your Online Choices: www.youronlinechoices.eu\n\nPara consultas específicas sobre nuestra Política de Cookies:\nEmail: info@regiamare.com\nTeléfono: +34 669 887 791'
+        },
+        {
+          title: '12. Medición Propia sin Cookies',
+          content: 'Además de las cookies, medimos el uso de la web con un sistema propio que no utiliza cookies ni almacena nada en su dispositivo.\n\nQUÉ MEDIMOS\nPáginas vistas, clics en teléfono, email y botones, hasta dónde se desplaza cada página, tiempo en página, país, región y ciudad aproximados, tipo de dispositivo, idioma del navegador y sitio de procedencia.\n\nQUÉ NO GUARDAMOS\nNo guardamos su dirección IP, su user-agent completo, identificadores persistentes ni datos que le identifiquen. El visitante se representa con un código anónimo que cambia cada día y no permite seguirle entre días.\n\nBASE JURÍDICA\nInterés legítimo (art. 6.1.f RGPD) en mejorar la web. No requiere consentimiento previo porque no accede a su dispositivo (art. 22.2 LSSI), pero usted puede oponerse en cualquier momento (art. 21 RGPD) desactivando "Medición sin cookies" en las preferencias de cookies del pie de página. Respetamos también la señal Global Privacy Control de su navegador.\n\nCONSERVACIÓN\nLos eventos en crudo se eliminan a los 35 días; solo se conservan resúmenes diarios sin visitante.'
         }
       ]
     },
@@ -92,7 +96,7 @@ export default function Cookies({ language }: CookiesProps) {
         },
         {
           title: '8. Consent',
-          content: 'When accessing our website, you will be shown an informative banner about cookie use. You can:\n\n• Accept all cookies\n• Reject non-essential cookies\n• Configure your preferences\n\nYour consent is valid for 12 months, after which you will be asked again.'
+          content: 'When accessing our website, you will be shown a banner with three switches, besides the necessary cookies (always on):\n\n• Cookie-free measurement (see section 12)\n• Analytics (third-party cookies)\n• Advertising (third-party cookies)\n\nYou can accept everything, keep only the necessary ones or set each switch. Rejecting cookies does not turn off cookie-free measurement: they are different things, and you can object to it separately.\n\nYour decision is valid for 12 months, after which you will be asked again.'
         },
         {
           title: '9. Consent Revocation',
@@ -105,6 +109,10 @@ export default function Cookies({ language }: CookiesProps) {
         {
           title: '11. More Information',
           content: 'For more information about cookies:\n\n• Spanish Data Protection Agency: www.aepd.es\n• Cookie usage guide: www.aepd.es/guias\n• Your Online Choices: www.youronlinechoices.eu\n\nFor specific inquiries about our Cookie Policy:\nEmail: info@regiamare.com\nPhone: +34 669 887 791'
+        },
+        {
+          title: '12. Own Cookie-Free Measurement',
+          content: 'Besides cookies, we measure website usage with our own system that uses no cookies and stores nothing on your device.\n\nWHAT WE MEASURE\nPage views, clicks on phone, email and buttons, how far each page is scrolled, time on page, approximate country, region and city, device type, browser language and referring site.\n\nWHAT WE DO NOT STORE\nWe do not store your IP address, your full user-agent, persistent identifiers or any data that identifies you. The visitor is represented by an anonymous code that changes every day and cannot be used to follow you across days.\n\nLEGAL BASIS\nLegitimate interest (art. 6.1.f GDPR) in improving the website. It does not require prior consent because it does not access your device (art. 22.2 LSSI), but you may object at any time (art. 21 GDPR) by turning off "Cookie-free measurement" in the cookie preferences in the footer. We also honor your browser\'s Global Privacy Control signal.\n\nRETENTION\nRaw events are deleted after 35 days; only daily summaries with no visitor data are kept.'
         }
       ]
     },
@@ -141,7 +149,7 @@ export default function Cookies({ language }: CookiesProps) {
         },
         {
           title: '8. Consentement',
-          content: 'Lors de l\'accès à notre site web, une bannière informative sur l\'utilisation des cookies vous sera présentée. Vous pouvez:\n\n• Accepter tous les cookies\n• Refuser les cookies non essentiels\n• Configurer vos préférences\n\nVotre consentement est valable pendant 12 mois, après quoi il vous sera redemandé.'
+          content: 'Lors de l\'accès à notre site web, une bannière avec trois interrupteurs vous sera présentée, en plus des cookies nécessaires (toujours actifs):\n\n• Mesure sans cookies (voir section 12)\n• Analyse (cookies de tiers)\n• Publicité (cookies de tiers)\n\nVous pouvez tout accepter, ne garder que les nécessaires ou régler chaque interrupteur. Refuser les cookies ne désactive pas la mesure sans cookies: ce sont deux choses différentes, et vous pouvez vous y opposer séparément.\n\nVotre décision est valable pendant 12 mois, après quoi elle vous sera redemandée.'
         },
         {
           title: '9. Révocation du Consentement',
@@ -154,6 +162,10 @@ export default function Cookies({ language }: CookiesProps) {
         {
           title: '11. Plus d\'Informations',
           content: 'Pour plus d\'informations sur les cookies:\n\n• Agence Espagnole de Protection des Données: www.aepd.es\n• Guide sur l\'utilisation des cookies: www.aepd.es/guias\n• Your Online Choices: www.youronlinechoices.eu\n\nPour des questions spécifiques sur notre Politique de Cookies:\nEmail: info@regiamare.com\nTéléphone: +34 669 887 791'
+        },
+        {
+          title: '12. Mesure Propre sans Cookies',
+          content: 'En plus des cookies, nous mesurons l\'utilisation du site avec notre propre système, qui n\'utilise aucun cookie et ne stocke rien sur votre appareil.\n\nCE QUE NOUS MESURONS\nPages vues, clics sur le téléphone, l\'email et les boutons, jusqu\'où chaque page est parcourue, temps passé sur la page, pays, région et ville approximatifs, type d\'appareil, langue du navigateur et site de provenance.\n\nCE QUE NOUS NE STOCKONS PAS\nNous ne stockons ni votre adresse IP, ni votre user-agent complet, ni d\'identifiants persistants, ni de données permettant de vous identifier. Le visiteur est représenté par un code anonyme qui change chaque jour et ne permet pas de le suivre d\'un jour à l\'autre.\n\nBASE JURIDIQUE\nIntérêt légitime (art. 6.1.f RGPD) à améliorer le site. Elle ne requiert pas de consentement préalable car elle n\'accède pas à votre appareil (art. 22.2 LSSI), mais vous pouvez vous y opposer à tout moment (art. 21 RGPD) en désactivant "Mesure sans cookies" dans les préférences de cookies du pied de page. Nous respectons aussi le signal Global Privacy Control de votre navigateur.\n\nCONSERVATION\nLes événements bruts sont supprimés après 35 jours; seuls les résumés quotidiens sans visiteur sont conservés.'
         }
       ]
     }

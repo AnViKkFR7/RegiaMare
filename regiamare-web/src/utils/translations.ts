@@ -1089,9 +1089,54 @@ export const translations: Translation = {
     fr: 'Nous utilisons des cookies'
   },
   'cookies.banner.message': {
-    es: 'Utilizamos cookies propias y de terceros para mejorar nuestros servicios y mostrarle publicidad relacionada con sus preferencias mediante el análisis de sus hábitos de navegación.',
-    en: 'We use our own and third-party cookies to improve our services and show you advertising related to your preferences by analyzing your browsing habits.',
-    fr: 'Nous utilisons nos propres cookies et ceux de tiers pour améliorer nos services et vous montrer de la publicité liée à vos préférences en analysant vos habitudes de navigation.'
+    es: 'Medimos las visitas de forma anónima y sin cookies para mejorar la web; puede oponerse en cualquier momento. Las cookies de analítica y publicidad de terceros solo se activan si usted las acepta.',
+    en: 'We measure visits anonymously and without cookies to improve the website; you can object at any time. Third-party analytics and advertising cookies are only enabled if you accept them.',
+    fr: 'Nous mesurons les visites de manière anonyme et sans cookies pour améliorer le site ; vous pouvez vous y opposer à tout moment. Les cookies d\'analyse et de publicité de tiers ne sont activés que si vous les acceptez.'
+  },
+  'cookies.prefs.necessary': {
+    es: 'Necesarias',
+    en: 'Necessary',
+    fr: 'Nécessaires'
+  },
+  'cookies.prefs.necessary.desc': {
+    es: 'Imprescindibles para que la web funcione. Siempre activas.',
+    en: 'Essential for the website to work. Always on.',
+    fr: 'Indispensables au fonctionnement du site. Toujours actives.'
+  },
+  'cookies.prefs.measurement': {
+    es: 'Medición sin cookies',
+    en: 'Cookie-free measurement',
+    fr: 'Mesure sans cookies'
+  },
+  'cookies.prefs.measurement.desc': {
+    es: 'Cuenta visitas y clics de forma anónima, sin cookies ni identificarle. Puede desactivarla.',
+    en: 'Counts visits and clicks anonymously, with no cookies and without identifying you. You can turn it off.',
+    fr: 'Compte les visites et les clics de façon anonyme, sans cookies ni identification. Vous pouvez la désactiver.'
+  },
+  'cookies.prefs.analytics': {
+    es: 'Analítica',
+    en: 'Analytics',
+    fr: 'Analyse'
+  },
+  'cookies.prefs.analytics.desc': {
+    es: 'Cookies de terceros para analizar el uso del sitio.',
+    en: 'Third-party cookies to analyze how the site is used.',
+    fr: 'Cookies de tiers pour analyser l\'utilisation du site.'
+  },
+  'cookies.prefs.marketing': {
+    es: 'Publicidad',
+    en: 'Advertising',
+    fr: 'Publicité'
+  },
+  'cookies.prefs.marketing.desc': {
+    es: 'Cookies de terceros para mostrar publicidad relacionada con sus intereses.',
+    en: 'Third-party cookies to show advertising related to your interests.',
+    fr: 'Cookies de tiers pour afficher de la publicité liée à vos centres d\'intérêt.'
+  },
+  'cookies.prefs.save': {
+    es: 'Guardar preferencias',
+    en: 'Save preferences',
+    fr: 'Enregistrer les préférences'
   },
   'cookies.banner.accept': {
     es: 'Aceptar',
@@ -1099,9 +1144,9 @@ export const translations: Translation = {
     fr: 'Accepter'
   },
   'cookies.banner.reject': {
-    es: 'Rechazar',
-    en: 'Reject',
-    fr: 'Refuser'
+    es: 'Solo necesarias',
+    en: 'Necessary only',
+    fr: 'Nécessaires uniquement'
   },
   'cookies.banner.configure': {
     es: 'Configurar',
@@ -1145,6 +1190,28 @@ export const translations: Translation = {
     es: 'Cookies',
     en: 'Cookies',
     fr: 'Cookies'
+  },
+  'footer.cookiePrefs': {
+    es: 'Preferencias de cookies',
+    en: 'Cookie preferences',
+    fr: 'Préférences des cookies'
+  },
+
+  // 404
+  'notFound.title': {
+    es: 'Esta página no existe',
+    en: 'This page does not exist',
+    fr: 'Cette page n\'existe pas'
+  },
+  'notFound.text': {
+    es: 'Puede que el enlace esté roto o que la página se haya movido.',
+    en: 'The link may be broken or the page may have moved.',
+    fr: 'Le lien est peut-être rompu ou la page a été déplacée.'
+  },
+  'notFound.home': {
+    es: 'Volver al inicio',
+    en: 'Back to home',
+    fr: 'Retour à l\'accueil'
   }
 };
 

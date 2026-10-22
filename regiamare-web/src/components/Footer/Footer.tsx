@@ -104,6 +104,13 @@ export default function Footer({ language }: FooterProps) {
             <Link to="/privacy">{t('footer.privacy')}</Link>
             <Link to="/legal">{t('footer.legal')}</Link>
             <Link to="/cookies">{t('footer.cookies')}</Link>
+            <button
+              type="button"
+              className="footer-link-button"
+              onClick={() => window.dispatchEvent(new CustomEvent('moira:open-cookie-preferences'))}
+            >
+              {t('footer.cookiePrefs')}
+            </button>
           </div>
         </div>
       </div>

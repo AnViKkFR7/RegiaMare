@@ -1,3 +1,11 @@
+// lib/leads.ts — a copiar en el proyecto de CADA web de empresa.
+// Código idéntico para todas salvo la variable de entorno VITE_COMPANY_ID.
+//
+// Envía el formulario de contacto a /api/lead, que lo guarda en la bandeja
+// de solicitudes del admin panel.
+//
+// Variable de entorno requerida (esta sí con prefijo VITE_, es pública):
+//   VITE_COMPANY_ID   (uuid de esta empresa en la tabla companies)
 const ENDPOINT = '/api/lead'
 const COMPANY_ID = import.meta.env.VITE_COMPANY_ID
 
@@ -38,7 +46,15 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
         source_campaign: new URLSearchParams(window.location.search).get('utm_campaign') ?? undefined,
       }),
     })
-    if (response.ok) return { ok: true }
+    if (response.ok) {
+      // Avisa a la analítica (lib/analytics.ts, si está instalada) de que ha
+      // habido un envío. Se hace AQUÍ, tras la respuesta del servidor, y no en
+      // el clic del botón: así el número de la analítica es el de solicitudes
+      // que de verdad llegaron a la bandeja, y no el de intentos. Es un evento
+      // del DOM para que este fichero no dependa de analytics.ts.
+      window.dispatchEvent(new CustomEvent('moira:lead-sent'))
+      return { ok: true }
+    }
     return { ok: false, reason: response.status === 400 ? 'invalid' : 'server' }
   } catch {
     return { ok: false, reason: 'network' }

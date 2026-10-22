@@ -93,6 +93,34 @@
   border-color: var(--color-text);
 }
 
+.cookie-prefs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+.cookie-pref label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+}
+
+.cookie-pref-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--color-text);
+}
+
+.cookie-pref p {
+  margin: 0 0 0 calc(13px + var(--spacing-xs));
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+}
+
 /* Tablet and Desktop */
 @media (min-width: 768px) {
   .cookie-banner-content {
