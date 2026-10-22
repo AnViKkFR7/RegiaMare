@@ -8,6 +8,7 @@ import type { Language } from '../../types';
 import { useTranslation } from '../../utils/translations';
 import { trackEvent } from '../../lib/analytics';
 import { submitLead } from '../../lib/leads';
+import PrivacyConsent from '../../components/PrivacyConsent/PrivacyConsent';
 
 interface PropertyDetailProps {
   language: Language;
@@ -565,6 +566,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
                 onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
                 required
               />
+
+              <PrivacyConsent language={language} id="privacy-property" />
 
               <input
                 type="text"

@@ -1082,6 +1082,22 @@ export const translations: Translation = {
     fr: 'Une erreur s\'est produite lors de l\'envoi du formulaire. Veuillez réessayer.'
   },
   
+  'form.privacy.prefix': {
+    es: 'He leído y acepto la',
+    en: 'I have read and accept the',
+    fr: 'J\'ai lu et j\'accepte la'
+  },
+  'form.privacy.link': {
+    es: 'política de privacidad',
+    en: 'privacy policy',
+    fr: 'politique de confidentialité'
+  },
+  'form.privacy.suffix': {
+    es: ' y el tratamiento de mis datos para responder a mi solicitud.',
+    en: ' and the processing of my data to answer my request.',
+    fr: ' et le traitement de mes données pour répondre à ma demande.'
+  },
+
   // Cookie Banner
   'cookies.banner.title': {
     es: 'Usamos cookies',

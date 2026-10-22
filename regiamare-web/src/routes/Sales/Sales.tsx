@@ -3,6 +3,7 @@ import './Sales.css';
 import { useTranslation } from '../../utils/translations';
 import { trackEvent } from '../../lib/analytics';
 import { submitLead } from '../../lib/leads';
+import PrivacyConsent from '../../components/PrivacyConsent/PrivacyConsent';
 import type { Language } from '../../types';
 
 interface SalesProps {
@@ -307,6 +308,8 @@ export default function Sales({ language }: SalesProps) {
                 />
               </div>
 
+              <PrivacyConsent language={language} id="privacy-sales" />
+
               <input
                 type="text"
                 name="company_website"
@@ -416,6 +419,8 @@ export default function Sales({ language }: SalesProps) {
                 placeholder={t('sales.formPropertyInfo')}
               />
             </div>
+
+            <PrivacyConsent language={language} id="privacy-sales-bottom" />
 
             <input
               type="text"
