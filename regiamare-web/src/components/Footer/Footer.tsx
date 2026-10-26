@@ -31,6 +31,7 @@ export default function Footer({ language }: FooterProps) {
               <Link to="/purchases">{t('nav.purchases')}</Link>
               <Link to="/sales">{t('nav.sales')}</Link>
               <Link to="/about">{t('nav.about')}</Link>
+              <a href="/blog">Blog</a>
             </nav>
           </div>
 

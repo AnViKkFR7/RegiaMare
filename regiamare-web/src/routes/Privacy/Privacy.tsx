@@ -148,13 +148,18 @@ export default function Privacy({ language }: PrivacyProps) {
   };
 
   const pageContent = content[language];
+  const requestInfo = {
+    es: 'Al enviar una consulta conservamos sus datos de contacto, mensaje, página de origen y, cuando corresponde, el título e identificador público de la propiedad consultada. También se registra la procedencia y la campaña del enlace de entrada, si existen, para conocer el origen de la solicitud. Guardamos si ha marcado la casilla de privacidad y la versión de su texto. Puede enviar su consulta sin marcarla; esto no supone aceptar comunicaciones comerciales.',
+    en: 'When you send an enquiry, we store your contact details, message, source page and, where applicable, the title and public identifier of the property. We also record the referring site and entry link campaign, when available, to understand where the enquiry came from. We record whether you selected the privacy checkbox and its text version. You can send your enquiry without selecting it; this does not mean accepting marketing communications.',
+    fr: 'Lorsque vous envoyez une demande, nous conservons vos coordonnées, votre message, la page d’origine et, le cas échéant, le titre et l’identifiant public du bien consulté. Nous enregistrons également la provenance et la campagne du lien d’entrée, si disponibles, pour connaître l’origine de la demande. Nous conservons votre choix concernant la case de confidentialité et la version de son texte. Vous pouvez envoyer votre demande sans la cocher ; cela ne vaut pas acceptation de communications commerciales.',
+  };
   
   return (
     <div className="legal-page">
       <section className="legal-hero">
         <div className="container">
           <h1>{t('privacy.title')}</h1>
-          <p className="legal-date">{t('privacy.updated')}: 09/02/2026</p>
+          <p className="legal-date">{t('privacy.updated')}: 26/10/2026</p>
         </div>
       </section>
 
@@ -162,6 +167,7 @@ export default function Privacy({ language }: PrivacyProps) {
         <div className="container">
           <div className="legal-text">
             <p className="legal-intro">{pageContent.intro}</p>
+            <p>{requestInfo[language]}</p>
 
             {pageContent.sections.map((section, index) => (
               <div key={index} className="legal-section">

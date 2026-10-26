@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import './Sales.css';
 import { useTranslation } from '../../utils/translations';
 import { trackEvent } from '../../lib/analytics';
-import { submitLead } from '../../lib/leads';
+import { submitLead, LEAD_PRIVACY_TEXT_VERSION } from '../../lib/leads';
 import PrivacyConsent from '../../components/PrivacyConsent/PrivacyConsent';
 import type { Language } from '../../types';
 
@@ -82,7 +82,8 @@ export default function Sales({ language }: SalesProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const honeypot = String(new FormData(e.currentTarget).get('company_website') ?? '');
+    const submittedData = new FormData(e.currentTarget);
+    const honeypot = String(submittedData.get('company_website') ?? '');
     if (honeypot) {
       // Bot: se simula éxito sin enviar nada
       setSubmitted(true);
@@ -98,6 +99,8 @@ export default function Sales({ language }: SalesProps) {
       const [leadResult, emailResult] = await Promise.allSettled([
         submitLead({
           name: formData.name,
+          consent_given: submittedData.get('privacy_accepted') === 'on',
+          consent_text_version: LEAD_PRIVACY_TEXT_VERSION,
           email: formData.email,
           phone: formData.phone,
           message: `Dirección: ${formData.address}\nTipo de propiedad: ${formData.propertyType}\n\n${formData.message}`.trim(),

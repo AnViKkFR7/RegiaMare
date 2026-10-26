@@ -15,6 +15,7 @@ import Privacy from './routes/Privacy/Privacy';
 import Legal from './routes/Legal/Legal';
 import Cookies from './routes/Cookies/Cookies';
 import NotFound from './routes/NotFound/NotFound';
+import Blog from './routes/Blog/Blog';
 import type { Language } from './types';
 import './styles/globals.css';
 import './App.css';
@@ -23,6 +24,10 @@ function PageviewTracker() {
   const location = useLocation();
   useEffect(() => {
     trackPageview(location.pathname);
+    if (!location.pathname.startsWith('/blog')) {
+      document.title = 'Regia Mare Properties';
+      document.querySelectorAll('[data-blog-seo]').forEach(element => element.remove());
+    }
   }, [location.pathname]);
   return null;
 }
@@ -49,6 +54,8 @@ function App() {
             <Route path="/property/:id" element={<PropertyDetail language={language} />} />
             <Route path="/sales" element={<Sales language={language} />} />
             <Route path="/about" element={<About language={language} />} />
+            <Route path="/blog" element={<Blog language={language} />} />
+            <Route path="/blog/:slug" element={<Blog language={language} />} />
             <Route path="/privacy" element={<Privacy language={language} />} />
             <Route path="/legal" element={<Legal language={language} />} />
             <Route path="/cookies" element={<Cookies language={language} />} />

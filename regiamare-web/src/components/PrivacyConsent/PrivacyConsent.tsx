@@ -13,7 +13,7 @@ export default function PrivacyConsent({ language, id }: PrivacyConsentProps) {
 
   return (
     <div className="privacy-consent">
-      <input type="checkbox" id={id} name="privacy_accepted" required />
+      <input type="checkbox" id={id} name="privacy_accepted" />
       <label htmlFor={id}>
         {t('form.privacy.prefix')}{' '}
         {/* Nueva pestaña: así no se pierde lo ya escrito en el formulario */}

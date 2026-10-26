@@ -1,0 +1,19 @@
+.blog-page { padding-top: 4rem; padding-bottom: 5rem; min-height: 60vh; }
+.blog-page h1 { font-size: clamp(2rem, 5vw, 3.5rem); margin: 1rem 0 2rem; }
+.blog-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 2rem; }
+.blog-card { border-bottom: 1px solid var(--color-beige); padding-bottom: 2rem; }
+.blog-card img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
+.blog-card h2 { font-size: 1.5rem; margin: 1rem 0; }
+.blog-card p, .blog-intro, .blog-heading { margin: 1rem 0; line-height: 1.8; }
+.blog-page time { color: var(--color-text-light); font-size: .875rem; }
+.blog-article { max-width: 820px; margin: auto; }
+.blog-article img { max-width: 100%; height: auto; }
+.blog-cover { width: 100%; margin: 2rem 0; }
+.blog-body { line-height: 1.9; overflow-wrap: anywhere; }
+.blog-body p, .blog-body ul, .blog-body ol, .blog-body pre, .blog-body blockquote { margin: 1.5rem 0; }
+.blog-body ul, .blog-body ol { padding-left: 2rem; }
+.blog-body h2, .blog-body h3 { margin-top: 2rem; }
+.blog-body pre { overflow-x: auto; padding: 1rem; background: var(--color-gray-light); }
+.blog-body a, .blog-pagination a { text-decoration: underline; }
+.blog-article figure { margin: 2rem 0; }
+.blog-pagination { display: flex; justify-content: space-between; gap: 2rem; margin-top: 3rem; }

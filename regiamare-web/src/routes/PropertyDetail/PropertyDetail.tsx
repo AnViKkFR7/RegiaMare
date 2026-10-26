@@ -7,7 +7,7 @@ import ImageGallery from '../../components/ImageGallery/ImageGallery';
 import type { Language } from '../../types';
 import { useTranslation } from '../../utils/translations';
 import { trackEvent } from '../../lib/analytics';
-import { submitLead } from '../../lib/leads';
+import { submitLead, LEAD_PRIVACY_TEXT_VERSION } from '../../lib/leads';
 import PrivacyConsent from '../../components/PrivacyConsent/PrivacyConsent';
 
 interface PropertyDetailProps {
@@ -117,7 +117,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
 
   const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const honeypot = String(new FormData(e.currentTarget).get('company_website') ?? '');
+    const submittedData = new FormData(e.currentTarget);
+    const honeypot = String(submittedData.get('company_website') ?? '');
     if (honeypot) {
       // Bot: se simula éxito sin enviar nada
       setSubmitted(true);
@@ -135,6 +136,9 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
       const [leadResult, emailResult] = await Promise.allSettled([
         submitLead({
           name: contactForm.name,
+          source_item: `${property?.title ?? ''} · ${id ?? ''}`,
+          consent_given: submittedData.get('privacy_accepted') === 'on',
+          consent_text_version: LEAD_PRIVACY_TEXT_VERSION,
           email: contactForm.email,
           phone: contactForm.phone,
           message,

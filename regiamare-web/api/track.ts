@@ -23,7 +23,9 @@ import {
 
 const supabaseUrl = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL
 
-const supabase = createClient(supabaseUrl!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
+const supabase = supabaseUrl && process.env.SUPABASE_SERVICE_ROLE_KEY
+  ? createClient(supabaseUrl, process.env.SUPABASE_SERVICE_ROLE_KEY)
+  : null
 
 // La medición nunca debe romper la web ni delatar nada: pase lo que pase se
 // responde 204 y el navegador no reintenta.
@@ -33,6 +35,7 @@ const noContent = () => new Response(null, { status: 204 })
 let definitionsCache: { companyId: string; keys: Set<string>; expiresAt: number } | null = null
 
 async function activeEventKeys(companyId: string): Promise<Set<string>> {
+  if (!supabase) return new Set()
   if (definitionsCache?.companyId === companyId && definitionsCache.expiresAt > Date.now()) {
     return definitionsCache.keys
   }
@@ -50,6 +53,7 @@ async function activeEventKeys(companyId: string): Promise<Set<string>> {
 let saltCache: { day: string; salt: string } | null = null
 
 async function dailySalt(day: string): Promise<string | null> {
+  if (!supabase) return null
   if (saltCache?.day === day) return saltCache.salt
   const { data, error } = await supabase.rpc('analytics_salt', { p_day: day })
   if (error || typeof data !== 'string') return null
@@ -63,7 +67,7 @@ export async function POST(req: Request) {
   const get = (header: string) => req.headers.get(header)
 
   // Sin configuración no se guarda nada, pero tampoco se avisa
-  if (!supabaseUrl || !process.env.SUPABASE_SERVICE_ROLE_KEY || !process.env.ANALYTICS_SALT) {
+  if (!supabase || !process.env.ANALYTICS_SALT) {
     return noContent()
   }
 
@@ -84,7 +88,7 @@ export async function POST(req: Request) {
 
   const ownHost = get('x-forwarded-host') ?? get('host') ?? undefined
   const preliminary = parseTrackPayload(body, { ownHost })
-  if (!preliminary) return noContent()
+  if (!preliminary || preliminary.company_id !== process.env.VITE_COMPANY_ID) return noContent()
 
   // Un clic con una clave que la empresa no ha dado de alta se descarta,
   // salvo las reservadas (teléfono, email, formulario), que valen siempre.

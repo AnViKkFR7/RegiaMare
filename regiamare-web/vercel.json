@@ -1,5 +1,11 @@
 {
+  "functions": {
+    "api/blog.ts": { "includeFiles": "dist/index.html" }
+  },
   "rewrites": [
+    { "source": "/blog", "destination": "/api/blog" },
+    { "source": "/blog/:slug", "destination": "/api/blog?slug=:slug" },
+    { "source": "/sitemap.xml", "destination": "/api/blog?sitemap=1" },
     {
       "source": "/(.*)",
       "destination": "/index.html"

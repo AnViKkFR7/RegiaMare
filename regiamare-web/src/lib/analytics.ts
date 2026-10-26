@@ -46,6 +46,11 @@ let scrollQueued = false
 
 /** Lo llama el banner de cookies al decidir, y también al arrancar */
 export function setMeasurement(on: boolean) {
+  if (enabled !== on) {
+    activeMs = 0
+    visibleSince = on && typeof document !== 'undefined' && document.visibilityState === 'visible'
+      ? performance.now() : null
+  }
   enabled = on
 }
 
@@ -115,7 +120,7 @@ const pauseClock = () => {
 }
 
 const resumeClock = () => {
-  if (visibleSince === null) visibleSince = performance.now()
+  if (enabled && visibleSince === null) visibleSince = performance.now()
 }
 
 function flushEngagement() {
