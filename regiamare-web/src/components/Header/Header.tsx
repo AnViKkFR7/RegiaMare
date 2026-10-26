@@ -40,7 +40,6 @@ export default function Header({ language, onLanguageChange }: HeaderProps) {
           <Link to="/purchases" onClick={() => setIsMenuOpen(false)}>{t('nav.purchases')}</Link>
           <Link to="/sales" onClick={() => setIsMenuOpen(false)}>{t('nav.sales')}</Link>
           <Link to="/about" onClick={() => setIsMenuOpen(false)}>{t('nav.about')}</Link>
-          <a href="/blog" onClick={() => setIsMenuOpen(false)}>Blog</a>
           
           {/* Language selector for mobile < 550px */}
           <div className="header-language-mobile">

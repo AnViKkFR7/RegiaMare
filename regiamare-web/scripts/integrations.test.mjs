@@ -1,6 +1,9 @@
 import { build } from 'esbuild'
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
+import ts from 'typescript'
+import { readFileSync } from 'node:fs'
+import { resolve, dirname } from 'node:path'
 
 await build({ entryPoints: ['api/lead.ts', 'api/track.ts', 'api/blog.ts'], bundle: true,
   outdir: 'node_modules/.tmp/integrations', format: 'esm', platform: 'node', packages: 'external', jsx: 'automatic' })
@@ -113,6 +116,34 @@ test('blog entrega Markdown seguro, alt y SEO en HTML inicial', async () => {
   assert.match(html, /<strong>Hola<\/strong>/)
   assert.match(html, /alt="Costa de Sitges"/)
   assert.doesNotMatch(html, /<script>alert|href="javascript:/)
+})
+test('Vercel descubre la configuración de API y el blog arranca sin bundling', async () => {
+  const configPath = ts.findConfigFile('api', ts.sys.fileExists)
+  assert.equal(configPath?.replaceAll('\\', '/'), 'api/tsconfig.json')
+  const absoluteConfig = resolve(configPath)
+  const { config, error } = ts.readConfigFile(absoluteConfig, ts.sys.readFile)
+  assert.equal(error, undefined)
+  const parsed = ts.parseJsonConfigFileContent(config, ts.sys, dirname(absoluteConfig), {}, absoluteConfig)
+  assert.ok(parsed.fileNames.length > 0)
+  assert.equal(parsed.options.jsx, ts.JsxEmit.ReactJSX)
+  // El trazador de Vercel busca .ts para imports .js, pero no busca .tsx.
+  // Evitar que el bundle de esbuild oculte una dependencia ausente en producción.
+  const apiSource = readFileSync('api/blog.ts', 'utf8')
+  for (const imported of ts.preProcessFile(apiSource).importedFiles) {
+    if (!imported.fileName.startsWith('.') || !imported.fileName.endsWith('.js')) continue
+    assert.ok(ts.sys.fileExists(resolve('api', imported.fileName.replace(/\.js$/, '.ts'))), imported.fileName)
+  }
+  const program = ts.createProgram(parsed.fileNames, {
+    ...parsed.options, noEmit: false, rootDir: process.cwd(), outDir: 'node_modules/.tmp/vercel-runtime',
+  })
+  const emitted = program.emit()
+  assert.equal(emitted.emitSkipped, false)
+  const component = readFileSync('node_modules/.tmp/vercel-runtime/src/routes/Blog/BlogContent.js', 'utf8')
+  assert.doesNotMatch(component, /<article/)
+  const { GET } = await import('../node_modules/.tmp/vercel-runtime/api/blog.js')
+  const response = await GET(new Request('https://regiamare.example/blog/guia-sitges'))
+  assert.equal(response.status, 200)
+  assert.match(await response.text(), /<strong>Hola<\/strong>/)
 })
 test('blog lista publicaciones y devuelve 404 para inexistentes, borradores y otra empresa', async () => {
   assert.equal((await blog(new Request('https://regiamare.example/api/blog'))).status, 200)

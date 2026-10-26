@@ -4,5 +4,5 @@
     "lib": ["ES2022", "DOM"], "types": ["node"], "jsx": "react-jsx",
     "strict": true, "skipLibCheck": true, "noEmit": true
   },
-  "include": ["api/**/*.ts", "src/lib/blog.ts", "src/routes/Blog/BlogContent.tsx"]
+  "include": ["api/**/*.ts", "src/lib/blog.ts", "src/routes/Blog/BlogContent.ts"]
 }

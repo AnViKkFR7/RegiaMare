@@ -35,6 +35,16 @@ prueba los endpoints con respuestas simuladas de Supabase, incluyendo empresa fi
 CRM desactivado, consentimiento, HTML inicial/Markdown seguro, 404 y sitemap.
 No sustituye comprobar el RLS y las migraciones en el proyecto real.
 
+`api/tsconfig.json` hace que el compilador de funciones de Vercel descubra la
+configuración `jsx: react-jsx` de `tsconfig.api.json`. El tsconfig raíz solo
+contiene referencias a otros proyectos; esas referencias no transmiten las
+opciones JSX al compilar una función. Sin la configuración en `api/`, el componente
+del blog puede conservar JSX en el JavaScript de servidor y fallar al arrancar.
+El renderer compartido `BlogContent.ts` usa `createElement` para que el trazador
+de Vercel incluya el componente: al resolver imports `.js`, busca el archivo `.ts`
+correspondiente, pero no `.tsx`. La suite comprueba esa resolución y la carga de
+los módulos compilados sin bundling.
+
 En desarrollo `npm run dev` sirve la SPA; las funciones y sus rewrites requieren
 Vercel (preview o producción). Visitar `/blog`, `/blog/:slug` y `/sitemap.xml`;
 comprobar con curl que el HTML inicial contiene title, description, canonical y OG,
