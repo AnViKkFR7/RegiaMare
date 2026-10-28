@@ -60,7 +60,8 @@ Las imágenes de las capturas son placeholders de prueba, no un cambio en los da
 3. Ensayar el SQL que termina en ROLLBACK, revisar SELECT; confirmar manualmente
    solo tras la aprobación. Conservar lote aplicado y resultado en el registro
    de despliegue. No se alteran título, resumen, atributos, precio, estado o medios.
-4. Configurar SITE_URL y VITE_SITE_URL con el mismo dominio HTTPS definitivo;
+4. El dominio predeterminado es `https://regiamare.com`. Si se configuran SITE_URL
+   y VITE_SITE_URL, usar el mismo dominio HTTPS definitivo; son opcionales.
    VITE_COMPANY_ID debe coincidir con el inventario. Requiere Vercel para SSR.
 5. Aprobar un preview y comprobar con curl las URLs reales, 308, 404 y sitemap.
    Repetir preflight y comparar las 8 URLs una vez cargados sus slugs. No desplegar

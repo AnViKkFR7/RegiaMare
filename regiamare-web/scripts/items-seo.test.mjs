@@ -106,6 +106,31 @@ test('UUID publicado redirige 308 al slug sin queries ni contenido duplicado', a
   assert.equal(response.headers.get('location'), 'https://regiamare.example/property/casa-costa')
   assert.equal(await response.text(), '')
 })
+test('sin SITE_URL ni VITE_SITE_URL las fichas, redirects y sitemap usan regiamare.com', async () => {
+  const saved = { site: process.env.SITE_URL, vite: process.env.VITE_SITE_URL }
+  delete process.env.SITE_URL
+  delete process.env.VITE_SITE_URL
+  try {
+    const response = await fetch(`${base}/property/casa-costa`, { headers: { 'X-Forwarded-Host': 'otro-sitio.example' } })
+    assert.equal(response.status, 200)
+    assert.match(await response.text(), /rel="canonical" href="https:\/\/regiamare.com\/property\/casa-costa"/)
+    const redirect = await fetch(`${base}/property/${id}`, { redirect: 'manual' })
+    assert.equal(redirect.status, 308)
+    assert.equal(redirect.headers.get('location'), 'https://regiamare.com/property/casa-costa')
+    const map = await fetch(`${base}/sitemap.xml`)
+    assert.equal(map.status, 200)
+    assert.match(await map.text(), /https:\/\/regiamare.com\/property\/casa-costa/)
+  } finally {
+    if (saved.site === undefined) delete process.env.SITE_URL; else process.env.SITE_URL = saved.site
+    if (saved.vite === undefined) delete process.env.VITE_SITE_URL; else process.env.VITE_SITE_URL = saved.vite
+  }
+})
+test('un dominio configurado explícitamente sin HTTPS sigue siendo un error', async () => {
+  const previous = process.env.SITE_URL
+  process.env.SITE_URL = 'http://regiamare.example'
+  try { assert.equal((await fetch(`${base}/property/casa-costa`)).status, 503) }
+  finally { process.env.SITE_URL = previous }
+})
 test('UUID sin slug mantiene ficha con noindex, sin canonical UUID', async () => {
   const response = await fetch(`${base}/property/33333333-3333-4333-8333-333333333333`)
   assert.equal(response.status, 200)

@@ -11,7 +11,10 @@ Configurar las variables de `.env.example` en Vercel y en `.env` para desarrollo
 `VITE_COMPANY_ID` debe existir también en las funciones de servidor. El blog usa
 exclusivamente la clave anon y el RLS de Supabase; leads y analítica usan la clave
 service_role solo en servidor. `SITE_URL` es el dominio público HTTPS canónico;
-`VITE_SITE_URL` debe coincidir. Ajustar ambos si el dominio real es distinto.
+`VITE_SITE_URL` debe coincidir si se configura. Ambas variables son opcionales:
+sin ellas, servidor y cliente usan `https://regiamare.com`, fijado en `src/lib/siteConfig.ts`.
+No se usa el Host enviado por el visitante para construir canonical o redirecciones.
+Ajustar ambas solo si el dominio real cambia; un valor explícito debe usar HTTPS.
 
 ## Requisitos en el proyecto Supabase del panel
 

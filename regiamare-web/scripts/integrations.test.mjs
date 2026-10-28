@@ -177,6 +177,19 @@ test('blog lista publicaciones y devuelve 404 para inexistentes, borradores y ot
     assert.equal((await blog(new Request(`https://regiamare.example/api/blog?slug=${slug}`))).status, 404)
   }
 })
+test('blog sin variables de dominio usa el dominio fijo del sitio', async () => {
+  const saved = { site: process.env.SITE_URL, vite: process.env.VITE_SITE_URL }
+  delete process.env.SITE_URL
+  delete process.env.VITE_SITE_URL
+  try {
+    const response = await blog(new Request('https://visitor-host.example/blog/guia-sitges'))
+    assert.equal(response.status, 200)
+    assert.match(await response.text(), /rel="canonical" href="https:\/\/regiamare.com\/blog\/guia-sitges"/)
+  } finally {
+    if (saved.site === undefined) delete process.env.SITE_URL; else process.env.SITE_URL = saved.site
+    if (saved.vite === undefined) delete process.env.VITE_SITE_URL; else process.env.VITE_SITE_URL = saved.vite
+  }
+})
 test('sitemap excluye borradores, otra empresa y posts sin slug', async () => {
   const response = await blog(new Request('https://regiamare.example/api/blog?sitemap=1'))
   assert.equal(response.status, 200)

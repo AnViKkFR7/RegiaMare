@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { supabase } from '../../services/supabase'
 import { loadBlog, blogSeo } from '../../lib/blog'
+import { siteOrigin } from '../../lib/siteConfig'
 import type { BlogPost } from '../../lib/blog'
 import type { Language } from '../../types'
 import BlogContent from './BlogContent'
@@ -27,7 +28,7 @@ export default function Blog({ language }: { language: Language }) {
     const seo = blogSeo(slug ? result.posts[0] : undefined)
     document.title = seo.title
     document.querySelectorAll('[data-blog-seo]').forEach(element => element.remove())
-    const baseUrl = import.meta.env.VITE_SITE_URL || window.location.origin
+    const baseUrl = siteOrigin(import.meta.env.VITE_SITE_URL)
     const canonical = new URL(slug ? `/blog/${slug}` : '/blog', baseUrl)
     if (!slug && page > 1) canonical.searchParams.set('page', String(page))
     const tags = [

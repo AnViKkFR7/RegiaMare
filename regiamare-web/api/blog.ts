@@ -4,6 +4,7 @@ import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { blogSeo, loadBlog } from '../src/lib/blog.js'
 import { GET as loadSitemap } from './sitemap.js'
+import { siteOrigin } from '../src/lib/siteConfig.js'
 import BlogContent from '../src/routes/Blog/BlogContent.js'
 
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!)
@@ -19,10 +20,8 @@ export async function GET(req: Request) {
     const companyId = process.env.VITE_COMPANY_ID
     const anonKey = process.env.VITE_SUPABASE_ANON_KEY
     const supabaseUrl = process.env.SUPABASE_URL ?? process.env.VITE_SUPABASE_URL
-    const siteUrl = process.env.SITE_URL ?? process.env.VITE_SITE_URL
-    if (!companyId || !anonKey || !supabaseUrl || !siteUrl) throw new Error('Missing blog configuration')
-    const origin = new URL(siteUrl)
-    if (origin.protocol !== 'https:') throw new Error('SITE_URL must use HTTPS')
+    if (!companyId || !anonKey || !supabaseUrl) throw new Error('Missing blog configuration')
+    const origin = siteOrigin(process.env.SITE_URL?.trim() || process.env.VITE_SITE_URL?.trim())
     const client = createClient(supabaseUrl, anonKey, { auth: { persistSession: false } })
     if (sitemap) {
       return loadSitemap()

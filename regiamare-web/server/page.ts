@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { readFile } from 'node:fs/promises'
 import { PROPERTY_COMPANY_ID } from '../src/lib/properties.js'
+import { siteOrigin } from '../src/lib/siteConfig.js'
 
 export const escapeHtml = (value: string) => value.replace(/[&<>"']/g,
   char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!)
@@ -8,11 +9,10 @@ export const escapeHtml = (value: string) => value.replace(/[&<>"']/g,
 export function publicSite() {
   const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
   const key = process.env.VITE_SUPABASE_ANON_KEY
-  const site = process.env.SITE_URL || process.env.VITE_SITE_URL
-  if (!url || !key || !site || process.env.VITE_COMPANY_ID !== PROPERTY_COMPANY_ID) throw new Error('Invalid public site configuration')
-  const origin = new URL(site)
-  if (origin.protocol !== 'https:') throw new Error('SITE_URL must use HTTPS')
-  return { origin: origin.origin, client: createClient(url, key, { auth: { persistSession: false } }) }
+  if (!url || !key) throw new Error('Missing public Supabase configuration')
+  if (process.env.VITE_COMPANY_ID?.trim() !== PROPERTY_COMPANY_ID) throw new Error('Invalid company configuration for RegiaMare')
+  const origin = siteOrigin(process.env.SITE_URL?.trim() || process.env.VITE_SITE_URL?.trim())
+  return { origin, client: createClient(url, key, { auth: { persistSession: false } }) }
 }
 
 export async function propertyHtml({ title, description = '', canonical, image, content, index = false, status = 200 }:
