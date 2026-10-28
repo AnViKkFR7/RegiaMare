@@ -146,28 +146,20 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     try {
       const message = `Consulta sobre la propiedad: ${property?.title || id}\nURL: ${window.location.href}`;
 
-      // Se guarda en la bandeja de leads y, además, se sigue enviando el
-      // email. Basta con que una de las dos vías funcione.
-      const [leadResult, emailResult] = await Promise.allSettled([
-        submitLead({
-          name: contactForm.name,
-          source_item: `${property?.title ?? ''} · ${id ?? ''}`,
-          consent_given: submittedData.get('privacy_accepted') === 'on',
-          consent_text_version: LEAD_PRIVACY_TEXT_VERSION,
-          email: contactForm.email,
-          phone: contactForm.phone,
-          message,
-        }),
-        sendContactEmail(message),
-      ]);
-
-      const leadOk = leadResult.status === 'fulfilled' && leadResult.value.ok;
-      const emailOk = emailResult.status === 'fulfilled';
-      if (!leadOk) console.error('Error saving lead:', leadResult);
-      if (!emailOk) console.error('Error sending email:', emailResult);
-      if (!leadOk && !emailOk) {
-        throw new Error('Lead and email both failed');
-      }
+      // Solo confirmar el envío cuando la solicitud esté guardada en CRM.
+      const leadResult = await submitLead({
+        name: contactForm.name,
+        source_item: `${property?.title ?? ''} · ${id ?? ''}`,
+        consent_given: submittedData.get('privacy_accepted') === 'on',
+        consent_text_version: LEAD_PRIVACY_TEXT_VERSION,
+        email: contactForm.email,
+        phone: contactForm.phone,
+        message,
+      });
+      if (!leadResult.ok) throw new Error('CRM request was not saved');
+      // El email es una notificación adicional; no sustituye al guardado.
+      try { await sendContactEmail(message); }
+      catch { console.error('Lead saved, email notification failed'); }
 
       trackEvent('form_submit_success');
       setSubmitted(true);

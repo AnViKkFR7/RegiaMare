@@ -65,10 +65,17 @@ consentimiento. La atribución conserva los parámetros de entrada en memoria du
 la navegación SPA, sin cookies ni almacenamiento persistente. El formulario de
 ventas deja `source_item` vacío; la ficha envía su título e ID público.
 
-Se conserva el envío de email existente como alternativa si falla CRM. El evento
-reservado `form_submit` solo se emite tras HTTP 201 de `/api/lead`, de modo que el
-email por sí solo no aumenta el contador de solicitudes guardadas. El evento propio
-`form_submit_success` mantiene el comportamiento anterior y requiere alta en el panel.
+El guardado en CRM es obligatorio para confirmar éxito. Solo después de HTTP 201
+de `/api/lead` se envía la notificación por email. Si falla CRM se conserva el
+formulario y se muestra error; el email no sustituye la solicitud. Si falla solo
+el email, la solicitud ya está guardada y se mantiene el éxito. Tanto el evento
+reservado `form_submit` como `form_submit_success` exigen un guardado confirmado.
+El evento propio `form_submit_success` requiere alta en el panel.
+
+La API traduce las UTM recibidas a las columnas reales de `lead`:
+`utm_campaign` → `source_campaign` y las otras cuatro a `source_utm_*`.
+`node scripts/check-leads.mjs` verifica columnas sin leer solicitudes y consulta
+CRM solo si el rol configurado tiene permiso. No inserta filas ni envía emails.
 
 La analítica de terceros sigue sin cargarse porque no hay GA4/Meta configurados.
 La medición propia respeta la decisión del banner y GPC, y permanece apagada en dev.

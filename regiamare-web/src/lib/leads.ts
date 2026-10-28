@@ -57,13 +57,13 @@ export async function submitLead(input: LeadInput): Promise<LeadResult> {
           .map(key => [key, entryParams.get(key) ?? undefined])),
       }),
     })
-    if (response.ok) {
+    if (response.status === 201) {
       // Avisa a la analítica (lib/analytics.ts, si está instalada) de que ha
       // habido un envío. Se hace AQUÍ, tras la respuesta del servidor, y no en
       // el clic del botón: así el número de la analítica es el de solicitudes
       // que de verdad llegaron a la bandeja, y no el de intentos. Es un evento
       // del DOM para que este fichero no dependa de analytics.ts.
-      if (response.status === 201) window.dispatchEvent(new CustomEvent('moira:lead-sent'))
+      window.dispatchEvent(new CustomEvent('moira:lead-sent'))
       return { ok: true }
     }
     return { ok: false, reason: response.status === 400 ? 'invalid' : 'server' }

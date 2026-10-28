@@ -75,9 +75,9 @@ export async function POST(req: Request) {
     source_path: clean(body.source_path, MAX.path),
     source_item: clean(body.source_item, 200),
     source_referrer: clean(body.source_referrer, 2048),
-    source_campaign: clean(body.source_campaign, MAX.campaign),
-    ...Object.fromEntries(['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
-      .map(key => [key, clean(body[key], MAX.campaign)])),
+    source_campaign: clean(body.utm_campaign ?? body.source_campaign, MAX.campaign),
+    ...Object.fromEntries(['source', 'medium', 'term', 'content']
+      .map(key => [`source_utm_${key}`, clean(body[`utm_${key}`], MAX.campaign)])),
     consent_given: body.consent_given === true && !!clean(body.consent_text_version, 120),
     consent_text_version: clean(body.consent_text_version, 120),
   })

@@ -16,6 +16,9 @@ Object.assign(process.env, { VITE_COMPANY_ID: company, SUPABASE_URL: 'https://ex
 let enabled = true
 let fail = false
 let inserted
+let failInsert = false
+const leadSchema = readFileSync('../DB_SCHEMA.sql', 'utf8').match(/CREATE TABLE public\.lead \(([\s\S]*?)\r?\n\);/)[1]
+const leadColumns = new Set([...leadSchema.matchAll(/^\s{2}(\w+)\s+(?:uuid|text|boolean|timestamp)/gm)].map(match => match[1]))
 const published = { id: 'post-1', company_id: company, status: 'published', slug: 'guia-sitges',
   title: 'Guía <Sitges>', heading: 'Vivir en la costa', intro: 'Una introducción', body: '## Consejos\n\n**Hola**\n\n<script>alert(1)</script>\n\n[bad](javascript:alert(1))',
   seo_title: 'SEO "Sitges"', seo_description: 'Casas & mar', seo_og_image_url: null,
@@ -30,7 +33,14 @@ globalThis.fetch = async (input, init) => {
   if (url.pathname.endsWith('/companies')) return Response.json([{ id: company }])
   if (url.pathname.endsWith('/items')) return Response.json([])
   if (url.pathname.endsWith('/company_modules')) return Response.json([{ is_enabled: enabled }])
-  if (url.pathname.endsWith('/lead')) { inserted = JSON.parse(init.body); return new Response(null, { status: 201 }) }
+  if (url.pathname.endsWith('/lead')) {
+    const payload = JSON.parse(init.body)
+    const unknown = Object.keys(payload).filter(key => !leadColumns.has(key))
+    if (unknown.length) return Response.json({ code: 'PGRST204', message: `Unknown columns: ${unknown.join(',')}` }, { status: 400 })
+    if (failInsert) return Response.json({ code: 'TEST', message: 'Insert failed' }, { status: 500 })
+    inserted = payload
+    return new Response(null, { status: 201 })
+  }
   if (url.pathname.endsWith('/blog_posts')) {
     let rows = fixtures.filter(post => post.company_id === url.searchParams.get('company_id')?.slice(3)
       && post.status === url.searchParams.get('status')?.slice(3))
@@ -59,7 +69,10 @@ test('leads fija empresa, respeta CRM y guarda atribución/consentimiento', asyn
   assert.equal((await lead(request(values))).status, 503)
   enabled = true
   assert.equal((await lead(request(values))).status, 201)
-  for (const key of ['company_id', 'source_item', 'source_referrer', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'consent_given', 'consent_text_version']) assert.equal(inserted[key], values[key])
+  for (const key of ['company_id', 'source_item', 'source_referrer', 'consent_given', 'consent_text_version']) assert.equal(inserted[key], values[key])
+  for (const key of ['source', 'medium', 'term', 'content']) assert.equal(inserted[`source_utm_${key}`], values[`utm_${key}`])
+  assert.equal(inserted.source_campaign, values.utm_campaign)
+  assert.equal(Object.keys(inserted).some(key => key.startsWith('utm_')), false)
   assert.equal((await lead(request({ ...values, consent_text_version: '' }))).status, 201)
   assert.equal(inserted.consent_given, false)
   assert.equal((await lead(request({ ...values, consent_given: false }))).status, 201)
@@ -73,6 +86,14 @@ test('leads fija empresa, respeta CRM y guarda atribución/consentimiento', asyn
 })
 test('analytics sin configuración responde 204 sin fallar al importar', async () => {
   assert.equal((await track(request({}))).status, 204)
+})
+test('un fallo al insertar una solicitud nunca se confirma como guardado', async () => {
+  failInsert = true
+  inserted = undefined
+  try {
+    assert.equal((await lead(request(values))).status, 500)
+    assert.equal(inserted, undefined)
+  } finally { failInsert = false }
 })
 test('cliente conserva cinco UTM de entrada y solo cuenta envíos guardados', async () => {
   await build({ entryPoints: ['src/lib/leads.ts'], bundle: true, outfile: 'node_modules/.tmp/integrations/client.mjs',
@@ -96,7 +117,7 @@ test('cliente conserva cinco UTM de entrada y solo cuenta envíos guardados', as
     for (const [key, value] of Object.entries({ utm_source: 'news', utm_medium: 'email', utm_campaign: 'oct', utm_term: 'costa', utm_content: 'hero' })) assert.equal(payload[key], value)
     assert.equal(count, 1)
     status = 200
-    assert.equal((await submitLead(values)).ok, true)
+    assert.equal((await submitLead(values)).ok, false)
     assert.equal(count, 1)
     status = 500
     assert.equal((await submitLead(values)).ok, false)
