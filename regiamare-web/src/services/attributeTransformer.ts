@@ -1,4 +1,4 @@
-import type { PropertyAttributes } from '../types';
+import type { PropertyAttributes } from '../types/index.js';
 
 /**
  * Database types for Supabase responses

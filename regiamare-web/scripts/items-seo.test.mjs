@@ -5,6 +5,8 @@ import { createClient } from '@supabase/supabase-js'
 import { createServer } from 'node:http'
 import { once } from 'node:events'
 import { readFileSync } from 'node:fs'
+import { mkdtemp, access, rmdir } from 'node:fs/promises'
+import { resolve } from 'node:path'
 
 await build({ entryPoints: ['api/property.ts', 'api/sitemap.ts', 'src/lib/properties.ts'], bundle: true,
   outdir: 'node_modules/.tmp/items-tests', format: 'esm', platform: 'node', packages: 'external' })
@@ -91,6 +93,20 @@ test('HTML HTTP inicial contiene SEO, canonical, contenido y alt sin JavaScript'
   assert.match(html, /alt="La casa y su terraza"/)
   assert.match(html, /<h1>Casa &lt;costa&gt; \$&amp;<\/h1>/)
   assert.doesNotMatch(html, /<script>alert|src="javascript:|MUST-NOT-BE-USED/)
+})
+test('fichas y 404 arrancan desde un runtime que no contiene dist/index.html', async () => {
+  const cwd = process.cwd()
+  const isolated = await mkdtemp(resolve('node_modules/.tmp/without-static-files-'))
+  try {
+    process.chdir(isolated)
+    await assert.rejects(access('dist/index.html'))
+    const response = await property(new Request('https://regiamare.example/property/casa-costa'))
+    assert.equal(response.status, 200)
+    const html = await response.text()
+    assert.match(html, /\/assets\/[^" ]+\.js/)
+    assert.match(html, /<h1>Casa &lt;costa&gt;/)
+    assert.equal((await property(new Request('https://regiamare.example/property/inexistente'))).status, 404)
+  } finally { process.chdir(cwd); await rmdir(isolated) }
 })
 test('fallback SEO usa título/resumen y omite OG inseguro sin imágenes aptas', async () => {
   const response = await fetch(`${base}/property/sin-seo`)

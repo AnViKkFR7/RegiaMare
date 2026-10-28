@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { readFile } from 'node:fs/promises'
+import { siteTemplate as template } from './site-template.generated.js'
 import { PROPERTY_COMPANY_ID } from '../src/lib/properties.js'
 import { siteOrigin } from '../src/lib/siteConfig.js'
 
@@ -26,7 +26,6 @@ export async function propertyHtml({ title, description = '', canonical, image, 
     <meta data-item-seo property="og:type" content="website" />
     ${canonical ? `<meta data-item-seo property="og:url" content="${escapeHtml(canonical)}" />` : ''}
     ${image ? `<meta data-item-seo property="og:image" content="${escapeHtml(image)}" />` : ''}`
-  const template = await readFile(`${process.cwd()}/dist/index.html`, 'utf8')
   const html = template.replace('<html lang="en">', '<html lang="es">')
     .replace(/<title>[^<]*<\/title>/, () => head)
     .replace('<div id="root"></div>', () => `<div id="root"><header><a href="/">Regia Mare Properties</a></header>${content}</div>`)

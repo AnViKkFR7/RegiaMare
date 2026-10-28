@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { readFile } from 'node:fs/promises'
+import { siteTemplate as template } from '../server/site-template.generated.js'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { blogSeo, loadBlog } from '../src/lib/blog.js'
@@ -42,7 +42,6 @@ export async function GET(req: Request) {
       ${seo.image && !missing ? `<meta property="og:image" content="${escapeHtml(seo.image)}" />` : ''}`
     const content = missing ? '<h1>Esta página no existe</h1><a href="/blog">Volver al blog</a>'
       : renderToStaticMarkup(createElement(BlogContent, { posts, detail: !!slug, page }))
-    const template = await readFile(`${process.cwd()}/dist/index.html`, 'utf8')
     const html = template.replace('<html lang="en">', '<html lang="es">')
       .replace(/<title>[^<]*<\/title>/, meta.replace(/<(meta|link) /g, '<$1 data-blog-seo '))
       .replace('<div id="root"></div>', `<div id="root"><header><a href="/">Regia Mare Properties</a></header><main class="blog-page container">${content}</main></div>`)

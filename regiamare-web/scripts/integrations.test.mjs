@@ -4,6 +4,7 @@ import { test } from 'node:test'
 import ts from 'typescript'
 import { readFileSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
+import { mkdtemp, access, rmdir } from 'node:fs/promises'
 
 await build({ entryPoints: ['api/lead.ts', 'api/track.ts', 'api/blog.ts'], bundle: true,
   outdir: 'node_modules/.tmp/integrations', format: 'esm', platform: 'node', packages: 'external', jsx: 'automatic' })
@@ -138,6 +139,17 @@ test('blog entrega Markdown seguro, alt y SEO en HTML inicial', async () => {
   assert.match(html, /<strong>Hola<\/strong>/)
   assert.match(html, /alt="Costa de Sitges"/)
   assert.doesNotMatch(html, /<script>alert|href="javascript:/)
+})
+test('blog renderiza desde un runtime sin el directorio dist', async () => {
+  const cwd = process.cwd()
+  const isolated = await mkdtemp(resolve('node_modules/.tmp/blog-without-static-files-'))
+  try {
+    process.chdir(isolated)
+    await assert.rejects(access('dist/index.html'))
+    const response = await blog(new Request('https://regiamare.example/blog/guia-sitges'))
+    assert.equal(response.status, 200)
+    assert.match(await response.text(), /<strong>Hola<\/strong>/)
+  } finally { process.chdir(cwd); await rmdir(isolated) }
 })
 test('Vercel descubre la configuración de API y el blog arranca sin bundling', async () => {
   const configPath = ts.findConfigFile('api', ts.sys.fileExists)

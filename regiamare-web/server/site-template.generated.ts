@@ -1,0 +1,3 @@
+// Generado por scripts/embed-site-template.mjs después de vite build.
+// Incluye el HTML en la función; no necesita dist/index.html en runtime.
+export const siteTemplate: string = "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"/favicon.png\" />\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n    <title>Regia Mare Properties</title>\n    <script type=\"module\" crossorigin src=\"/assets/index-CP4GFpMj.js\"></script>\n    <link rel=\"stylesheet\" crossorigin href=\"/assets/index-Bv8FrHZX.css\">\n  </head>\n  <body>\n    <div id=\"root\"></div>\n  </body>\n</html>\n"
