@@ -1,0 +1,72 @@
+{
+  "count": 8,
+  "snapshot": "docs/items-seo/exports/published-2026-10-28T09-57-57-229Z.json",
+  "issues": [
+    {
+      "id": "3eb76f0d-de71-4db5-a380-1bb23257316c",
+      "issues": [
+        "missing_slug",
+        "missing_seo_title",
+        "missing_seo_description"
+      ]
+    },
+    {
+      "id": "10a925a9-567f-455f-ac59-8d5b7a6f89e4",
+      "issues": [
+        "missing_slug",
+        "missing_seo_title",
+        "missing_seo_description"
+      ]
+    },
+    {
+      "id": "973af166-214a-4b52-96bf-b12841ca075c",
+      "issues": [
+        "missing_slug",
+        "missing_seo_title",
+        "missing_seo_description"
+      ]
+    },
+    {
+      "id": "991c8fb7-66e7-4eda-9aa9-b9e466771ca4",
+      "issues": [
+        "missing_slug",
+        "missing_seo_title",
+        "missing_seo_description"
+      ]
+    },
+    {
+      "id": "01c335d8-1ccd-49bd-90f9-cda4bb441d3f",
+      "issues": [
+        "missing_slug",
+        "missing_seo_title",
+        "missing_seo_description"
+      ]
+    },
+    {
+      "id": "e4dead59-2fdc-4816-a33a-b431d947e4bf",
+      "issues": [
+        "missing_slug",
+        "missing_seo_title",
+        "missing_seo_description"
+      ]
+    },
+    {
+      "id": "5d293e70-f081-4ac5-8641-d082cd73d3c5",
+      "issues": [
+        "missing_slug",
+        "missing_seo_title",
+        "missing_seo_description"
+      ]
+    },
+    {
+      "id": "a7f3e8b2-4c9d-41a5-8e6f-3d2a1b5c7e9f",
+      "issues": [
+        "missing_slug",
+        "missing_seo_title",
+        "missing_seo_description"
+      ]
+    }
+  ],
+  "public_collisions": [],
+  "limitations": "Anon no permite auditar colisiones con borradores/archivados. Ejecutar ITEMS_SEO_PREFLIGHT.sql con el responsable antes del lote SQL."
+}

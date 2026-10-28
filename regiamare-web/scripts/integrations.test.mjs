@@ -28,6 +28,7 @@ globalThis.fetch = async (input, init) => {
   const url = new URL(typeof input === 'string' ? input : input.url ?? String(input))
   if (fail) return Response.json({ message: 'Database unavailable', code: 'TEST' }, { status: 500 })
   if (url.pathname.endsWith('/companies')) return Response.json([{ id: company }])
+  if (url.pathname.endsWith('/items')) return Response.json([])
   if (url.pathname.endsWith('/company_modules')) return Response.json([{ is_enabled: enabled }])
   if (url.pathname.endsWith('/lead')) { inserted = JSON.parse(init.body); return new Response(null, { status: 201 }) }
   if (url.pathname.endsWith('/blog_posts')) {
@@ -144,6 +145,10 @@ test('Vercel descubre la configuración de API y el blog arranca sin bundling', 
   const response = await GET(new Request('https://regiamare.example/blog/guia-sitges'))
   assert.equal(response.status, 200)
   assert.match(await response.text(), /<strong>Hola<\/strong>/)
+  const { GET: property } = await import('../node_modules/.tmp/vercel-runtime/api/property.js')
+  assert.equal((await property(new Request('https://regiamare.example/property/inexistente'))).status, 404)
+  const { GET: sitemap } = await import('../node_modules/.tmp/vercel-runtime/api/sitemap.js')
+  assert.equal((await sitemap()).status, 200)
 })
 test('blog lista publicaciones y devuelve 404 para inexistentes, borradores y otra empresa', async () => {
   assert.equal((await blog(new Request('https://regiamare.example/api/blog'))).status, 200)

@@ -9,6 +9,9 @@ import { useTranslation } from '../../utils/translations';
 import { trackEvent } from '../../lib/analytics';
 import { submitLead, LEAD_PRIVACY_TEXT_VERSION } from '../../lib/leads';
 import PrivacyConsent from '../../components/PrivacyConsent/PrivacyConsent';
+import NotFound from '../NotFound/NotFound';
+import { propertyPath, indexableProperty, UUID_PATTERN } from '../../lib/properties';
+import { setPropertyHead } from '../../lib/propertyHead';
 
 interface PropertyDetailProps {
   language: Language;
@@ -20,6 +23,8 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
   const t = useTranslation(language);
   const [property, setProperty] = useState<Property | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const [relatedError, setRelatedError] = useState(false);
   const [relatedProperties, setRelatedProperties] = useState<Property[]>([]);
   const [contactForm, setContactForm] = useState({
     name: '',
@@ -46,43 +51,53 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
   useEffect(() => {
+    let active = true;
     async function fetchProperty() {
-      if (!id) {
-        navigate('/purchases');
-        return;
-      }
-
       setLoading(true);
-      const data = await getPropertyById(id);
-      
-      if (!data) {
-        navigate('/purchases');
-        return;
+      setLoadError(false);
+      try {
+        const data = id ? await getPropertyById(id) : null;
+        if (!active) return;
+        if (data && id && UUID_PATTERN.test(id) && indexableProperty(data)) {
+          navigate(propertyPath(data), { replace: true });
+        }
+        setProperty(data);
+      } catch {
+        if (active) { setLoadError(true); setProperty(null); }
+      } finally {
+        if (active) setLoading(false);
       }
-
-      setProperty(data);
-      setLoading(false);
     }
-
     fetchProperty();
+    return () => { active = false; };
   }, [id, navigate]);
+
+  useEffect(() => {
+    setPropertyHead(!loading && !loadError ? property : null,
+      loading ? 'Cargando propiedad | Regia Mare Properties' : loadError ? 'Error de carga | Regia Mare Properties' : undefined);
+    return () => { document.querySelectorAll('[data-item-seo]').forEach(element => element.remove()); };
+  }, [property, loading, loadError]);
 
   // Fetch related properties by zone
   useEffect(() => {
+    let active = true;
     async function fetchRelatedProperties() {
       if (!property?.attributes.zone) return;
-      
-      const properties = await getPropertiesByZone(property.attributes.zone);
-      // Filter out current property and limit to 4
-      const filtered = properties
-        .filter(p => p.id !== property.id)
-        .slice(0, 4);
-      setRelatedProperties(filtered);
+      try {
+        const properties = await getPropertiesByZone(property.attributes.zone);
+        // Filter out current property and limit to 4
+        const filtered = properties
+          .filter(p => p.id !== property.id)
+          .slice(0, 4);
+        if (active) { setRelatedProperties(filtered); setRelatedError(false); }
+      } catch { if (active) setRelatedError(true); }
     }
 
     if (property) {
+      setRelatedProperties([]);
       fetchRelatedProperties();
     }
+    return () => { active = false; };
   }, [property]);
 
   const sendContactEmail = async (message: string) => {
@@ -158,7 +173,7 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
       setSubmitted(true);
       setContactForm({ name: '', phone: '', email: '' });
       setTimeout(() => setSubmitted(false), 5000);
-    } catch (err) {
+    } catch {
       trackEvent('form_submit_error');
       setError(t('form.error'));
     } finally {
@@ -168,7 +183,7 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
 
   // Convert YouTube URL to embed format
   const getYouTubeEmbedUrl = (url: string): string => {
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     const videoId = (match && match[2].length === 11) ? match[2] : null;
     return videoId ? `https://www.youtube.com/embed/${videoId}` : url;
@@ -349,12 +364,12 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
     );
   }
 
-  if (!property) {
-    return null;
-  }
+  if (loadError) return <div className="container" role="alert"><p>No se ha podido cargar la propiedad.</p><button onClick={() => window.location.reload()}>Reintentar</button></div>;
+  if (!property) return <NotFound language={language} />;
 
   const attrs = property.attributes;
-  const images = property.media.filter(m => m.media_type === 'image');
+  const images = property.media.filter(m => m.media_type === 'image')
+    .sort((a, b) => Number(b.is_primary) - Number(a.is_primary));
 
   return (
     <div className="property-detail">
@@ -607,6 +622,7 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
       </div>
 
       {/* Related Properties Section */}
+      {relatedError && <p role="alert">No se han podido cargar las propiedades relacionadas.</p>}
       {relatedProperties.length > 0 && (
         <div className="related-properties-section">
           <Link 
@@ -619,7 +635,7 @@ export default function PropertyDetail({ language }: PropertyDetailProps) {
             {relatedProperties.map(relProp => (
               <Link 
                 key={relProp.id}
-                to={`/property/${relProp.id}`}
+                to={propertyPath(relProp)}
                 className="related-property-card"
               >
                 <div className="related-property-image">

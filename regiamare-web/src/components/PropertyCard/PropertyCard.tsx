@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import type { Property, Language } from '../../types';
 import './PropertyCard.css';
 import { useTranslation } from '../../utils/translations';
+import { propertyPath } from '../../lib/properties';
 
 interface PropertyCardProps {
   property: Property;
@@ -26,7 +27,7 @@ export default function PropertyCard({ property, featured = false, language }: P
   };
 
   return (
-    <Link to={`/property/${property.id}`} className={`property-card ${featured ? 'featured' : ''}`}>
+    <Link to={propertyPath(property)} className={`property-card ${featured ? 'featured' : ''}`}>
       <div className="property-card-image">
         <img loading="lazy" decoding="async" src={primaryImage} alt={property.title} />
         {attributes.vendido ? (
@@ -36,7 +37,7 @@ export default function PropertyCard({ property, featured = false, language }: P
         ) : null}
         <div className="property-card-overlay">
           {featured && <span className="property-badge featured-badge">{t('card.featured')}</span>}
-          <span className="property-badge type-badge">{attributes.property_type.toUpperCase()}</span>
+          <span className="property-badge type-badge">{attributes.property_type?.toUpperCase()}</span>
         </div>
       </div>
 

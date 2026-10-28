@@ -6,8 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && tsc -p tsconfig.api.json && vite build",
-    "test:integrations": "node --test scripts/integrations.test.mjs",
+    "test:integrations": "node --test scripts/*.test.mjs",
     "blog:preflight": "node scripts/blog-preflight.mjs",
+    "items:preflight": "node scripts/items-preflight.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },

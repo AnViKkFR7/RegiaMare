@@ -1,163 +1,10 @@
 import { supabase } from './supabase';
-import type { Property, ItemMedia } from '../types';
-import { 
-  transformAttributesToPropertyAttributes, 
-  validateRequiredAttributes,
-  type AttributeValue 
-} from './attributeTransformer';
+import type { Property } from '../types';
+import { loadPublicProperties, loadPublicProperty } from '../lib/properties';
 
-/**
- * Constants
- */
-const COMPANY_ID = 'eac2ccbe-cc36-40cd-bb7e-d5fe44de972d';
-const ITEM_TYPE = 'regiamare_property';
-
-/**
- * Raw database response types
- */
-interface ItemFromDB {
-  id: string;
-  company_id: string;
-  title: string;
-  summary: string | null;
-  status: string;
-  item_type: string;
-  created_at: string;
-  updated_at: string;
-  attribute_values: AttributeValue[];
-  item_media: ItemMediaFromDB[];
-}
-
-interface ItemMediaFromDB {
-  id: string;
-  item_id: string;
-  file_type: 'image' | 'pdf' | 'other';
-  url_externa: string;
-  title: string | null;
-  alt_text: string | null;
-  sort_order: number;
-  metadata: any;
-  created_at: string;
-}
-
-/**
- * Transforms ItemMedia from database format to application format
- */
-function transformItemMedia(dbMedia: ItemMediaFromDB[]): ItemMedia[] {
-  return dbMedia
-    .sort((a, b) => a.sort_order - b.sort_order)
-    .map(media => ({
-      id: media.id,
-      item_id: media.item_id,
-      media_type: media.file_type,
-      url: media.url_externa,
-      alt_text: media.alt_text || media.title || '',
-      display_order: media.sort_order,
-      is_primary: media.sort_order === 0,
-      created_at: media.created_at
-    }));
-}
-
-/**
- * Transforms raw database item to Property type
- */
-function transformItemToProperty(item: ItemFromDB): Property | null {
-  const attributes = transformAttributesToPropertyAttributes(item.attribute_values);
-  
-  // Validate required attributes
-  if (!validateRequiredAttributes(attributes)) {
-    console.warn(`Property ${item.id} is missing required attributes`);
-    return null;
-  }
-
-  const media = transformItemMedia(item.item_media);
-
-  return {
-    id: item.id,
-    company_id: item.company_id,
-    title: item.title,
-    description: item.summary || undefined,
-    status: item.status as 'draft' | 'published' | 'archived',
-    item_type: item.item_type,
-    created_at: item.created_at,
-    updated_at: item.updated_at,
-    attributes: attributes as any, // Type assertion needed due to Partial conversion
-    media
-  };
-}
-
-/**
- * Gets all published properties for RegiaMare
- */
-export async function getAllProperties(): Promise<Property[]> {
-  try {
-    const { data, error } = await supabase
-      .from('items')
-      .select(`
-        *,
-        attribute_values (
-          *,
-          attribute_definitions (*)
-        ),
-        item_media (*)
-      `)
-      .eq('company_id', COMPANY_ID)
-      .eq('item_type', ITEM_TYPE)
-      .eq('status', 'published')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching properties:', error);
-      return [];
-    }
-
-    if (!data) {
-      return [];
-    }
-
-    const properties = data
-      .map(item => transformItemToProperty(item as ItemFromDB))
-      .filter((prop): prop is Property => prop !== null);
-
-    return properties;
-  } catch (error) {
-    console.error('Unexpected error fetching properties:', error);
-    return [];
-  }
-}
-
-/**
- * Gets a single property by ID
- */
-export async function getPropertyById(id: string): Promise<Property | null> {
-  try {
-    const { data, error } = await supabase
-      .from('items')
-      .select(`
-        *,
-        attribute_values (
-          *,
-          attribute_definitions (*)
-        ),
-        item_media (*)
-      `)
-      .eq('id', id)
-      .eq('company_id', COMPANY_ID)
-      .eq('item_type', ITEM_TYPE)
-      .eq('status', 'published')
-      .single();
-
-    if (error || !data) {
-      console.error('Error fetching property:', error);
-      return null;
-    }
-
-    return transformItemToProperty(data as ItemFromDB);
-  } catch (error) {
-    console.error('Unexpected error fetching property:', error);
-    return null;
-  }
-}
+// Los errores se propagan a la UI: vacío solo significa una consulta sin filas.
+export const getAllProperties = () => loadPublicProperties(supabase);
+export const getPropertyById = (reference: string) => loadPublicProperty(supabase, reference);
 
 /**
  * Gets 2 featured properties based on is_featured attribute.
@@ -189,7 +36,7 @@ export async function getFeaturedProperties(): Promise<Property[]> {
     return properties.sort(byPriceDesc).slice(0, 2);
   } catch (error) {
     console.error('Error fetching featured properties:', error);
-    return [];
+    throw error;
   }
 }
 
@@ -205,7 +52,7 @@ export async function getPropertiesByZone(zone: string): Promise<Property[]> {
     );
   } catch (error) {
     console.error('Error fetching properties by zone:', error);
-    return [];
+    throw error;
   }
 }
 
@@ -285,7 +132,7 @@ export async function getFilteredProperties(filters: PropertyFilters): Promise<P
     return properties;
   } catch (error) {
     console.error('Error filtering properties:', error);
-    return [];
+    throw error;
   }
 }
 
@@ -306,7 +153,7 @@ export async function getAvailableZones(): Promise<string[]> {
     return Array.from(zones).sort();
   } catch (error) {
     console.error('Error fetching available zones:', error);
-    return [];
+    throw error;
   }
 }
 
@@ -327,7 +174,7 @@ export async function getAvailablePropertyTypes(): Promise<string[]> {
     return Array.from(types).sort();
   } catch (error) {
     console.error('Error fetching available property types:', error);
-    return [];
+    throw error;
   }
 }
 
@@ -352,7 +199,7 @@ export async function getPriceRange(): Promise<{ min: number; max: number }> {
     };
   } catch (error) {
     console.error('Error fetching price range:', error);
-    return { min: 0, max: 0 };
+    throw error;
   }
 }
 
@@ -426,12 +273,6 @@ export async function getFilteredPropertiesWithPagination(
     };
   } catch (error) {
     console.error('Error fetching paginated properties:', error);
-    return {
-      properties: [],
-      totalCount: 0,
-      totalPages: 0,
-      currentPage: page,
-      pageSize
-    };
+    throw error;
   }
 }

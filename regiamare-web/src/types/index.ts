@@ -16,6 +16,10 @@ export interface Item {
   item_type: string; // 'regiamare_property' for properties
   title: string;
   description?: string;
+  slug?: string | null;
+  seo_title?: string | null;
+  seo_description?: string | null;
+  seo_og_image_url?: string | null;
   status: 'draft' | 'published' | 'archived';
   created_at: string;
   updated_at: string;

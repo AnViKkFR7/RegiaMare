@@ -1,11 +1,13 @@
 {
   "functions": {
-    "api/blog.ts": { "includeFiles": "dist/index.html" }
+    "api/blog.ts": { "includeFiles": "dist/index.html" },
+    "api/property.ts": { "includeFiles": "dist/index.html" }
   },
   "rewrites": [
     { "source": "/blog", "destination": "/api/blog" },
     { "source": "/blog/:slug", "destination": "/api/blog?slug=:slug" },
-    { "source": "/sitemap.xml", "destination": "/api/blog?sitemap=1" },
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+    { "source": "/property/:reference", "destination": "/api/property?reference=:reference" },
     {
       "source": "/(.*)",
       "destination": "/index.html"

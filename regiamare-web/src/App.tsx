@@ -24,9 +24,12 @@ function PageviewTracker() {
   const location = useLocation();
   useEffect(() => {
     trackPageview(location.pathname);
-    if (!location.pathname.startsWith('/blog')) {
+    if (!location.pathname.startsWith('/blog') && !location.pathname.startsWith('/property/')) {
       document.title = 'Regia Mare Properties';
       document.querySelectorAll('[data-blog-seo]').forEach(element => element.remove());
+    }
+    if (!location.pathname.startsWith('/property/')) {
+      document.querySelectorAll('[data-item-seo]').forEach(element => element.remove());
     }
   }, [location.pathname]);
   return null;

@@ -1,0 +1,54 @@
+{
+  "snapshot": "exports/published-2026-10-28T09-57-57-229Z.json",
+  "stage": "Propuesta pendiente de aprobación editorial; no aplicada",
+  "items": [
+    {
+      "id": "3eb76f0d-de71-4db5-a380-1bb23257316c",
+      "slug": "vivienda-historica-mercat-santa-caterina-barcelona",
+      "seo_title": "Vivienda histórica junto al Mercat de Santa Caterina",
+      "seo_description": "Vivienda de 61 m² y dos dormitorios junto al Mercat de Santa Caterina, Barcelona. Balcón, suelos hidráulicos y vigas de madera. Cuarta planta sin ascensor."
+    },
+    {
+      "id": "10a925a9-567f-455f-ac59-8d5b7a6f89e4",
+      "slug": "loft-46-m2-born-barcelona",
+      "seo_title": "Loft de 46 m² en el Born, Barcelona",
+      "seo_description": "Loft de 46 m² construidos en Carrer Sant Pere Mitjà, en el Born de Barcelona. Espacio diáfano con posibilidad de redistribución y comercios cercanos."
+    },
+    {
+      "id": "973af166-214a-4b52-96bf-b12841ca075c",
+      "slug": "apartamento-terraza-primera-linea-mar-coma-ruga",
+      "seo_title": "Apartamento con terraza en primera línea, Coma-ruga",
+      "seo_description": "Apartamento de 130 m² y tres dormitorios en primera línea de mar en Coma-ruga. Planta baja con terraza de 40 m² y acceso directo al paseo marítimo."
+    },
+    {
+      "id": "991c8fb7-66e7-4eda-9aa9-b9e466771ca4",
+      "slug": "casa-pareada-francaset-roda-de-bera",
+      "seo_title": "Casa pareada en El Francaset, Roda de Berà",
+      "seo_description": "Casa pareada de 195 m² construidos y cuatro dormitorios sobre parcela de 460 m² en El Francaset, Roda de Berà, con espacios exteriores."
+    },
+    {
+      "id": "01c335d8-1ccd-49bd-90f9-cda4bb441d3f",
+      "slug": "piso-reformado-94-m2-centro-sitges",
+      "seo_title": "Piso reformado de 94 m² en el centro de Sitges",
+      "seo_description": "Piso de 94 m² y tres dormitorios con reforma integral en el centro de Sitges, a 200 metros del mar. Instalaciones de agua y electricidad renovadas."
+    },
+    {
+      "id": "e4dead59-2fdc-4816-a33a-b431d947e4bf",
+      "slug": "planta-baja-jardin-sant-salvador-coma-ruga",
+      "seo_title": "Planta baja con jardín en Sant Salvador, Coma-ruga",
+      "seo_description": "Planta baja de 83 m² y dos dormitorios en Sant Salvador, Coma-ruga. Jardín privado, dos terrazas, parking y trastero, a 200 metros de la playa."
+    },
+    {
+      "id": "5d293e70-f081-4ac5-8641-d082cd73d3c5",
+      "slug": "duplex-reformado-terraza-privada-sitges",
+      "seo_title": "Dúplex reformado con terraza privada en Sitges",
+      "seo_description": "Planta baja dúplex reformada de 101 m² en el centro de Sitges. Terraza privada y dos dormitorios dobles con armarios empotrados y balcón."
+    },
+    {
+      "id": "a7f3e8b2-4c9d-41a5-8e6f-3d2a1b5c7e9f",
+      "slug": "villa-independiente-els-cards-sant-pere-de-ribes",
+      "seo_title": "Villa independiente en Els Cards, Sant Pere de Ribes",
+      "seo_description": "Villa independiente de 172 m² y tres dormitorios en Els Cards, Sant Pere de Ribes. Parcela llana de unos 400 m² y garaje de unos 60 m²."
+    }
+  ]
+}

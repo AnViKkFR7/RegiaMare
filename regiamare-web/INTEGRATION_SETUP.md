@@ -1,5 +1,12 @@
 # Leads, analítica y blog
 
+La migración SEO de propiedades tiene su inventario, copia pública, propuestas,
+SQL de revisión y comprobaciones en `docs/items-seo/IMPLEMENTATION.md`.
+`npm run items:preflight` vuelve a auditar/exportar sin escribir en Supabase.
+La ruta `/sitemap.xml` usa ahora `api/sitemap.ts` e incluye propiedades publicadas
+con slug válido, además del contenido previo. `api/property.ts` sirve HTML inicial
+y redirecciones UUID→slug. Configurar el mismo dominio HTTPS en SITE_URL y VITE_SITE_URL.
+
 Configurar las variables de `.env.example` en Vercel y en `.env` para desarrollo.
 `VITE_COMPANY_ID` debe existir también en las funciones de servidor. El blog usa
 exclusivamente la clave anon y el RLS de Supabase; leads y analítica usan la clave

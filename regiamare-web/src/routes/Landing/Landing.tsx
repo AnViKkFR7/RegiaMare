@@ -14,6 +14,7 @@ export default function Landing({ language }: LandingProps) {
   const t = useTranslation(language);
   const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
 
   useEffect(() => {
     async function loadFeaturedProperties() {
@@ -23,6 +24,7 @@ export default function Landing({ language }: LandingProps) {
         setFeaturedProperties(properties);
       } catch (error) {
         console.error('Error loading featured properties:', error);
+        setLoadError(true);
       } finally {
         setIsLoading(false);
       }
@@ -82,7 +84,7 @@ export default function Landing({ language }: LandingProps) {
           </div>
 
           <div className="featured-properties-grid">
-            {isLoading ? (
+            {loadError ? <p role="alert">No se han podido cargar las propiedades. <button onClick={() => window.location.reload()}>Reintentar</button></p> : isLoading ? (
               // Loading skeleton
               <>
                 <div className="property-card-skeleton"></div>

@@ -2,7 +2,8 @@ import { createClient } from '@supabase/supabase-js'
 import { readFile } from 'node:fs/promises'
 import { createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { blogSeo, loadBlog, validSlug } from '../src/lib/blog.js'
+import { blogSeo, loadBlog } from '../src/lib/blog.js'
+import { GET as loadSitemap } from './sitemap.js'
 import BlogContent from '../src/routes/Blog/BlogContent.js'
 
 const escapeHtml = (value: string) => value.replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!)
@@ -24,19 +25,7 @@ export async function GET(req: Request) {
     if (origin.protocol !== 'https:') throw new Error('SITE_URL must use HTTPS')
     const client = createClient(supabaseUrl, anonKey, { auth: { persistSession: false } })
     if (sitemap) {
-      const paths = ['/', '/services', '/purchases', '/sales', '/about', '/blog']
-      // Supabase limita cada respuesta: recorrer todas las páginas del sitemap.
-      for (let offset = 0; ; offset += 1000) {
-        const { data, error } = await client.from('blog_posts').select('slug')
-          .eq('company_id', companyId).eq('status', 'published').not('slug', 'is', null)
-          .order('id').range(offset, offset + 999)
-        if (error) throw error
-        for (const post of data ?? []) if (validSlug(post.slug)) paths.push(`/blog/${post.slug}`)
-        if (!data || data.length < 1000) break
-      }
-      return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${[...new Set(paths)].map(path => `<url><loc>${escapeHtml(new URL(path, origin).href)}</loc></url>`).join('')}</urlset>`, {
-        headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'no-cache' },
-      })
+      return loadSitemap()
     }
     const posts = await loadBlog(client, companyId, { slug, page })
     const missing = slug !== undefined && posts.length === 0

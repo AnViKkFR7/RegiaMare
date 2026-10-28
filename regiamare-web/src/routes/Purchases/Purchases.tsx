@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import PropertyCard from '../../components/PropertyCard/PropertyCard';
 import './Purchases.css';
 import { useTranslation } from '../../utils/translations';
-import type { Language } from '../../types';
+import type { Language, Property } from '../../types';
 import { 
   getFilteredPropertiesWithPagination, 
   getAvailableZones, 
@@ -18,11 +18,14 @@ interface PurchasesProps {
 
 export default function Purchases({ language }: PurchasesProps) {
   const t = useTranslation(language);
-  const [properties, setProperties] = useState<any[]>([]);
+  const [properties, setProperties] = useState<Property[]>([]);
   const [zones, setZones] = useState<string[]>([]);
   const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
   const [maxPrice, setMaxPrice] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
+  const [optionsReady, setOptionsReady] = useState(false);
+  const [optionsError, setOptionsError] = useState(false);
   
   // Filters
   const [selectedZone, setSelectedZone] = useState<string>('');
@@ -50,67 +53,79 @@ export default function Purchases({ language }: PurchasesProps) {
 
   // Load zones, property types, and price range on mount
   useEffect(() => {
+    let active = true;
     async function loadFilterOptions() {
-      const [zonesData, typesData, priceRangeData] = await Promise.all([
-        getAvailableZones(),
-        getAvailablePropertyTypes(),
-        getPriceRange()
-      ]);
-      setZones(zonesData);
-      setPropertyTypes(typesData);
-      setMaxPrice(priceRangeData.max);
-      setPriceTo(priceRangeData.max);
+      try {
+        const [zonesData, typesData, priceRangeData] = await Promise.all([
+          getAvailableZones(),
+          getAvailablePropertyTypes(),
+          getPriceRange()
+        ]);
+        if (!active) return;
+        setZones(zonesData);
+        setPropertyTypes(typesData);
+        setMaxPrice(priceRangeData.max);
+        setPriceTo(priceRangeData.max);
+        setOptionsReady(true);
+      } catch { if (active) { setOptionsError(true); setLoading(false); } }
     }
     loadFilterOptions();
+    return () => { active = false; };
   }, []);
 
   // Load properties when filters, sort or page change
   useEffect(() => {
+    let active = true;
     async function loadProperties() {
       setLoading(true);
+      setLoadError(false);
+      try {
       
-      const filters: PropertyFilters = {};
+        const filters: PropertyFilters = {};
       
-      if (selectedZone) {
-        filters.zone = selectedZone;
-      }
-      
-      if (selectedBedrooms) {
-        if (selectedBedrooms === '5+') {
-          filters.minBedrooms = 5;
-        } else {
-          filters.minBedrooms = parseInt(selectedBedrooms);
+        if (selectedZone) {
+          filters.zone = selectedZone;
         }
-      }
       
-      if (selectedType) {
-        filters.propertyType = selectedType;
-      }
-
-      if (selectedOperationType) {
-        filters.operationType = selectedOperationType;
-      }
-
-      if (priceFrom > 0) {
-        filters.minPrice = priceFrom;
-      }
-
-      if (priceTo > 0 && priceTo < maxPrice) {
-        filters.maxPrice = priceTo;
-      }
-
-      const result = await getFilteredPropertiesWithPagination(filters, currentPage, pageSize, sortBy);
+        if (selectedBedrooms) {
+          if (selectedBedrooms === '5+') {
+            filters.minBedrooms = 5;
+          } else {
+            filters.minBedrooms = parseInt(selectedBedrooms);
+          }
+        }
       
-      setProperties(result.properties);
-      setTotalPages(result.totalPages);
-      setTotalCount(result.totalCount);
-      setLoading(false);
+        if (selectedType) {
+          filters.propertyType = selectedType;
+        }
+
+        if (selectedOperationType) {
+          filters.operationType = selectedOperationType;
+        }
+
+        if (priceFrom > 0) {
+          filters.minPrice = priceFrom;
+        }
+
+        if (priceTo > 0 && priceTo < maxPrice) {
+          filters.maxPrice = priceTo;
+        }
+
+        const result = await getFilteredPropertiesWithPagination(filters, currentPage, pageSize, sortBy);
+        if (!active) return;
+      
+        setProperties(result.properties);
+        setTotalPages(result.totalPages);
+        setTotalCount(result.totalCount);
+      } catch { if (active) setLoadError(true); }
+      finally { if (active) setLoading(false); }
     }
     
-    if (maxPrice > 0) {
+    if (optionsReady) {
       loadProperties();
     }
-  }, [selectedZone, selectedBedrooms, selectedType, selectedOperationType, priceFrom, priceTo, currentPage, sortBy, maxPrice]);
+    return () => { active = false; };
+  }, [selectedZone, selectedBedrooms, selectedType, selectedOperationType, priceFrom, priceTo, currentPage, sortBy, maxPrice, optionsReady]);
 
   const handleFilterChange = () => {
     // Reset to page 1 when filters change
@@ -536,7 +551,7 @@ export default function Purchases({ language }: PurchasesProps) {
               </div>
             </div>
 
-            {loading ? (
+            {loadError || optionsError ? <div role="alert"><p>No se han podido cargar las propiedades.</p><button onClick={() => window.location.reload()}>Reintentar</button></div> : loading ? (
               <div className="loading">
                 <p>{t('purchases.loading')}</p>
               </div>
