@@ -4,7 +4,7 @@ import PropertyCard from '../../components/PropertyCard/PropertyCard';
 import './Landing.css';
 import { useTranslation } from '../../utils/translations';
 import type { Language, Property } from '../../types';
-import { getFeaturedProperties } from '../../services';
+import LocalInfo from '../../components/LocalInfo/LocalInfo';
 
 interface LandingProps {
   language: Language;
@@ -20,6 +20,7 @@ export default function Landing({ language }: LandingProps) {
     async function loadFeaturedProperties() {
       try {
         setIsLoading(true);
+        const { getFeaturedProperties } = await import('../../services/propertyService');
         const properties = await getFeaturedProperties();
         setFeaturedProperties(properties);
       } catch (error) {
@@ -38,7 +39,7 @@ export default function Landing({ language }: LandingProps) {
       {/* Hero Section - Full Screen */}
       <section className="hero">
         <div className="hero-background">
-          <img src="/2151986074.jpg" alt="Luxury Properties" />
+          <img src="/2151986074.jpg" alt="Viviendas en la costa de Barcelona y Costa Dorada" fetchPriority="high" />
           <div className="hero-overlay"></div>
         </div>
         <div className="hero-content">
@@ -111,6 +112,7 @@ export default function Landing({ language }: LandingProps) {
         </div>
       </section>
 
+      <LocalInfo language={language} />
       {/* Value Proposition Section */}
       <section className="value-section bg-surface">
         <div className="container">

@@ -1,0 +1,111 @@
+{
+  "checked_at": "2026-11-11T18:18:15.541Z",
+  "origin": "https://regiamare.com",
+  "ai_search_home_status": 200,
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "title": "Regia Mare Properties",
+      "description": null,
+      "canonical": null,
+      "h1": 0,
+      "schemas": []
+    },
+    {
+      "path": "/services",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "title": "Regia Mare Properties",
+      "description": null,
+      "canonical": null,
+      "h1": 0,
+      "schemas": []
+    },
+    {
+      "path": "/purchases",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "title": "Regia Mare Properties",
+      "description": null,
+      "canonical": null,
+      "h1": 0,
+      "schemas": []
+    },
+    {
+      "path": "/sales",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "title": "Regia Mare Properties",
+      "description": null,
+      "canonical": null,
+      "h1": 0,
+      "schemas": []
+    },
+    {
+      "path": "/about",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "title": "Regia Mare Properties",
+      "description": null,
+      "canonical": null,
+      "h1": 0,
+      "schemas": []
+    },
+    {
+      "path": "/blog",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "title": "Blog | Regia Mare Properties",
+      "description": "Actualidad y consejos inmobiliarios de Regia Mare Properties.",
+      "canonical": "https://regiamare.com/blog",
+      "h1": 1,
+      "schemas": []
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "title": "Regia Mare Properties",
+      "description": null,
+      "canonical": null,
+      "h1": 0,
+      "schemas": [],
+      "plainText": false,
+      "sample": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"/favicon.png\" />\n    <meta name=\"viewport\" co"
+    },
+    {
+      "path": "/llms.txt",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "title": "Regia Mare Properties",
+      "description": null,
+      "canonical": null,
+      "h1": 0,
+      "schemas": [],
+      "plainText": false,
+      "sample": "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <link rel=\"icon\" type=\"image/png\" href=\"/favicon.png\" />\n    <meta name=\"viewport\" co"
+    },
+    {
+      "path": "/pagina-inexistente-seo-audit",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "title": "Regia Mare Properties",
+      "description": null,
+      "canonical": null,
+      "h1": 0,
+      "schemas": []
+    },
+    {
+      "path": "/property/piso-reformado-94-m2-centro-sitges",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "title": "Piso reformado de 94 m² en el centro de Sitges",
+      "description": "Piso de 94 m² y tres dormitorios con reforma integral en el centro de Sitges, a 200 metros del mar. Instalaciones de agua y electricidad renovadas.",
+      "canonical": "https://regiamare.com/property/piso-reformado-94-m2-centro-sitges",
+      "h1": 1,
+      "schemas": []
+    }
+  ]
+}

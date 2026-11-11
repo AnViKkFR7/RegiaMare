@@ -11,8 +11,8 @@ const COMPANY_ID = import.meta.env.VITE_COMPANY_ID
 export const LEAD_PRIVACY_TEXT_VERSION = 'regiamare-contact-2026-10'
 
 // Mantener la atribución de entrada durante la navegación SPA, sin almacenamiento.
-const entryParams = new URLSearchParams(window.location.search)
-const entryReferrer = document.referrer
+const entryParams = new URLSearchParams(typeof window === 'undefined' ? '' : window.location.search)
+const entryReferrer = typeof document === 'undefined' ? '' : document.referrer
 
 export interface LeadInput {
   name: string

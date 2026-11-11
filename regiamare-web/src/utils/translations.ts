@@ -35,9 +35,9 @@ export const translations: Translation = {
     fr: 'Bienvenue à Regia Mare'
   },
   'landing.heroTitle': {
-    es: 'ENCUENTRA TU VIVIENDA IDEAL EN LA COSTA',
-    en: 'FIND YOUR IDEAL HOME ON THE COAST',
-    fr: 'TROUVEZ VOTRE LOGEMENT IDÉAL SUR LA CÔTE'
+    es: 'ENCUENTRA TU VIVIENDA EN SITGES Y LA COSTA DORADA',
+    en: 'FIND YOUR HOME IN SITGES AND COSTA DORADA',
+    fr: 'TROUVEZ VOTRE LOGEMENT À SITGES ET SUR LA COSTA DORADA'
   },
   'landing.heroSubtitle': {
     es: 'Propiedades exclusivas en las mejores zonas de Barcelona y la Costa Dorada',

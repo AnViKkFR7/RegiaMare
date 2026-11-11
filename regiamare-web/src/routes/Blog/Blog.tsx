@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { supabase } from '../../services/supabase'
-import { loadBlog, blogSeo } from '../../lib/blog'
+import { loadBlog } from '../../lib/blog'
+import { blogMetadata } from '../../lib/seo'
+import { applySeo } from '../../lib/seoHead'
 import { siteOrigin } from '../../lib/siteConfig'
 import type { BlogPost } from '../../lib/blog'
 import type { Language } from '../../types'
@@ -24,30 +26,15 @@ export default function Blog({ language }: { language: Language }) {
     return () => { active = false }
   }, [slug, page, key])
   useEffect(() => {
-    if (result?.key !== key || !result.posts || (slug && !result.posts.length)) return
-    const seo = blogSeo(slug ? result.posts[0] : undefined)
-    document.title = seo.title
-    document.querySelectorAll('[data-blog-seo]').forEach(element => element.remove())
-    const baseUrl = siteOrigin(import.meta.env.VITE_SITE_URL)
-    const canonical = new URL(slug ? `/blog/${slug}` : '/blog', baseUrl)
-    if (!slug && page > 1) canonical.searchParams.set('page', String(page))
-    const tags = [
-      ['name', 'description', seo.description], ['property', 'og:title', seo.title],
-      ['property', 'og:description', seo.description], ['property', 'og:url', canonical.href],
-      ['property', 'og:type', slug ? 'article' : 'website'],
-      ...(seo.image ? [['property', 'og:image', seo.image]] : []),
-    ]
-    for (const [attribute, name, content] of tags) {
-      const meta = document.createElement('meta')
-      meta.setAttribute(attribute, name); meta.content = content; meta.dataset.blogSeo = ''
-      document.head.append(meta)
+    if (result?.key !== key || !result.posts || ((slug || page > 1) && !result.posts.length)) {
+      applySeo({ title: result?.error ? 'Error de carga | Regia Mare Properties' : 'Blog | Regia Mare Properties', description: '', index: false })
+      return
     }
-    const link = document.createElement('link')
-    link.rel = 'canonical'; link.href = canonical.href; link.dataset.blogSeo = ''
-    document.head.append(link)
-    return () => { document.querySelectorAll('[data-blog-seo]').forEach(element => element.remove()) }
+    const metadata = blogMetadata(slug ? result.posts[0] : undefined, page, siteOrigin(import.meta.env.VITE_SITE_URL))
+    metadata.index = result.posts.length > 0
+    applySeo(metadata)
   }, [result, key, slug, page])
-  if (result?.key === key && slug && result.posts?.length === 0) return <NotFound language={language} />
+  if (result?.key === key && (slug || page > 1) && result.posts?.length === 0) return <NotFound language={language} />
   return <div className="blog-page container">
     {result?.key !== key ? <p role="status">Cargando…</p>
       : result.error ? <p role="alert">No se ha podido cargar el blog. <button onClick={() => window.location.reload()}>Reintentar</button></p>

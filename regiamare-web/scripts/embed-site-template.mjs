@@ -17,9 +17,23 @@ export async function embedSiteTemplate(htmlPath = 'dist/index.html', outputPath
     if (!path.startsWith(directory + sep)) throw new Error('Asset fuera del directorio de salida')
     await access(path)
   }
+  const manifest = JSON.parse(await readFile(resolve(directory, '.vite/manifest.json'), 'utf8').catch(() => '{}'))
+  const routes = { '/property/': 'src/routes/PropertyDetail/PropertyDetail.tsx', '/blog': 'src/routes/Blog/Blog.tsx', '/purchases': 'src/routes/Purchases/Purchases.tsx' }
+  const routeAssets = {}
+  for (const [path, entry] of Object.entries(routes)) {
+    const chunk = manifest[entry]
+    if (!chunk) continue
+    const files = [...(chunk.css || []), chunk.file].filter(Boolean)
+    for (const file of files) {
+      if (!file.startsWith('assets/') || file.includes('..')) throw new Error('Asset de ruta inválido')
+      await access(resolve(directory, file))
+    }
+    routeAssets[path] = { css: (chunk.css || []).map(file => '/' + file), script: '/' + chunk.file }
+  }
   await writeFile(outputPath, '// Generado por scripts/embed-site-template.mjs después de vite build.\n'
     + '// Incluye el HTML en la función; no necesita dist/index.html en runtime.\n'
-    + `export const siteTemplate: string = ${JSON.stringify(html)}\n`)
+    + `export const siteTemplate: string = ${JSON.stringify(html)}\n`
+    + `export const routeAssets: Record<string, { css: string[]; script?: string }> = ${JSON.stringify(routeAssets)}\n`)
   return { assets }
 }
 

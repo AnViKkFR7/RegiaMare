@@ -88,7 +88,7 @@ test('HTML HTTP inicial contiene SEO, canonical, contenido y alt sin JavaScript'
   assert.match(html, /<title>Casa &quot;costa&quot;<\/title>/)
   assert.match(html, /name="description" content="Descripción &lt;segura&gt;"/)
   assert.match(html, /rel="canonical" href="https:\/\/regiamare.example\/property\/casa-costa"/)
-  assert.match(html, /name="robots" content="index,follow"/)
+  assert.match(html, /name="robots" content="index,follow,max-image-preview:large"/)
   assert.match(html, /property="og:image" content="https:\/\/images.example\/og.jpg"/)
   assert.match(html, /alt="La casa y su terraza"/)
   assert.match(html, /<h1>Casa &lt;costa&gt; \$&amp;<\/h1>/)

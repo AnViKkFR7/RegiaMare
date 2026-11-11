@@ -5,7 +5,7 @@ import { validSlug } from '../src/lib/blog.js'
 export async function GET() {
   try {
     const { client, origin } = publicSite()
-    const paths = new Set(['/', '/services', '/purchases', '/sales', '/about', '/blog'])
+    const paths = new Set(['/', '/services', '/purchases', '/sales', '/about'])
     for (let start = 0; ; start += 500) {
       const { data, error } = await publicPropertiesQuery(client, 'id,slug').order('id').range(start, start + 499)
         .returns<{ id: string; slug: string | null }[]>()
@@ -17,7 +17,7 @@ export async function GET() {
       const { data, error } = await client.from('blog_posts').select('slug').eq('company_id', PROPERTY_COMPANY_ID)
         .eq('status', 'published').not('slug', 'is', null).order('id').range(start, start + 499)
       if (error) throw error
-      for (const post of data ?? []) if (validSlug(post.slug)) paths.add(`/blog/${post.slug}`)
+      for (const post of data ?? []) if (validSlug(post.slug)) { paths.add('/blog'); paths.add(`/blog/${post.slug}`) }
       if (!data || data.length < 500) break
     }
     // updated_at también cambia por mantenimiento: omitir lastmod hasta contar

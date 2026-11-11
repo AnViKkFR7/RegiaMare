@@ -1,4 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { applySeo } from '../../lib/seoHead';
+import { staticMetadata } from '../../lib/seo';
+import { siteOrigin } from '../../lib/siteConfig';
+import NotFound from '../NotFound/NotFound';
 import PropertyCard from '../../components/PropertyCard/PropertyCard';
 import './Purchases.css';
 import { useTranslation } from '../../utils/translations';
@@ -18,6 +23,7 @@ interface PurchasesProps {
 
 export default function Purchases({ language }: PurchasesProps) {
   const t = useTranslation(language);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [properties, setProperties] = useState<Property[]>([]);
   const [zones, setZones] = useState<string[]>([]);
   const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
@@ -28,7 +34,12 @@ export default function Purchases({ language }: PurchasesProps) {
   const [optionsError, setOptionsError] = useState(false);
   
   // Filters
-  const [selectedZone, setSelectedZone] = useState<string>('');
+  const selectedZone = searchParams.get('zone') || '';
+  const setSelectedZone = (value: string) => {
+    const next = new URLSearchParams(searchParams);
+    if (value) next.set('zone', value); else next.delete('zone');
+    next.delete('page'); setSearchParams(next);
+  };
   const [selectedBedrooms, setSelectedBedrooms] = useState<string>('');
   const [selectedType, setSelectedType] = useState<string>('');
   const [selectedOperationType, setSelectedOperationType] = useState<string>('');
@@ -39,7 +50,14 @@ export default function Purchases({ language }: PurchasesProps) {
   const [sortBy, setSortBy] = useState<SortOption>('oldest');
   
   // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
+  const pageValue = searchParams.get('page') || '1';
+  const validPage = /^[1-9]\d{0,3}$/.test(pageValue);
+  const currentPage = validPage ? Number(pageValue) : 1;
+  const setCurrentPage = (value: number) => {
+    const next = new URLSearchParams(searchParams);
+    if (value > 1) next.set('page', String(value)); else next.delete('page');
+    setSearchParams(next);
+  };
   const [totalPages, setTotalPages] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const pageSize = 20;
@@ -50,6 +68,18 @@ export default function Purchases({ language }: PurchasesProps) {
 
   const bedroomOptions = ['1', '2', '3', '4', '5+'];
   const operationTypes = ['sale', 'rent'];
+
+  useEffect(() => {
+    const metadata = staticMetadata('/purchases', siteOrigin(import.meta.env.VITE_SITE_URL));
+    const canonical = new URL(metadata.canonical!);
+    if (currentPage > 1) canonical.searchParams.set('page', String(currentPage));
+    metadata.canonical = canonical.href;
+    metadata.index = validPage && currentPage <= Math.max(1, totalPages) && !selectedZone && !selectedBedrooms && !selectedType && !selectedOperationType && priceFrom === 0 && !(priceTo > 0 && priceTo < maxPrice) && !loadError && !optionsError;
+    if (currentPage > 1) metadata.title = `Viviendas · Página ${currentPage} | Regia Mare Properties`;
+    metadata.graph = metadata.graph?.map(node => node['@type'] === 'WebPage'
+      ? { ...node, '@id': `${canonical.href}#webpage`, url: canonical.href, name: metadata.title } : node);
+    applySeo(metadata);
+  }, [currentPage, validPage, totalPages, selectedZone, selectedBedrooms, selectedType, selectedOperationType, priceFrom, priceTo, maxPrice, loadError, optionsError]);
 
   // Load zones, property types, and price range on mount
   useEffect(() => {
@@ -139,7 +169,6 @@ export default function Purchases({ language }: PurchasesProps) {
     setSelectedOperationType('');
     setPriceFrom(0);
     setPriceTo(maxPrice);
-    setCurrentPage(1);
   };
 
   const handlePreviousPage = () => {
@@ -171,6 +200,8 @@ export default function Purchases({ language }: PurchasesProps) {
     setIsMobileSortOpen(false);
     handleFilterChange();
   };
+
+  if (optionsReady && !loading && (!validPage || (currentPage > 1 && currentPage > totalPages))) return <NotFound language={language} />;
 
   return (
     <div className="purchases-page">
@@ -393,7 +424,6 @@ export default function Purchases({ language }: PurchasesProps) {
                 value={selectedZone} 
                 onChange={(e) => {
                   setSelectedZone(e.target.value);
-                  handleFilterChange();
                 }}
               >
                 <option value="">{t('purchases.allZones')}</option>

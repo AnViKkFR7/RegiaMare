@@ -1,10 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
-import { siteTemplate as template } from './site-template.generated.js'
+import { renderDocument, publicFrame } from './html.js'
+import type { SeoMetadata } from '../src/lib/seo.js'
+export { escapeHtml } from './html.js'
 import { PROPERTY_COMPANY_ID } from '../src/lib/properties.js'
 import { siteOrigin } from '../src/lib/siteConfig.js'
-
-export const escapeHtml = (value: string) => value.replace(/[&<>"']/g,
-  char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]!)
 
 export function publicSite() {
   const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
@@ -15,20 +14,9 @@ export function publicSite() {
   return { origin, client: createClient(url, key, { auth: { persistSession: false } }) }
 }
 
-export async function propertyHtml({ title, description = '', canonical, image, content, index = false, status = 200 }:
-  { title: string; description?: string; canonical?: string; image?: string; content: string; index?: boolean; status?: number }) {
-  const head = `<title>${escapeHtml(title)}</title>
-    <meta data-item-seo name="description" content="${escapeHtml(description)}" />
-    <meta data-item-seo name="robots" content="${index ? 'index,follow' : 'noindex,follow'}" />
-    ${canonical ? `<link data-item-seo rel="canonical" href="${escapeHtml(canonical)}" />` : ''}
-    <meta data-item-seo property="og:title" content="${escapeHtml(title)}" />
-    <meta data-item-seo property="og:description" content="${escapeHtml(description)}" />
-    <meta data-item-seo property="og:type" content="website" />
-    ${canonical ? `<meta data-item-seo property="og:url" content="${escapeHtml(canonical)}" />` : ''}
-    ${image ? `<meta data-item-seo property="og:image" content="${escapeHtml(image)}" />` : ''}`
-  const html = template.replace('<html lang="en">', '<html lang="es">')
-    .replace(/<title>[^<]*<\/title>/, () => head)
-    .replace('<div id="root"></div>', () => `<div id="root"><header><a href="/">Regia Mare Properties</a></header>${content}</div>`)
+export async function propertyHtml({ title, description = '', canonical, image, content, index = false, status = 200, metadata }:
+  { title: string; description?: string; canonical?: string; image?: string; content: string; index?: boolean; status?: number; metadata?: SeoMetadata }) {
+  const html = renderDocument(metadata || { title, description, canonical, image, index }, publicFrame(content))
   return new Response(html, { status, headers: { 'Content-Type': 'text/html; charset=utf-8',
     'Cache-Control': 'no-store', ...(index ? {} : { 'X-Robots-Tag': 'noindex' }) } })
 }

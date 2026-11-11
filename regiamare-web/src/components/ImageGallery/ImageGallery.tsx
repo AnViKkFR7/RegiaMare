@@ -45,7 +45,7 @@ export default function ImageGallery({ images, propertyTitle, language }: ImageG
       <div className="image-gallery">
         {/* Main Image - Left side (2/3) */}
         <div className="gallery-main-image" onClick={() => openModal(0)}>
-          <img loading="lazy" decoding="async" src={mainImage.url} alt={mainImage.alt_text || propertyTitle} />
+          <img loading="eager" fetchPriority="high" decoding="async" src={mainImage.url} alt={mainImage.alt_text || propertyTitle} />
         </div>
 
         {/* Side Images - Right side (1/3) */}

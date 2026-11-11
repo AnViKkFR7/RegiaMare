@@ -1,5 +1,6 @@
 import { publicSite, propertyHtml, escapeHtml as escape } from '../server/page.js'
 import { indexableProperty, loadPublicProperty, propertyPath, propertySeo, UUID_PATTERN } from '../src/lib/properties.js'
+import { propertyMetadata } from '../src/lib/seo.js'
 
 export async function GET(req: Request) {
   try {
@@ -30,7 +31,8 @@ export async function GET(req: Request) {
       <section aria-label="Imágenes">${property.media.filter(image => image.media_type === 'image')
         .map(image => `<img src="${escape(image.url)}" alt="${escape(image.alt_text || property.title)}" loading="lazy" style="max-width:100%;height:auto" />`).join('')}</section>
       <a href="mailto:info@regiamare.com">Consultar esta propiedad</a></main>`
-    return await propertyHtml({ title: seo.title, description: seo.description, image: seo.image, canonical, content, index })
+    return await propertyHtml({ title: seo.title, description: seo.description, image: seo.image, canonical, content, index,
+      metadata: propertyMetadata(property, origin) })
   } catch (error) {
     console.error('[property] load failed', error instanceof Error ? error.message : 'Database error')
     return new Response('<!doctype html><html lang="es"><head><title>Error de carga</title><meta name="robots" content="noindex" /></head><body><main><h1>No se ha podido cargar la propiedad</h1><p>Inténtalo de nuevo más tarde.</p></main></body></html>',

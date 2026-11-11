@@ -9,7 +9,10 @@ test('el HTML incorporado coincide con el build y todos sus assets existen', asy
   const generated = await readFile('server/site-template.generated.ts', 'utf8')
   const js = ts.transpileModule(generated, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText
   const { siteTemplate } = await import(`data:text/javascript;base64,${Buffer.from(js).toString('base64')}`)
-  assert.equal(siteTemplate, await readFile('dist/index.html', 'utf8'))
+  assert.ok(siteTemplate.includes('<div id="root"></div>'))
+  const home = await readFile('dist/index.html', 'utf8')
+  assert.match(home, /<h1/)
+  for (const asset of siteTemplate.match(/\/assets\/[\w.-]+\.(?:js|css)/g) ?? []) assert.ok(home.includes(asset))
   for (const asset of siteTemplate.match(/\/assets\/[\w.-]+\.(?:js|css)/g) ?? []) await access(`dist${asset}`)
 })
 test('el generador rechaza un HTML sin compilar o sin puntos de inserción', async () => {

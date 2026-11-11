@@ -4,6 +4,8 @@ import './NotFound.css';
 import { trackNotFound } from '../../lib/analytics';
 import { useTranslation } from '../../utils/translations';
 import type { Language } from '../../types';
+import { applySeo } from '../../lib/seoHead';
+import { staticMetadata } from '../../lib/seo';
 
 interface NotFoundProps {
   language: Language;
@@ -14,6 +16,7 @@ export default function NotFound({ language }: NotFoundProps) {
 
   useEffect(() => {
     trackNotFound();
+    applySeo(staticMetadata('/__not-found__'));
   }, []);
 
   return (

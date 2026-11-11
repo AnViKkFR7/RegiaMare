@@ -18,6 +18,7 @@ let enabled = true
 let fail = false
 let inserted
 let failInsert = false
+let emptyBlog = false
 const leadSchema = readFileSync('../DB_SCHEMA.sql', 'utf8').match(/CREATE TABLE public\.lead \(([\s\S]*?)\r?\n\);/)[1]
 const leadColumns = new Set([...leadSchema.matchAll(/^\s{2}(\w+)\s+(?:uuid|text|boolean|timestamp)/gm)].map(match => match[1]))
 const published = { id: 'post-1', company_id: company, status: 'published', slug: 'guia-sitges',
@@ -43,6 +44,7 @@ globalThis.fetch = async (input, init) => {
     return new Response(null, { status: 201 })
   }
   if (url.pathname.endsWith('/blog_posts')) {
+    if (emptyBlog) return Response.json([])
     let rows = fixtures.filter(post => post.company_id === url.searchParams.get('company_id')?.slice(3)
       && post.status === url.searchParams.get('status')?.slice(3))
     if (url.searchParams.has('slug')) {
@@ -208,6 +210,17 @@ test('sitemap excluye borradores, otra empresa y posts sin slug', async () => {
   const xml = await response.text()
   assert.match(xml, /\/blog\/guia-sitges/)
   assert.doesNotMatch(xml, /borrador|otra-empresa|\/null/)
+})
+test('blog vacío no se indexa ni entra en el sitemap; una página inexistente es 404', async () => {
+  emptyBlog = true
+  try {
+    const response = await blog(new Request('https://regiamare.example/blog'))
+    assert.equal(response.status, 200)
+    assert.equal(response.headers.get('x-robots-tag'), 'noindex')
+    assert.equal((await blog(new Request('https://regiamare.example/blog?page=2'))).status, 404)
+    const map = await blog(new Request('https://regiamare.example/api/blog?sitemap=1'))
+    assert.doesNotMatch(await map.text(), /<loc>[^<]*\/blog/)
+  } finally { emptyBlog = false }
 })
 test('errores de blog son 503, nunca listas vacías ni 404', async () => {
   fail = true

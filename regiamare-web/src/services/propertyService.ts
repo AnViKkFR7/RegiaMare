@@ -48,7 +48,7 @@ export async function getPropertiesByZone(zone: string): Promise<Property[]> {
     const properties = await getAllProperties();
     
     return properties.filter(prop => 
-      prop.attributes.zone?.toLowerCase() === zone.toLowerCase()
+      [prop.attributes.zone, prop.attributes.city].some(value => value?.toLowerCase() === zone.toLowerCase())
     );
   } catch (error) {
     console.error('Error fetching properties by zone:', error);
@@ -80,7 +80,7 @@ export async function getFilteredProperties(filters: PropertyFilters): Promise<P
     // Apply zone filter
     if (filters.zone) {
       properties = properties.filter(prop => 
-        prop.attributes.zone?.toLowerCase() === filters.zone?.toLowerCase()
+        [prop.attributes.zone, prop.attributes.city].some(value => value?.toLowerCase() === filters.zone?.toLowerCase())
       );
     }
 
@@ -148,6 +148,7 @@ export async function getAvailableZones(): Promise<string[]> {
       if (prop.attributes.zone) {
         zones.add(prop.attributes.zone);
       }
+      if (prop.attributes.city) zones.add(prop.attributes.city);
     });
 
     return Array.from(zones).sort();

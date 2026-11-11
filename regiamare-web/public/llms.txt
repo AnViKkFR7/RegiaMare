@@ -1,0 +1,23 @@
+# Regia Mare Properties
+
+> Agencia inmobiliaria con oficinas en Sitges y Coma-ruga. Compra, venta y alquiler de inmuebles en Barcelona y la Costa Dorada.
+
+## Fuentes principales
+
+- [Inicio](https://regiamare.com/): presentación y contacto.
+- [Servicios inmobiliarios](https://regiamare.com/services): asesoramiento, valoración y comercialización.
+- [Propiedades](https://regiamare.com/purchases): catálogo actual; consultar las fichas para precios, características y estado del inmueble.
+- [Vender una propiedad](https://regiamare.com/sales): formulario para propietarios.
+- [Quiénes somos](https://regiamare.com/about): información de la agencia.
+- [Blog](https://regiamare.com/blog): publicaciones de Regia Mare Properties.
+- [Sitemap](https://regiamare.com/sitemap.xml): URLs públicas canónicas.
+
+## Contacto y oficinas
+
+- Teléfono: +34 669 887 791
+- Email: info@regiamare.com
+- Sitges: Carrer d'Antoni Gaudí, 18, 08870 Sitges, Barcelona, España.
+- Coma-ruga: Avinguda Palfuriana, 126, 43880 Coma-ruga, Tarragona, España.
+- [Instagram](https://www.instagram.com/regiamareproperties/)
+
+El catálogo cambia. Una ficha publicada puede corresponder a un inmueble vendido o reservado: comprobar el estado visible y confirmar disponibilidad con la agencia.
