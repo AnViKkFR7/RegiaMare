@@ -4,7 +4,6 @@ import PropertyCard from '../../components/PropertyCard/PropertyCard';
 import './Landing.css';
 import { useTranslation } from '../../utils/translations';
 import type { Language, Property } from '../../types';
-import LocalInfo from '../../components/LocalInfo/LocalInfo';
 
 interface LandingProps {
   language: Language;
@@ -112,7 +111,6 @@ export default function Landing({ language }: LandingProps) {
         </div>
       </section>
 
-      <LocalInfo language={language} />
       {/* Value Proposition Section */}
       <section className="value-section bg-surface">
         <div className="container">

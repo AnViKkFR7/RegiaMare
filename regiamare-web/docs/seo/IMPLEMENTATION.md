@@ -28,8 +28,8 @@ La portada respondió 200 al user-agent de OAI-SearchBot; no se ha probado su IP
 - Las ofertas de compra solo incluyen precios reales de ventas no marcadas como
   vendidas/reservadas. No se infiere disponibilidad de `published` ni se inventa
   la periodicidad de precios de alquiler. El JSON-LD escapa cierres de script.
-- Información local visible y respuestas a consultas habituales en ES/EN/FR:
-  oficinas, teléfono, email, consulta de viviendas y ayuda para vender.
+- Se conserva el diseño de la landing sin añadir secciones de oficinas ni preguntas
+  frecuentes. El bloque local añadido inicialmente se ha retirado a petición del propietario.
 - `robots.txt` permite el rastreo público y referencia el sitemap; `/api/` queda
   excluido del rastreo. No bloquea OAI-SearchBot ni otros buscadores de IA.
 - `llms.txt` contiene un resumen y enlaces a fuentes canónicas, sin precios o
